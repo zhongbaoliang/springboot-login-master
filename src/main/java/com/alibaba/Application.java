@@ -21,17 +21,18 @@ import org.springframework.scheduling.annotation.EnableAsync;
  *          @Component：说明这也是一个spring组件
  *
  *
- * @EnableAutoConfiguration ： 自动配置文件
+ * @EnableAutoConfiguration ： 启动自动配置导入选择器
  *      @AutoConfigurationPackage ： 自动配置包
  *          @Import({Registrar.class}) ： 导入注册器
  *      @Import({AutoConfigurationImportSelector.class}) ： 导入选择器
  *
  *
- * @ComponentScan() 扫描()里面的包，可以剔除一些东西.
+ * @ComponentScan() 扫描()里面的包，可以剔除一些东西，然后加载包里面符合条件的bean
  *
  *
  */
 @SpringBootApplication
+@EnableAsync
 public class Application {
 
     public static void main(String[] args) {

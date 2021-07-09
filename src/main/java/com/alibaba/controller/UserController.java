@@ -4,13 +4,18 @@ import com.alibaba.bean.Result;
 import com.alibaba.bean.User;
 import com.alibaba.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+//@RestController=@Controller+@ResponseBody
+//@Controller=@Component+@Scope
+@Controller
+//@Component
+//@Scope("prototype")
+@ResponseBody
 @RequestMapping("/user")
 public class UserController {
 
