@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  *      @Import({AutoConfigurationImportSelector.class}) ： 导入选择器
  *
  *
- * @ComponentScan() 扫描()里面的包，可以剔除一些东西
+ * @ComponentScan() 扫描()里面的包，可以剔除一些东西.
  *
  *
  */
