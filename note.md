@@ -1,4 +1,4 @@
-![structure](D:\software\Typora\img\structure.jpg)
+![structure](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\structure.jpg)
 
 # Spring 
 
@@ -225,7 +225,7 @@ public class MyBeanFactory {
 
 ### Bean生命周期
 
-![image-20210701164701218](D:\software\Typora\img\image-20210701164602402.png)
+![image-20210701164602402](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\image-20210701164602402.png)
 
 ​	实例化->DI设置属性->初始化->单例模式则spring管理bean，原型模式则调用者管理bean
 
@@ -414,11 +414,11 @@ Spring MVC主要由**DispatcherServlet、处理器映射、处理器（控制器
 
 ## 流程图
 
-![SpringMVC-1](D:\software\Typora\img\SpringMVC-1.jpg)
 
 
+![SpringMVC-1](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\SpringMVC-1.jpg)
 
-![springmvc2](D:\software\Typora\img\springmvc2.jpg)
+![springmvc2](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\springmvc2.jpg)
 
 ## MVC工作流程
 
