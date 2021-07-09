@@ -398,6 +398,16 @@ public class MockConfiguration {
 
 ​	Spring中的过滤器、拦截器、监听器都属于面向切面编程的具体实现。
 
+## AOP术语
+
+切面：如一个拦截器。
+
+增强：拦截器的实现。
+
+前置通知、后置通知、异常通知、返回通知、环绕通知
+
+连接点：程序执行的某个特定位置，拦截器链中某一个拦截器
+
 
 
 
@@ -410,7 +420,7 @@ public class MockConfiguration {
 
 ​	Spring MVC是Spring提供的一个灵活而强大的web框架。借助于注解，Spring MVC提供了几乎是POJO的开发模式，使得控制器的开发和测试更加简单。这些**控制器一般不直接处理请求，而是将请求委托给spring上下文中的其他的bean**，通过spring的依赖注入功能，这些bean被注入到控制器中。
 
-Spring MVC主要由**DispatcherServlet、处理器映射、处理器（控制器）、视图解析器、视图** 五部分组成。其核心是处理器映射和视图解析器，前者负责选择出哪个控制器来处理哪个请求，后者负责结果渲染；通过这两个模块，spring MVC保证了 如何选择控制处理请求 和 如何选择视图展现输出 之间的松耦合。
+​	Spring MVC主要由**DispatcherServlet、处理器映射、处理器（控制器）、视图解析器、视图** 五部分组成。其核心是处理器映射和视图解析器，前者负责选择出哪个控制器来处理哪个请求，后者负责结果渲染；通过这两个模块，spring MVC保证了 如何选择控制处理请求 和 如何选择视图展现输出 之间的松耦合。
 
 ## 流程图
 
@@ -593,9 +603,50 @@ public @interface SpringBootApplication {
 
 ​	借助了Spring中的SpringFactoriesLoader。
 
-​	@ComponentScan注解 
+​	SpringFactoriesLoader作用是获取jar包中的工厂类，然后为工厂类创建实例。
+
+![img](.\src\main\resources\img\springFactoriesLoader-01.jpg)
+
+![img](.\src\main\resources\img\springFactoriesLoader-02.jpg)
+
+​	@ComponentScan注解 扫描包，注入包中的bean。
 
 
+
+## SpringBoot执行流程
+
+​	调用SpringApplication的run方法
+
+​	创建IOC容器...
+
+
+
+## 启动器
+
+​	
+
+### SpringBoot两大特点
+
+1. 约定大于配置
+2. 通过spring-boot-start-自动配置依赖模块。
+
+启动器的原始依赖都在父项目中。
+
+### spring-boot-starter-logging
+
+​	导入此以来后可以直接使用log4j，log4j2，commons logging 等等多种日志。
+
+### spring-boot-starter-web
+
+​	使用 Spring MVC 构建 Web（包括 RESTful）应用程序。使用 Tomcat 作为默认的嵌入式容器。
+
+### spring-boot-starter-jdbc
+
+### spring-boot-starter-aop
+
+### spring-boot-starter-security
+
+### spring-boot-starter-actuator
 
 # Spring Security
 
@@ -645,7 +696,15 @@ SQL执行流程
 
 
 
+# 设计模式
 
+## 代理模式
+
+​	代理类A帮被代理类B做事，隐藏被代理类的信息。分为静态代理和动态代理。
+
+### 静态代理
+
+​	代理类和被代理类实现了同一个接口，代理类持有被代理类的实例。
 
 
 
