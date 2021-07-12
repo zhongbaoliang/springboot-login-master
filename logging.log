@@ -756,3 +756,18 @@
 2021-07-12 17:09:45.089  INFO 148288 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
 2021-07-12 17:09:45.091  INFO 148288 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
 2021-07-12 17:09:45.091  INFO 148288 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-12 20:00:32.594  INFO 18188 --- [restartedMain] com.alibaba.Application                  : Starting Application on DESKTOP-72U23C1 with PID 18188 (D:\IDEA\IDEAPro\github\springboot-login-master\target\classes started by 钟宝梁 in D:\IDEA\IDEAPro\github\springboot-login-master)
+2021-07-12 20:00:32.598  INFO 18188 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
+2021-07-12 20:00:32.758  INFO 18188 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-12 20:00:32.758  INFO 18188 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-12 20:00:37.340  INFO 18188 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2021-07-12 20:00:37.375  INFO 18188 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-07-12 20:00:37.375  INFO 18188 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
+2021-07-12 20:00:37.510  INFO 18188 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-07-12 20:00:37.510  INFO 18188 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4751 ms
+2021-07-12 20:00:37.666  INFO 18188 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
+2021-07-12 20:00:38.292  INFO 18188 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-07-12 20:00:38.439  INFO 18188 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
+2021-07-12 20:00:38.591  INFO 18188 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-07-12 20:00:38.645  INFO 18188 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2021-07-12 20:00:38.649  INFO 18188 --- [restartedMain] com.alibaba.Application                  : Started Application in 7.447 seconds (JVM running for 8.644)
