@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 //@RestController=@Controller+@ResponseBody
 //@Controller=@Component+@Scope
 @Controller
@@ -38,8 +40,16 @@ public class UserController {
      * @return Result
      */
     @PostMapping(value = "/login")
-    public Result login(User user){
-        return userService.login(user);
+    public Result login(User user, HttpServletRequest servletRequest){
+
+        Result login = userService.login(user);
+        if(login.isSuccess()){
+            //System.out.println("controller getSession "+servletRequest.getSession().getId());
+            servletRequest.getSession().setAttribute("",user.getUsername());
+
+        }
+        return login;
     }
+
 }
 
