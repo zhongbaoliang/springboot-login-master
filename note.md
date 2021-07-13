@@ -388,7 +388,7 @@ public class MockConfiguration {
 
 
 
-## Spring AOP
+## AOP
 
 ​	面向切面编程（AOP）类似于OOP也是一种编程模式。Spring AOP的使用**减少了系统间的重复代码，达到了模块间松耦合的目的**。它将业务逻辑的各个部分分隔开，是程序员在编写业务代码时能够专心于核心业务，从而提高开发效率。
 
@@ -400,7 +400,7 @@ public class MockConfiguration {
 
 ![image-20210712205442787](./src/main/resources/img/AOP.jpg)
 
-### AOP术语
+### Spring AOP术语
 
 横切关注点：跨越应用程序多个模块的方法和功能。即与业务逻辑无关的，但是需要关注的部分。如：日志，安全，缓存，事务等**公共功能**。
 
@@ -422,6 +422,10 @@ public class MockConfiguration {
 
 
 
+
+
+
+
 ### 作用时机
 
 #### 过滤器
@@ -433,6 +437,8 @@ public class MockConfiguration {
 ​	每个请求
 
 #### 拦截器
+
+​	作用域controller函数前后，或者MVC渲染之后。
 
 ​	controller执行之前
 
@@ -446,6 +452,8 @@ public class MockConfiguration {
 
 #### 切面
 
+​	作用于业务层代码（函数）前后。
+
 ​	前置增强：在业务代码执行前
 
 ​	后置增强：方法结束后（无论是正常执行完，还是抛出异常)
@@ -456,7 +464,11 @@ public class MockConfiguration {
 
 ​	引介增强：在目标类中添加新的方法属性
 
-​	
+```java
+@After("execution(* com.alibaba.aspect.aopTest1.service.UserService1Impl.*(..))")
+```
+
+​	@After表明通知（增强方法）位于连接点（被增强的方法）之前，execution表明连接点（被增强方法）的位置，以 *  号开头，最后面的*表示匹配目标（被代理类）任意方法，(..)表示任意参数。
 
 过滤器与拦截器区别：
 
@@ -466,11 +478,185 @@ public class MockConfiguration {
 
 作用时机不同：过滤器作用于每个请求执行前或者服务开始与结束时,拦截器作用于MVC两个阶段前中后
 
-作用范围不同：过滤器适用于所有项目，拦截器只适用于SpringMVC
+作用范围不同：过滤器适用于所有请求，拦截器只适用于SpringMVC的action。
+
+
+
+### 代理模式与回调函数
+
+​	
+
+回调函数举例：
+
+```java
+interface Callback {
+    void execute(String session);//被调函数
+}
+//主调类
+class Host {
+    private String mySession = "I'm session";
+    //主调函数，将接口作为参数，可以传入接口的任意实现类。
+    public void method (Callback callback) {
+        System.out.println("before");
+        callback.execute(mySession);//同步回调
+        new Thread(()->{//异步回调
+            callback.execute(mySession);
+        }).start();
+        System.out.println("after");
+    }
+}
+//被调类,实现接口
+class Guest implements Callback{
+
+    @Override
+    public void execute(String session) {
+        System.out.println(session);
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        new Host().method(new Guest());
+    }
+}
+```
+
+
+
+代理模式举例：
+
+
+
+```java
+package proxy;
+ 
+//被代理类（目标）
+class Model implements DoSomething {
+	@Override
+	public void doIt() {
+		System.out.println("do it");
+	}
+}
+ 
+//代理类（切面）
+class Proxy implements DoSomething {
+	//代理类拥有接口（可传入被代理类）的引用
+	private DoSomething doSomething;
+	public Proxy (DoSomething doSomething) {
+		this.doSomething = doSomething;
+	}
+    public void setTarget(DoSomething doSomething) {
+		this.doSomething = doSomething;
+	}
+	
+    //方法增强（通知）
+	@Override
+	public void doIt() {
+		System.out.println("before");
+		doSomething.doIt();
+		System.out.println("after");
+	}
+}
+
+//代理类与被代理类实现同一个接口
+interface DoSomething {
+	void doIt();
+}
+
+public class Test {
+	public static void main(String[] args) {
+		DoSomething doSomething = new Model();
+		doSomething = new Proxy(doSomething);
+		doSomething.doIt();
+	}
+}
+```
+
+回调函数与代理模式关系：
+
+相同点：
+
+​	都是AOP思想的实现。
+
+不同点：
+
+​	代理模式基于接口时，代理类和被代理类**都实现相同的接口**，代理类中拥有接口（**被代理类）的引用**。
+
+​	而回调函数中，**只有被调类需要实现接口**（接口中的回调方法），主调类中**主调方法的参数是接口**，实际上传入的是被调类。
+
+​	
+
+​	个人认为：两者侧重点不同，代理模式主要是为了实现提取公共业务，对每个业务进行逻辑增强。而回调函数主要是可以实现异步处理。
 
 
 
 
+
+
+
+# 设计模式
+
+## 代理模式
+
+​	代理类A帮被代理类B做事，隐藏被代理类的信息。分为静态代理和动态代理。在代理类中可以对被代理类进行逻辑增强。
+
+### 静态代理
+
+​	代理类和被代理类实现了同一个接口，代理类持有被代理类的实例。
+
+结构：
+
+​	interface{func()}
+
+​	role implements interface{实现func()}
+
+​	proxy implements interface{实现func()}
+
+优点：
+
+​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
+
+​	公共功能交给你代理类，实现业务分工（逻辑增强）。
+
+​	公共业务发生扩展时，方便集中管理。
+
+缺点：
+
+​	一个真实的角色就会产生一个代理角色，代码量翻倍。
+
+
+
+### 动态代理
+
+​	动态代理和静态代理一样需要一个接口和一个被代理类。
+
+​	代理类是自动动态生成的。
+
+​	动态代理分为两大类：基于接口的动态代理，基于类的动态代理。
+
+​		基于接口：JDK动态代理，被代理类实现一个接口，生成的代理类是这个**接口的实现类**。
+
+​		基于类：cglib，生成的代理类是**被代理类的子类**。
+
+​		基于java字节码：javasist
+
+​	JDK的动态代理在java.lang.reflect包下，基于其中两个类来实现：
+
+​		Proxy
+
+​		InvocationHandler
+
+动态代理的优点：
+
+​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
+
+​	公共功能交给你代理类，实现业务分工（逻辑增强）。
+
+​	公共业务发生扩展时，方便集中管理。
+
+​	一个动态代理类代理的是一个1接口，一般是对应一类业务。
+
+​	一个动态代理类可以代理多个类，只要这些类实现了同一个接口。
 
 
 
@@ -760,69 +946,7 @@ SQL执行流程
 
 
 
-# 设计模式
 
-## 代理模式
-
-​	代理类A帮被代理类B做事，隐藏被代理类的信息。分为静态代理和动态代理。在代理类中可以对被代理类进行逻辑增强。
-
-### 静态代理
-
-​	代理类和被代理类实现了同一个接口，代理类持有被代理类的实例。
-
-结构：
-
-​	interface{func()}
-
-​	role implements interface{实现func()}
-
-​	proxy implements interface{实现func()}
-
-优点：
-
-​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
-
-​	公共功能交给你代理类，实现业务分工（逻辑增强）。
-
-​	公共业务发生扩展时，方便集中管理。
-
-缺点：
-
-​	一个真实的角色就会产生一个代理角色，代码量翻倍。
-
-
-
-### 动态代理
-
-​	动态代理和静态代理一样需要一个接口和一个被代理类。
-
-​	代理类是自动动态生成的。
-
-​	动态代理分为两大类：基于接口的动态代理，基于类的动态代理。
-
-​		基于接口：JDK动态代理
-
-​		基于类：cglib
-
-​		基于java字节码：javasist
-
-​	JDK的动态代理在java.lang.reflect包下，基于其中两个类来实现：
-
-​		Proxy
-
-​		InvocationHandler
-
-动态代理的优点：
-
-​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
-
-​	公共功能交给你代理类，实现业务分工（逻辑增强）。
-
-​	公共业务发生扩展时，方便集中管理。
-
-​	一个动态代理类代理的是一个1接口，一般是对应一类业务。
-
-​	一个动态代理类可以代理多个类，只要这些类实现了同一个接口。
 
 
 
