@@ -1,0 +1,22 @@
+{
+  "name": "feiyue",
+  "level": 99,
+  "age": 18,
+  "skillList": [
+    {
+      "id": 1,
+      "name": "天下无双",
+      "damage": "123"
+    },
+    {
+      "id": 2,
+      "name": "雌雄难辨",
+      "damage": "182"
+    },
+    {
+      "id": 3,
+      "name": "暗流涌动",
+      "damage": "89"
+    }
+  ]
+}

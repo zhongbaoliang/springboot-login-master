@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--view层 模板-->
+<div id="app">
+    <!--5. 获取数据-->
+    <!--v-bind等带有v-前缀的被称作指令，作用是在渲染的DOM上应用特殊的响应式行为
+    将这个元素节点的title特性与Vue实例的massage属性保持一致
+    -->
+    <!--{{massage}}-->
+    <span v-bind:title="massage">
+        鼠标悬浮看到绑定的数据
+    </span>
+
+    <h1 v-if="ok">Yes</h1>
+    <h1 v-else>NO</h1>
+
+
+    <h1 v-if="type==='A'">Type A</h1>
+    <h1 v-else-if="type==='B'">Type B</h1>
+    <h1 v-else>Type Other</h1>
+
+
+    <li v-for="i in items">
+        {{i.item}}
+    </li>
+    <!--v-on 绑定事件-->
+    <button v-on:click="sayHi">button</button>
+
+
+    输入: <input type="text" v-model="number">{{number}}<br>
+    <textarea v-model="number">{{number}}</textarea>
+
+    <div>
+        {{info.name}}
+    </div>
+    <div>
+        {{info.level}}
+    </div>
+
+
+
+</div>
+
+<!--
+MVVM架构
+M:Model，模板层，表示JavaScript对象数据
+V:View，视图层，表示DOM（HTML操作的元素)
+VM:ViewModel,连接视图数据的中间件，对视图数据进行双向绑定；Vue.js就是MVVM中的ViewModel层的实现者
+MVVM架构中，不允许视图数据直接通信，只能通过ViewModel来通信，
+而ViewModel就是定义了一个Observer观察者
+ViewModel 能够观察到数据变化，并对视图对应的内容进行更新
+ViewModel 能够监听到视图的变化，并通知数据发生改变
+-->
+
+<!--1. 导入Vue.js-->
+
+<script src = "https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+<script>
+    /*2. 新建Vue对象*/
+    var vue = new Vue({
+        /*3. 绑定元素*/
+        el:"#app",
+        /*Model层 数据*/
+        /*4. 放入数据*/
+        data: {
+            massage:"hello vue!",
+            ok: true,
+            type: "A",
+            items: [
+                {item: '我自横刀向天笑'},
+                {item: '去留肝胆两昆仑'}
+            ],
+            username: "lenovo",
+            number: "123"
+
+        },
+
+        methods: {
+            sayHi: function (event) {//事件event
+                alert(this.username);
+            }
+
+        },
+        data() {
+            return {
+                info:{
+                    name:null,
+                    level:null
+                }
+            }
+        },
+
+
+
+
+        mounted(){//钩子函数，链式编程，ES6新特性
+            axios.get("./demo1-vue.json").than(response=>(console.log(response.data)));
+
+        }
+
+
+
+    })
+</script>
+
+</body>
+</html>

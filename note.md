@@ -592,6 +592,85 @@ public class Test {
 
 
 
+## 事务
+
+​	事务是用来确保数据的完整性和一致性。
+
+### ACID
+
+- 原子性（Atomicity）：一个事务是一个不可分割的工作单位，事务中包括的动作要么都做要么都不做。
+- 一致性（Consistency）：事务必须保证数据库从一个一致性状态变到另一个一致性状态，一致性和原子性是密切相关的。
+- 隔离性（Isolation）：一个事务的执行不能被其它事务干扰，即一个事务内部的操作及使用的数据对并发的其它事务是隔离的，并发执行的各个事务之间不能互相打扰。
+- 持久性（Durability）：持久性也称为永久性，指一个事务一旦提交，它对数据库中数据的改变就是永久性的，后面的其它操作和故障都不应该对其有任何影响。
+
+
+
+### Spring中的事务
+
+Spring 的事务管理有 2 种方式：
+
+1. 传统的**编程式事务**管理，即通过编写代码实现的事务管理；
+2. 基于 AOP 技术实现的**声明式事务**管理。
+
+#### 1. 编程式事务管理
+
+​	编程式事务管理是通过编写代码实现的事务管理，灵活性高，但难以维护。
+
+#### 2. 声明式事务管理
+
+​	Spring 声明式事务管理在底层采用了 AOP 技术，其最大的优点在于无须通过编程的方式管理事务，只需要在配置文件中进行相关的规则声明，就可以将事务规则应用到业务逻辑中。
+
+Spring 实现声明式事务管理主要有 2 种方式：
+
+- 基于 XML 方式的声明式事务管理。
+
+- 通过 Annotation 注解方式的事务管理。
+
+  显然声明式事务管理要优于编程式事务管理。
+
+
+
+## 事务管理接口
+
+​	PlatformTransactionManager、TransactionDefinition 和 TransactionStatus 是事务的 3 个核心接口。
+
+### PlatformTransactionManager接口
+
+​	PlatformTransactionManager 接口用于管理事务。
+
+```java
+public interface PlatformTransactionManager {
+    TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException;
+    //用于获取事务的状态
+    void commit(TransactionStatus status) throws TransactionException;
+    //用于提交事务
+    void rollback(TransactionStatus status) throws TransactionException;
+    //用于回滚事务
+}
+```
+
+​	Spring 将 xml 中配置的事务信息封装到对象 TransactionDefinition 中，然后通过事务管理器的 getTransaction() 方法获得事务的状态（TransactionStatus），并对事务进行下一步的操作。
+
+
+
+### TransactionDefinition接口
+
+​	TransactionDefinition 接口用于获取事务相关信息。
+
+```java
+public interface TransactionDefinition {
+    int getPropagationBehavior();
+    int getIsolationLevel();
+    String getName();//获取事务名称
+    int getTimeout();
+    boolean isReadOnly();
+}
+```
+
+
+
+
+
 
 
 # 设计模式
@@ -705,9 +784,89 @@ ViewResolver：视图解析器，将模型（处理的结果数据）渲染到�
 
 
 
+## JSON
+
+前进后端分离：
+
+​	后端：提供接口（controller中对应的action），提供数据，业务逻辑。
+
+​	JSON：连接桥梁，是一种数据交换格式
+
+​	前端：渲染数据，提供交互。
+
+
+
+JSON格式：
+
+​	对象表示为键值对
+
+​	数据由逗号分割
+
+​	花括号保存对象
+
+​	方括号保存数组
+
+```json
+{
+	key1: value1,
+	key2: value2,
+	...
+}
+```
+
+任何数据类型都可以用JSON表示，如：字符串，数字，对象，数组等等。	
+
+例如：
+
+```json
+{
+	"name": "中国",
+    "age": 5000,
+    "province": [
+        {
+            "name": "湖北",
+            "city": {
+                "name": "武汉",
+                "position": "洞庭湖北部"
+            }
+        },
+        
+        {
+            "name": "湖南",
+            "city": {
+                "name": "长沙",
+                "position": "洞庭湖南部"
+            }
+        }
+    ]
+}
+```
+
+​	**JSON是JS对象的字符串表示法。**
+
+```js
+var obj = {a: "hello",b: "world"};
+//JS对象，key可以加引号也可以不加
+```
+
+```js
+var obj = JSON.parse('{"a": "Hello", "b": "world"}');
+//JSON字符串转JS对象，使用JSON.parse()
+var json = JSON.stringify({a: 'hello', b: 'world'});
+//JS对象转JSON字符串，使用JSON.stringify()
+```
+
+
+
 ## 总结
 
 ​	简而言之，springmvc就是**选择处理器与渲染视图**两大功能。
+
+
+
+
+
+
 
 
 
@@ -910,6 +1069,65 @@ public @interface SpringBootApplication {
 
 
 
+# 注解集
+
+## 创建bean
+
+1. **@Component**  可以使用此注解描述 Spring 中的 Bean，但它是一个泛化的概念，仅仅表示一个组件（Bean），并且可以作用在任何层次。使用时只需将该注解标注在相应类上即可，默认单例。
+2. **@Scope("prototype")** 作用域。
+3. **@Repository**  用于将数据访问层（DAO层）的类标识为 Spring 中的 Bean，其功能与 @Component 相同，默认单例。
+4. **@Service**  通常作用在业务层（Service 层），用于将业务层的类标识为 Spring 中的 Bean，其功能与 @Component 相同，默认单例。
+5. **@Controller**  通常作用在控制层（如 [Struts2](http://c.biancheng.net/struts2/) 的 Action），用于将控制层的类标识为 Spring 中的 Bean，其功能与 @Component 相同,只不过默认为多例模式。
+
+
+
+
+
+## 注入bean
+
+1. **@Configration**   表示该类的主要目的是作为 Bean 定义的来源。所有spring在xml中的配置都可以在标有@Configuration这个配置类中配置。
+2. **@Bean**  向IOC容器中注册组件。与<bean/>作用一样，都是用于类的实例化，配置并初始化为Spring IOC容器里面的一个对象。在默认情况下是任何条件都会被注册。
+3. @**Conditional**  有条件的注册组件，用在@Bean的前面，只有满足一定条件时才会注册。
+4. **@ComponentScan**   将扫描**包**下的所有组件（bean），将其注入到IOC容器中。对应 XML 配置形式中的 <context：component-scan> 元素，用于配合一些元信息 Java Annotation，比如 @Component 和 @Repository 等，**将标注了这些元信息 Annotation 的 bean 定义类批量采集到 Spring 的 IoC 容器中。**我们可以通过 basePackages 等属性来细粒度地定制 @ComponentScan 自动扫描的范围，如果不指定，则默认 Spring 框架实现会从声明 @ComponentScan 所在类的 package 进行扫描。
+5. **@Import **  将括号里面的**类**中定义的bean加载到IOC容器。只负责引入 JavaConfig 形式定义的 IoC 容器配置。
+6. **@ImportResource** 将XML形式定义的bean加载到 JavaConfig 形式定义的 IoC 容器。
+
+
+
+
+
+## bean实例获取
+
+1. **@Qualifier** 与 @Autowired 注解配合使用，会将默认的按 Bean 类型装配修改为按 Bean 的实例名称装配，Bean 的实例名称由 @Qualifier 注解的参数指定。
+2. **@Autowired**  用于对 Bean 的属性变量、属性的 Set 方法及构造函数进行标注，配合对应的注解处理器完成 Bean 的自动配置工作。**默认按照 Bean 的类型**进行装配。
+3. **@Resource**  其作用与 Autowired 一样。其区别在于 @Autowired 默认按照 Bean 类型装配，而 @Resource 默认按照 Bean 实例名称进行装配。@Resource 中有两个重要属性：name 和 type。Spring 将 name 属性解析为 Bean 实例名称，type 属性解析为 Bean 实例类型。如果指定 name 属性，则按实例名称进行装配；如果指定 type 属性，则按 Bean 类型进行装配。如果都不指定，则**先按 Bean 实例名称装配，如果不能匹配，则再按照 Bean 类型进行装配**；如果都无法匹配，则抛出 NoSuchBeanDefinitionException 异常。
+
+## SpringMVC注解
+
+1. **@RequestMapping** Spring MVC 中使用 @RequestMapping 来映射请求，也就是通过它来指定控制器可以处理哪些URL请求。可被**@GetMapping、@PostMapping、@PutMapping、@DeleteMapping、@PatchMapping**注解替换，例如：@RequestMapping(value="/get/{id}",method=RequestMethod.GET)=@GetMapping("/get/{id}")。
+2. **@ResponseBody**  将 controller的java对象返回值转为json格式的数据。用于ajax异步传输。
+3. @**RequestBody** 
+4. @**RequestParam** 可获取多个参数，POST,PUT中使用
+5. **@RestController**  @Controller + @ResponseBody，主要是为了使 http 请求返回 json 或者xml格式数据，一般情况下都是使用这个注解。
+6. 
+
+## Spring Security注解
+
+1. **@Valid** 用于对象属性字段的规则检测。
+2. **@ModelAttribute** 修饰方法，表明该方法在当前Controller的所有响应方法前面执行。主要用来做一些权限校验等。
+
+
+
+1. **@PropertySource 与 @PropertySources** @PropertySource **用于从某些地方加载 *.properties 文件内容，并将其中的属性加载到 IoC 容器**中，便于填充一些 bean 定义属性的占位符（placeholder）。使用 Java 8 或者更高版本开发，那么可以并行声明多个 @PropertySource。使用低于 Java 8 版本的 Java 开发 Spring 应用，又想声明多个 @PropertySource，则需要借助 @PropertySources 的帮助。
+2. **@SpringBootApplication**  SpringBoot应用启动类的注解，它主要包含@Configuration、@EnableAutoConfiguration、@ComponentScan三大注解。其中@Configuration就是JavaConfig形式的IOC配置类。
+3. @**EnableAutoConfiguration** 
+
+
+
+
+
+
+
 
 
 # Hibernate
@@ -950,53 +1168,111 @@ SQL执行流程
 
 
 
-# 注解集
-
-## 创建bean
-
-1. **@Component**  可以使用此注解描述 Spring 中的 Bean，但它是一个泛化的概念，仅仅表示一个组件（Bean），并且可以作用在任何层次。使用时只需将该注解标注在相应类上即可，默认单例。
-2. **@Scope("prototype")** 作用域。
-3. **@Repository**  用于将数据访问层（DAO层）的类标识为 Spring 中的 Bean，其功能与 @Component 相同，默认单例。
-4. **@Service**  通常作用在业务层（Service 层），用于将业务层的类标识为 Spring 中的 Bean，其功能与 @Component 相同，默认单例。
-5. **@Controller**  通常作用在控制层（如 [Struts2](http://c.biancheng.net/struts2/) 的 Action），用于将控制层的类标识为 Spring 中的 Bean，其功能与 @Component 相同,只不过默认为多例模式。
 
 
+# Vue
 
+## MVVM架构
 
-
-## 注入bean
-
-1. **@Configration**   表示该类的主要目的是作为 Bean 定义的来源。所有spring在xml中的配置都可以在标有@Configuration这个配置类中配置。
-2. **@Bean**  向IOC容器中注册组件。与<bean/>作用一样，都是用于类的实例化，配置并初始化为Spring IOC容器里面的一个对象。在默认情况下是任何条件都会被注册。
-3. @**Conditional**  有条件的注册组件，用在@Bean的前面，只有满足一定条件时才会注册。
-4. **@ComponentScan**   将扫描**包**下的所有组件（bean），将其注入到IOC容器中。对应 XML 配置形式中的 <context：component-scan> 元素，用于配合一些元信息 Java Annotation，比如 @Component 和 @Repository 等，**将标注了这些元信息 Annotation 的 bean 定义类批量采集到 Spring 的 IoC 容器中。**我们可以通过 basePackages 等属性来细粒度地定制 @ComponentScan 自动扫描的范围，如果不指定，则默认 Spring 框架实现会从声明 @ComponentScan 所在类的 package 进行扫描。
-5. **@Import **  将括号里面的**类**中定义的bean加载到IOC容器。只负责引入 JavaConfig 形式定义的 IoC 容器配置。
-6. **@ImportResource** 将XML形式定义的bean加载到 JavaConfig 形式定义的 IoC 容器。
+​	M:Model，模板层，表示JavaScript对象数据。
+​	V:View，视图层，表示DOM（HTML操作的元素)。
+​	VM:ViewModel,连接视图数据的中间件，对视图数据进行双向绑定；Vue.js就是MVVM中的ViewModel层的实现者。
+​	MVVM架构中，不允许视图数据直接通信，只能通过ViewModel来通信，而ViewModel就是定义了一个Observer观察者。
+​	**ViewModel 能够观察到数据变化，并对视图对应的内容进行更新。**
+​	**ViewModel 能够监听到视图的变化，并通知数据发生改变。**
 
 
 
 
 
-## bean实例获取
+## vue七大常用属性
 
-1. **@Qualifier** 与 @Autowired 注解配合使用，会将默认的按 Bean 类型装配修改为按 Bean 的实例名称装配，Bean 的实例名称由 @Qualifier 注解的参数指定。
-2. **@Autowired**  用于对 Bean 的属性变量、属性的 Set 方法及构造函数进行标注，配合对应的注解处理器完成 Bean 的自动配置工作。**默认按照 Bean 的类型**进行装配。
-3. **@Resource**  其作用与 Autowired 一样。其区别在于 @Autowired 默认按照 Bean 类型装配，而 @Resource 默认按照 Bean 实例名称进行装配。@Resource 中有两个重要属性：name 和 type。Spring 将 name 属性解析为 Bean 实例名称，type 属性解析为 Bean 实例类型。如果指定 name 属性，则按实例名称进行装配；如果指定 type 属性，则按 Bean 类型进行装配。如果都不指定，则**先按 Bean 实例名称装配，如果不能匹配，则再按照 Bean 类型进行装配**；如果都无法匹配，则抛出 NoSuchBeanDefinitionException 异常。
+### el: element
 
-## SpringMVC注解
+​	用来指示vue编译器从什么地方开始解析 vue的语法，可以说是一个占位符。相当于一个容器，跟上面的div id = "app"做关联，从此以后上面div id = "app"里面的内容要通过vue来渲染,都要经过vue处理才能看得到上面div里面的内容。
 
-1. **@RequestMapping** Spring MVC 中使用 @RequestMapping 来映射请求，也就是通过它来指定控制器可以处理哪些URL请求。可被**@GetMapping、@PostMapping、@PutMapping、@DeleteMapping、@PatchMapping**注解替换，例如：@RequestMapping(value="/get/{id}",method=RequestMethod.GET)=@GetMapping("/get/{id}")。
-2. **@ResponseBody**  将java对象转为json格式的数据。
-3. **@RestController**  @Controller + @ResponseBody，主要是为了使 http 请求返回 json 或者xml格式数据，一般情况下都是使用这个注解。
+### data
 
-## Spring Security注解
+​	用来组织从view中抽象出来的属性，可以说将视图的数据抽象出来存放在data中。
 
-1. **@Valid** 用于对象属性字段的规则检测。
-2. **@ModelAttribute** 修饰方法，表明该方法在当前Controller的所有响应方法前面执行。主要用来做一些权限校验等。
+### template
+
+​	用来设置模板，会替换页面元素，包括占位符。相当于html中的<body>
+
+### methods
+
+​	放置页面中的业务逻辑，js方法一般都放置在methods中，用来写方法。
+computed和methods是有区别的：computed是在**值发生改变**的时候才会触发效果，而methods只要**刷新**执行了就会触发，所有平时写VUE的时候，能用computed的尽量使用
+
+### render
+
+​	创建真正的virtual Dom
+
+### computed
+
+​	根据已经存在的属性计算出新的属性，对于同样的数据，会缓存。当其依赖属性的**值发生变化**是，这个属性的值会自动更新，与之相关的DOM部份也会同步自动更新。其实一般情况，我也会把一些关于逻辑的代码都写在computed中。
+
+### watch
+
+```vue
+watch:function(new,old){}
+```
+​	监听data中数据的变化,两个参数，一个返回新值，一个返回旧值.
+​	当有一些数据需要**随着其它数据变动而变动**时或者**执行异步操作**或**开销较大操作**时，建议使用watch。
 
 
 
-1. **@PropertySource 与 @PropertySources** @PropertySource **用于从某些地方加载 *.properties 文件内容，并将其中的属性加载到 IoC 容器**中，便于填充一些 bean 定义属性的占位符（placeholder）。使用 Java 8 或者更高版本开发，那么可以并行声明多个 @PropertySource。使用低于 Java 8 版本的 Java 开发 Spring 应用，又想声明多个 @PropertySource，则需要借助 @PropertySources 的帮助。
-2. **@SpringBootApplication**  SpringBoot应用启动类的注解，它主要包含@Configuration、@EnableAutoConfiguration、@ComponentScan三大注解。其中@Configuration就是JavaConfig形式的IOC配置类。
-3. @**EnableAutoConfiguration** 
+## Vue生命周期
+
+![Vue 实例生命周期](.\src\main\resources\img\vue-lifecycle.jpg)
+
+
+
+
+
+created: 实例创建之前执行的钩子。
+
+beforeMounted: 编译好的HTML挂载到对应虚拟dom时触发的钩子。此时页面并没有内容。
+
+mounted：编译好的HTML挂载到页面完成后执行的钩子，此钩子函数中一般会做一些ajax请求获取数据，进行数据初始化。mounted在整个实例中只执行一次。
+
+beforeUpdate 更新之前执行的钩子。
+
+VirtualDom 实时监控数据变化，并随之更新Dom。
+
+updates: 更新之后执行的钩子。
+
+beforeDestroed: 实例销毁之前 执行的钩子。
+
+destroyed: 实例销毁完成时 执行的钩子。
+
+## Axios
+
+​	vue.js是一个视图层框架，严格遵循SOC原则（关注度分离原则），所以Vue.js并不包含AJAX的通信功能，而Axios完美的解决了通信问题。少用使用jQuery，因为它操作Dom过于频繁。Axios是一个开源的可以用在浏览器端和Node.js的异步通信框架。主要作用是实现AJAX异步通信。
+
+
+
+### 功能特点
+
+​	从浏览器中创建XMLHttpRequests。
+
+​	从node.js创建http请求。  ？
+
+​	支持Promise API。   ？
+
+​	拦截请求和响应。//拦截器
+
+​	转换请求数据和响应数据。//过滤器
+
+​	取消请求。//拦截器
+
+​	客户端支持防御XSRF。
+
+​	
+
+
+
+## vue-cli
+
+​	vue-cli是官方提供的一个脚手架，用于快速生成一个vue项目的模板。类似天涯maven。
 

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 //@RestController=@Controller+@ResponseBody
 //@Controller=@Component+@Scope
 @Controller
+//controller的两种方式，一个是类实现Controller接口然后在xml文件中注入bean，一个是使用@Controller注解
 //@Component
 //@Scope("prototype")
 @ResponseBody
