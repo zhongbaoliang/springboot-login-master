@@ -43,6 +43,8 @@ Content-Type: text/html;charset=utf-8
 </html>	
 ```
 
+### 主要字段
+
 ​	**请求行**记录**请求的基本信息**。由请求方法字段、**URL字段**和HTTP协议版本字段3个字段组成,它们用空格分隔。响应头中有状态信息。
 
 ​	**请求头**记录**浏览器中**默认的或者缓存的信息。由关键字/值对组成，每行一对，关键字和值用英文冒号“:”分隔。如请求头中的**Cookie**、响应头中的 响应实体的 内容类型**Content-Type**、编码方式Content-Encoding等。
@@ -50,6 +52,18 @@ Content-Type: text/html;charset=utf-8
 ​	**空行**位于最后一个请求头之后，发送回车符和换行符，通知服务器以下不再有请求头。
 
 ​	**请求体**记录请求的**用户输入**的基本信息。仅用在POST方法，因为GET方法没有这一字段。POST方法适用于需要客户填写表单的场合。而响应体就是返回的页面信息。
+
+​	**状态码**
+
+| 分类 | 分类描述                                       |
+| :--- | :--------------------------------------------- |
+| 1**  | 信息，服务器收到请求，需要请求者继续执行操作   |
+| 2**  | 成功，操作被成功接收并处理                     |
+| 3**  | 重定向，需要进一步的操作以完成请求             |
+| 4**  | 客户端错误，请求包含语法错误或无法完成请求     |
+| 5**  | 服务器错误，服务器在处理请求的过程中发生了错误 |
+
+
 
 
 
@@ -942,29 +956,13 @@ Spring 的事务管理有 2 种方式：
 1. 传统的**编程式事务**管理，即通过编写代码实现的事务管理；
 2. 基于 AOP 技术实现的**声明式事务**管理。
 
-#### 1. 编程式事务管理
-
-​	编程式事务管理是通过编写代码实现的事务管理，灵活性高，但难以维护。
-
-#### 2. 声明式事务管理
-
-​	Spring 声明式事务管理在底层采用了 AOP 技术，其最大的优点在于无须通过编程的方式管理事务，只需要在配置文件中进行相关的规则声明，就可以将事务规则应用到业务逻辑中。
-
-Spring 实现声明式事务管理主要有 2 种方式：
-
-- 基于 XML 方式的声明式事务管理。
-
-- 通过 Annotation 注解方式的事务管理。
-
-  显然声明式事务管理要优于编程式事务管理。
 
 
-
-## 事务管理接口
+#### 事务管理接口
 
 ​	PlatformTransactionManager、TransactionDefinition 和 TransactionStatus 是事务的 3 个核心接口。
 
-### PlatformTransactionManager接口
+##### PlatformTransactionManager接口
 
 ​	PlatformTransactionManager 接口用于管理事务。
 
@@ -983,19 +981,229 @@ public interface PlatformTransactionManager {
 
 
 
-### TransactionDefinition接口
+##### TransactionDefinition接口
 
 ​	TransactionDefinition 接口用于获取事务相关信息。
 
 ```java
 public interface TransactionDefinition {
     int getPropagationBehavior();
-    int getIsolationLevel();
+    int getIsolationLevel();//获取事务隔离级别
     String getName();//获取事务名称
-    int getTimeout();
-    boolean isReadOnly();
+    int getTimeout();//获取事务的超时时间
+    boolean isReadOnly();//事务是否只读
 }
 ```
+
+##### TransactionStatus接口
+
+TransactionStatus 接口提供了一些简单的方法来控制事务的执行和查询事务的状态，接口定义如下。
+
+```java
+public interface TransactionStatus extends SavepointManager {
+    boolean isNewTransaction();//是否是新事物
+    boolean hasSavepoint();//是否存在保存点
+    void setRollbackOnly();//设置事务回滚
+    boolean isRollbackOnly();//是否回滚
+    boolean isCompleted();//是否完成
+}
+```
+
+
+
+#### 编程式事务管理
+
+​	编程式事务管理是通过编写代码实现的事务管理，灵活性高，但难以维护。
+
+​	1） DAO层引入获取PlatformTransactionManager的bean。
+
+​	2）try{PTM.commit();}catch(Exception e){PTM.rollback();throw e;}
+
+
+
+```java
+public class UserDaoImpl implements UserDao {
+    private JdbcTemplate jdbcTemplate;
+    private UserDao userDao;
+    private PlatformTransactionManager transactionManager;
+    @Override
+    public void saveUser(User user) {
+        TransactionDefinition def = new DefaultTransactionDefinition();
+        // getTransaction()用于启动事务，返回TransactionStatus实例对象
+        TransactionStatus status = transactionManager.getTransaction(def);
+        try {
+            this.jdbcTemplate.update("INSERT INTO USER(NAME,age) VALUES (?,?)", user.getName(), user.getAge());
+            transactionManager.commit(status);
+            System.out.println("commit!");
+        } catch (Exception e) {
+            System.out.println("Error in creating record, rolling back");
+            transactionManager.rollback(status);
+            throw e;
+        }
+    }
+}
+```
+
+```xml
+ <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="userdao" class="net.biancheng.UserDaoImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+```
+
+
+
+#### 声明式事务管理
+
+​	Spring 声明式事务管理在底层采用了 AOP 技术，其最大的优点在于无须通过编程的方式管理事务，只需要在配置文件中进行相关的规则声明，就可以将事务规则应用到业务逻辑中。
+
+Spring 实现声明式事务管理主要有 2 种方式：
+
+- 基于 XML 方式的声明式事务管理。
+
+- 通过 Annotation 注解方式的事务管理。
+
+  显然声明式事务管理要优于编程式事务管理。
+
+
+
+##### XML形式
+
+```java
+public class UserDaoImpl implements UserDao {
+    private JdbcTemplate jdbcTemplate;
+    private UserDao userDao;
+    private PlatformTransactionManager transactionManager;
+    @Override
+    @Override
+    public void saveUser(User user) {
+        try {
+            this.jdbcTemplate.update("INSERT INTO USER(NAME,age) VALUES (?,?)", user.getName(), user.getAge());
+            throw new RuntimeException("simulate Error condition");
+        } catch (Exception e) {
+            System.out.println("Error in creating record, rolling back");
+            throw e;
+        }
+    }
+}
+```
+
+```xml
+<!-- 编写通知：对事务进行增强（通知），需要编写切入点和具体执行事务的细节 -->
+    <tx:advice id="txAdvice"
+        transaction-manager="transactionManager">
+        <tx:attributes>
+             <!-- 给切入点方法添加事务详情，name表示方法名称，*表示任意方法名称，propagation用于设置传播行为，read-only表示隔离级别，是否只读 -->
+            <tx:method name="*" propagation="SUPPORTS" readOnly = "false"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- aop编写，让Spring自动对目标生成代理，需要使用AspectJ的表达式 -->
+    <aop:config>
+        <!-- 切入点，execution 定义的表达式表示net.biencheng包下的所有类所有方法都应用该是事务 -->
+        <aop:pointcut id="createOperation"
+            expression="execution(* net.biancheng.*.*(..))" />
+       
+        <aop:advisor advice-ref="txAdvice"
+            pointcut-ref="createOperation" />
+    </aop:config>
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="jdbcTemplate"
+        class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="userdao" class="net.biancheng.UserDaoImpl">
+        <property name="dataSource" ref="dataSource" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+```
+
+
+
+
+
+##### 注解形式
+
+1） 在Spring容器中注册驱动。
+
+```xml
+<tx:annotation-driven transaction-manager="txManager"/>
+```
+
+2） 在需要使用事务的业务或者方法上添加注解@Transactional。该注解只能应用在Public方法上。
+
+@Transactional常用属性说明如下：
+
+- propagation：设置事务的传播行为；
+
+- isolation：设置事务的隔离级别；
+
+  ​	DEFAULT；使用底层数据库默认的隔离级别
+
+  ​	READ_UNCOMMITTED；读未提交
+
+  ​	READ_COMMITTED；读已提交
+
+  ​	REPEATABLE_READ；可重复读
+
+  ​	SERIALIZABLE；可串行化
+
+- readOnly：设置是读写事务还是只读事务；
+
+- timeout：事务超时事件（单位：s）。
+
+
+
+```java
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+public class UserDaoImpl implements UserDao {
+    private JdbcTemplate jdbcTemplate;
+    private UserDao userDao;
+    @Override
+    public void saveUser(User user) {
+        try {
+            this.jdbcTemplate.update("INSERT INTO USER(NAME,age) VALUES (?,?)", user.getName(), user.getAge());
+            this.jdbcTemplate.update("INSERT INTO USER(NAME,age) VALUES (?,?)", "google", 16);
+            throw new RuntimeException("simulate Error condition");
+        } catch (Exception e) {
+            System.out.println("Error in creating record, rolling back");
+            throw e;
+        }
+    }
+}
+```
+
+
+
+```xml
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="jdbcTemplate"
+        class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="userdao" class="net.biancheng.UserDaoImpl">
+        <property name="dataSource" ref="dataSource" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+
+    <!-- 注册事务管理驱动 -->
+    <tx:annotation-driven
+        transaction-manager="transactionManager" />
+```
+
+
 
 
 
@@ -1318,6 +1526,48 @@ public String login(HttpServletRequest request, Model model) {
 
 
 
+## 同步请求和异步请求
+
+### 同步请求
+
+void ： 啥也不返回
+
+String ：表示逻辑视图名
+
+ModelAndView:该对象既有逻辑视图名，还可以携带去页面要展示的数据
+
+同步请求：如何将controller层的数据携带到页面上。
+
+　　　　1.使用ModelAndView作为方法的返回值类型
+
+　　　　2.使用Map、Model、ModelMap、类型的参数 在前端页面用el表达式取值即可。
+
+### 异步请求
+
+返回异步请求的数据 ，几乎各种数据都可以异步返回
+
+Map-------------------->转化之后成为 json对象
+
+对象--------------------->转化为json对象
+
+对象列表（对象List）   ------->转化后成为json数组
+
+
+
+​	@responseBody注解的作用是将controller的方法返回的对象通过适当的转换器转换为指定的格式之后，写入到response对象的body区，通常用来返回JSON数据或者是XML数据。在使用此注解之后不会再走视图处理器，而是直接将数据写入到输入流中，他的效果等同于通过response对象输出指定格式的数据。
+
+controller 如何返回json数据：
+
+1.导入json的包
+
+2.在controller加一个@responseBody注解
+
+3.在springmvc.xml中配置<mvc:annotation-driven/>
+
+
+
+
+
 ## SpringMVC的请求转发和重定向
 
 **请求转发：return "forward:/.."**
@@ -1522,6 +1772,14 @@ echo $jsonCallback . "(" . $jsonData . ")";    //输出jsonp格式的数据，�
 1. DOM 同源策略：禁止对不同源页面 DOM 进行操作。这里主要场景是 iframe 跨域的情况，不同域名的 iframe 是限制互相访问的。
 2. XMLHttpRequest 同源策略：禁止使用 XHR 对象向不同源的服务器地址发起 HTTP 请求。
 
+#### HttpRequest与XMLHttpRequest
+
+​	标准的HttpRequest做出一个同步的调用，必须等待服务器端返回响应，然后对页面进行加载（一般会呈递一个新的页面）。XMLHttpRequest可以发送异步请求，也可发送同步请求，但不会进行页面重新加载。
+
+
+
+
+
 ### **避免发生跨域访问**
 
 #### JSONP
@@ -1580,6 +1838,36 @@ Access-Control-Request-Headers=“Content-Type;//自定义的header的key”。
 ```java
 Access-Control-Allow-Credentials="true";//允许使用cookies
 ```
+
+#### Spring 的@CrossOrigin注解
+
+```java
+@CrossOrigin(origins="http://www.a.com:8888",allowCredentials = "true")
+```
+
+
+
+## 前后端分离
+
+​	传统的前后端不分离结构，都放在tomcat中。
+
+### 传统结构
+
+![img](.\src\main\resources\img\togather.jpg)
+
+​	前后端分离模式，前端部署到Nginx，后端部署到tomcat。
+
+### 前后端分离结构
+
+![img](.\src\main\resources\img\separation.jpg)
+
+
+
+### 补充
+
+ 	1. JSP与JS：**JS运行在客户端浏览器，而JSP运行在服务器。**JSP使用<%...%>标签，而JS使用<script>...</script>标签。**有JSP的系统，无论怎么部署，一定不是前后端分离。**
+ 	2. tomcat与JVM关系：tomcat是建立在JVM之上的，开启一个tomcat必然会自动开启一个JVM，多个应用可以部署到同一个tomcat里面。
+ 	3. tomcat里面的多个应用为什么不能相互调用呢，因为它们被类加载器隔离开了。
 
 
 
