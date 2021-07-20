@@ -477,7 +477,7 @@ public class InstanceTest1 {
 }
 ```
 
-​		定义了 Spring 配置文件的路径，然后 Spring 容器会加载配置文件。***在加载的同时，Spring 容器会通过实现类 Person1 中默认的无参构造函数对 Bean 进行实例化***。
+​		定义了 Spring 配置文件的路径，然后 Spring 容器会加载配置文件。**在加载的同时，Spring 容器会通过实现类 Person1 中默认的无参构造函数对 Bean 进行实例化。使用最多的一种方式。**
 
 **创建静态工厂类**
 
@@ -633,22 +633,6 @@ public class MyBeanFactory {
 ```
 
 
-
-###### Spring的常用注解
-
-1. **@Component**  可以使用此注解描述 Spring 中的 Bean，但它是一个泛化的概念，仅仅表示一个组件（Bean），并且可以作用在任何层次。使用时只需将该注解标注在相应类上即可。
-2. **@Repository**  用于将数据访问层（DAO层）的类标识为 Spring 中的 Bean，其功能与 @Component 相同。
-3. **@Service**  通常作用在业务层（Service 层），用于将业务层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。
-4. **@Controller**  通常作用在控制层（如 [Struts2](http://c.biancheng.net/struts2/) 的 Action），用于将控制层的类标识为 Spring 中的 Bean，其功能与 @Component 相同。
-5. **@Autowired**  用于对 Bean 的属性变量、属性的 Set 方法及构造函数进行标注，配合对应的注解处理器完成 Bean 的自动配置工作。**默认按照 Bean 的类型**进行装配。
-6. **@Resource**  其作用与 Autowired 一样。其区别在于 @Autowired 默认按照 Bean 类型装配，而 @Resource 默认按照 Bean 实例名称进行装配。@Resource 中有两个重要属性：name 和 type。Spring 将 name 属性解析为 Bean 实例名称，type 属性解析为 Bean 实例类型。如果指定 name 属性，则按实例名称进行装配；如果指定 type 属性，则按 Bean 类型进行装配。如果都不指定，则**先按 Bean 实例名称装配，如果不能匹配，则再按照 Bean 类型进行装配**；如果都无法匹配，则抛出 NoSuchBeanDefinitionException 异常。
-7. **@Qualifier** 与 @Autowired 注解配合使用，会将默认的按 Bean 类型装配修改为按 Bean 的实例名称装配，Bean 的实例名称由 @Qualifier 注解的参数指定。
-8. **@Bean**  与<bean/>作用一样，都是用于类的实例化，配置并初始化为Spring IOC容器里面的一个对象。
-9.  **@Configration**   表示该类的主要目的是作为 Bean 定义的来源。
-10. **@RequestMapping** Spring MVC 中使用 @RequestMapping 来映射请求，也就是通过它来指定控制器可以处理哪些URL请求。可被**@GetMapping、@PostMapping、@PutMapping、@DeleteMapping、@PatchMapping**注解替换，例如：@RequestMapping(value="/get/{id}",method=RequestMethod.GET)=@GetMapping("/get/{id}")。
-11. **@ResponseBody**  将java对象转为json格式的数据。
-12.  **@RestController**  @Controller + @ResponseBody，主要是为了使 http 请求返回 json 或者xml格式数据，一般情况下都是使用这个注解。
-13. @Valid 用于对象属性字段的规则检测。
 
 ##### 自动装配
 
@@ -823,6 +807,8 @@ public class MockConfiguration {
 作用时机不同：过滤器作用于每个请求执行前或者服务开始与结束时,拦截器作用于MVC两个阶段前中后
 
 作用范围不同：过滤器适用于所有请求，拦截器只适用于SpringMVC的action。
+
+​	使用过滤器对Web资源进行保护，使用拦截器对方法调用进行保护。
 
 
 
@@ -1202,124 +1188,6 @@ public class UserDaoImpl implements UserDao {
     <tx:annotation-driven
         transaction-manager="transactionManager" />
 ```
-
-
-
-
-
-# 软件工程
-
-## 设计原则
-
-### 	SOLID
-
-​	是六大设计原则的简称，分别表示：
-
-​	S即Single,单一职责原则
-
-​	O即Open,开闭原则
-
-​	L可以是里氏替换原则
-
-​	L还可以是Least，最少知识原则
-
-​	I是Interface，接口隔离原则
-
-​	D是Dependence，依赖倒转原则
-
-
-
-
-
-## 设计模式
-
-### 代理模式
-
-​	代理类A帮被代理类B做事，隐藏被代理类的信息。分为静态代理和动态代理。在代理类中可以对被代理类进行逻辑增强。
-
-#### 静态代理
-
-​	代理类和被代理类实现了同一个接口，代理类持有被代理类的实例。
-
-结构：
-
-​	interface{func()}
-
-​	role implements interface{实现func()}
-
-​	proxy implements interface{实现func()}
-
-优点：
-
-​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
-
-​	公共功能交给你代理类，实现业务分工（逻辑增强）。
-
-​	公共业务发生扩展时，方便集中管理。
-
-缺点：
-
-​	一个真实的角色就会产生一个代理角色，代码量翻倍。
-
-
-
-#### 动态代理
-
-​	动态代理和静态代理一样需要一个接口和一个被代理类。
-
-​	代理类是自动动态生成的。
-
-​	动态代理分为两大类：基于接口的动态代理，基于类的动态代理。
-
-​		基于接口：JDK动态代理，被代理类实现一个接口，生成的代理类是这个**接口的实现类**。
-
-​		基于类：cglib，生成的代理类是**被代理类的子类**。
-
-​		基于java字节码：javasist
-
-​	JDK的动态代理在java.lang.reflect包下，基于其中两个类来实现：
-
-​		Proxy
-
-​		InvocationHandler
-
-动态代理的优点：
-
-​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
-
-​	公共功能交给你代理类，实现业务分工（逻辑增强）。
-
-​	公共业务发生扩展时，方便集中管理。
-
-​	一个动态代理类代理的是一个1接口，一般是对应一类业务。
-
-​	一个动态代理类可以代理多个类，只要这些类实现了同一个接口。
-
-
-
-# 密码
-
-密钥越长越安全，越短效率越高。	
-
-​	对称加密：加密密钥与解密密钥一样，效率高。但是一般密码比较短，安全性不够。如DES、AES等
-
-​	非对称加密：加密密钥与解密密钥不同，使用可以公开的公钥进行加密，使用私钥进行解密。其特点是效率低，但是安全性高。如RSA
-
-​	**使用非对称密码算法的公钥对 对称密码算法的密钥进行解密**
-
-（1） Alice需要在银行的网站做一笔交易，她的浏览器首先生成了一个随机数作为对称密钥。
-
-（2） Alice的浏览器向银行的网站请求公钥。
-
-（3） 银行将公钥发送给Alice。
-
-（4） Alice的浏览器使用银行的公钥将自己的对称密钥加密。
-
-（5） Alice的浏览器将加密后的对称密钥发送给银行。
-
-（6） 银行使用私钥解密得到Alice浏览器的对称密钥。
-
-（7） Alice与银行可以使用对称密钥来对沟通的内容进行加密与解密了。
 
 
 
@@ -2023,7 +1891,7 @@ public @interface SpringBootApplication {
 
 ​	@SpringbootConfiguration注解 主要是封装@Configuration注解，而@Configuration注解与@Bean注解结合实现bean的纯Java方式注入，其作用是表明当前类是一个bean的配置类。
 
-​	@**EnableAutoConfiguration**注解 **启动自动配置导入选择器功能**，这是SpringBoot实现自动配置的核心。基于@Import注解，将所有的符合自动装配条件的bean注入IOC容器。其中最重要的是@Import（EnableAutoConfigurationImportSelector.class），借助EnableAutoConfigurationImportSelector这个类，可以将可以将所有符合条件的@Configuration配置加载到IOC容器中。
+​	**@EnableAutoConfiguration注解 启动自动导入配置选择器功能，这是SpringBoot实现自动配置的核心，基于@Import注解，将所有的符合自动装配条件的bean注入IOC容器。其中最重要的是@Import（EnableAutoConfigurationImportSelector.class），借助EnableAutoConfigurationImportSelector这个类，可以将可以将所有符合条件的@Configuration配置加载到IOC容器中。**
 
 ![image-20210709134451752](.\src\main\resources\img\springboot-01.jpg)
 
@@ -2070,19 +1938,145 @@ public @interface SpringBootApplication {
 
 ### spring-boot-starter-jdbc
 
+
+
+
+
 ### spring-boot-starter-aop
+
+
+
+
 
 ### spring-boot-starter-security
 
-### spring-boot-starter-actuator
+​		安全是软件设计中一个重要的部分。它确保了只有被授权的用户才能够访问对应的资源。其中**认证（authentication）和授权（authorization）**是至关重要的两个部分。
 
-# Spring Security
+​	认证：就是判断访问者**是否是一个合法用户**。
 
-​	安全是软件设计中一个重要的部分。它确保了只有被授权的用户才能够访问对应的资源。其中**认证（authentication）和授权（authorization）**是至关重要的两个部分。
-
-
+​	授权：就是对不同的访问者**授予不同资源的访问权限**。
 
 ​	Spring Security框架不但囊括了基本的认证和授权功能，而且还提供了加密解密、统一登陆等一系列相关支持。
+
+#### 特点
+
+1. 对身份验证和授权的全面和可扩展的支持
+2. 防止会话固定，点击劫持，跨站点请求伪造等攻击
+3. Servlet API集成
+4. 可与Spring Web MVC集成
+
+#### 使用步骤
+
+##### 1. 引入依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>   
+```
+
+##### 2. SpringSecurity配置类
+
+​	使用@EnableWebSecurity
+
+​	实现WebSecurityConfigurerAdapter抽象类
+
+​	实现configure方法
+
+​	注入DaoAuthenticationProvider 的Bean
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private UserService userService;
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .logout().permitAll()
+                .and()
+                .formLogin();
+        http.csrf().disable();
+    }
+    
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(passwordEncoder());
+        return auth;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
+}
+```
+
+@EnableWebSecurity作用是启动Spring Security功能，其作用原理是：
+
+​	1） 加载WebSecurityConfiguration配置类，此配置类中注入了springSecurityFilterChain， 配置安全认证策略。
+
+​	2） 加载AuthenticationConfiguration，此配置类中注入了AuthenticationManagerBuilder，配置认证信息。
+
+
+
+
+
+**WebSecurityConfigurerAdater**抽象类中的三个configure方法：
+
+​	1） 认证管理器配置：config(AuthenticationManagerBuilder auth)用来配置认证管理器AuthenticationManager。所有UserDetails相关的都归它管，包括PasswordEncoder密码机。**实现身份认证功能。**
+
+​	2） 核心过滤器配置：config(WebSecurity web)用来配置WebSecurity，WebSecurity是基于Servlet Filter来配置springSecurityFilterChain。**配置拦截资源。**
+
+​	3） 安全过滤链配置：configure(HttpSecurity http)用来配置HttpSecurity，构建一个安全过滤器链SecurityFilterChain。安全过滤器链最终被注入核心过滤器链。定义需要拦截的URL。**实现授权功能。**
+
+
+
+**DaoAuthenticationProvidery**用于比较登录的用户的密码是否与数据库中对应的密码一致。使用的service类需要实现
+
+```java
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null){
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+    }
+}
+
+```
+
+
+
+### spring-boot-starter-actuator
 
 
 
@@ -2100,9 +2094,12 @@ public @interface SpringBootApplication {
 6. **@Configration**   表示该类的主要目的是作为 Bean 定义的来源。所有spring在xml中的配置都可以在标有@Configuration这个配置类中配置。
 7. **@Bean**  向IOC容器中注册组件。与<bean/>作用一样，都是用于类的实例化，配置并初始化为Spring IOC容器里面的一个对象。在默认情况下是任何条件都会被注册。
 8. @**Conditional**  有条件的注册组件，用在@Bean的前面，只有满足一定条件时才会注册。
-9. **@ComponentScan**   将扫描**包**下的所有组件（bean），将其注入到IOC容器中。对应 XML 配置形式中的 <context：component-scan> 元素，用于配合一些元信息 Java Annotation，比如 @Component 和 @Repository 等，**将标注了这些元信息 Annotation 的 bean 定义类批量采集到 Spring 的 IoC 容器中。**我们可以通过 basePackages 等属性来细粒度地定制 @ComponentScan 自动扫描的范围，如果不指定，则默认 Spring 框架实现会从声明 @ComponentScan 所在类的 package 进行扫描。
-10. **@Import **  将括号里面的**类**中定义的bean加载到IOC容器。只负责引入 JavaConfig 形式定义的 IoC 容器配置。
-11. **@ImportResource** 将XML形式定义的bean加载到 JavaConfig 形式定义的 IoC 容器。
+
+## 加载bean
+
+1. **@ComponentScan**   将扫描**包**下的所有组件（bean），将其注入到IOC容器中。对应 XML 配置形式中的 <context：component-scan> 元素，用于配合一些元信息 Java Annotation，比如 @Component 和 @Repository 等，**将标注了这些元信息 Annotation 的 bean 定义类批量采集到 Spring 的 IoC 容器中。**我们可以通过 basePackages 等属性来细粒度地定制 @ComponentScan 自动扫描的范围，如果不指定，则默认 Spring 框架实现会从声明 @ComponentScan 所在类的 package 进行扫描。
+2. **@Import **  将括号里面的**类**中定义的bean加载到IOC容器。只负责引入 JavaConfig 形式定义的 IoC 容器配置。
+3. **@ImportResource** 将XML形式定义的bean加载到 JavaConfig 形式定义的 IoC 容器。
 
 
 
@@ -2163,6 +2160,217 @@ public @interface SpringBootApplication {
 
 
 
+# 软件工程
+
+## 设计原则
+
+### 	SOLID
+
+​	是六大设计原则的简称，分别表示：
+
+​	S即Single,单一职责原则
+
+​	O即Open,开闭原则
+
+​	L可以是里氏替换原则
+
+​	L还可以是Least，最少知识原则
+
+​	I是Interface，接口隔离原则
+
+​	D是Dependence，依赖倒转原则
+
+
+
+
+
+## 设计模式
+
+### 单例模式
+
+​	Spring中的Bean默认就是单例模式。所谓单例就是只有一个对象，因此一定不可能有public的构造方法。并且还能创建一个类的实例。因此单例模式的实现一定要做两件事：
+
+ 	1. 构造方法私有化
+ 	2. 创建一个实例
+ 	3. 通过一个get方法获取实例
+
+构造方法私有化与get方法的代码不可能改变，能变的只有第二条。根据创建实例的时机不同可以分为懒汉模式和饿汉模式。
+
+#### 饿汉模式
+
+**无论用不用，直接创建对象。**具体实现方式有：
+
+	1. 变量声明时就创建对象。（初始化阶段）
+	2. 静态代码段创建对象。（初始化阶段）
+	3. 静态内部类。也可以做到慢加载。（初始化阶段）
+	4. 枚举。枚举的每个元素都是静态常量。（链接阶段）
+
+```java
+//3. 静态内部类
+public class Singleton{
+	public static class SingletonHolder{
+        public static final Singleton instance = new Singleton();
+    }
+    
+    private Singleton(){
+        // 防止反射获取多个对象的漏洞
+		if (null != instance) {
+			throw new RuntimeException();
+		}
+    }
+    public static final Singleton getInstance(){
+        return SingletonHolder.instance;
+    }
+}
+```
+
+```java
+//4. 枚举
+public class Singleton{
+	INSTANCE;
+}
+```
+
+
+
+#### 懒汉模式
+
+**需要用的时候才创建对象，即在get方法中创建对象。**具体实现方式有：
+
+ 	1. get方法判断变量为空时直接创建一个对象。（多线程不安全）
+ 	2. 对get方法直接加锁。（锁粒度太大）
+ 	3. 判断为空加锁并创建实例。（不安全）
+ 	4. 双检锁。（指令重排序）
+ 	5. 加volatile的双检锁，禁止指令重排序。
+
+
+
+```java
+//5. 加volatile的双检锁
+public class Singleton{
+    public volatile static final Singleton instance;
+    
+    private Singleton(){
+        // 防止反射获取多个对象的漏洞
+		if (null != instance) {
+			throw new RuntimeException();
+		}
+
+    }
+    public static final Singleton getInstance(){
+        if(instance==null){
+            syschronize(Singleton.Class){//注意是锁class对象，如果锁instance就与方法2一样粒度过大
+                if(instance==null)
+                    instance = new Sinleton();
+            }
+        }
+        return SingletonHolder.instance;
+    }
+}
+```
+
+
+
+### 代理模式
+
+​	代理类A帮被代理类B做事，隐藏被代理类的信息。分为静态代理和动态代理。在代理类中可以对被代理类进行逻辑增强。
+
+#### 静态代理
+
+​	代理类和被代理类实现了同一个接口，代理类持有被代理类的实例。
+
+结构：
+
+​	interface{func()}
+
+​	role implements interface{实现func()}
+
+​	proxy implements interface{实现func()}
+
+优点：
+
+​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
+
+​	公共功能交给你代理类，实现业务分工（逻辑增强）。
+
+​	公共业务发生扩展时，方便集中管理。
+
+缺点：
+
+​	一个真实的角色就会产生一个代理角色，代码量翻倍。
+
+
+
+#### 动态代理
+
+​	动态代理和静态代理一样需要一个接口和一个被代理类。
+
+​	代理类是自动动态生成的。
+
+​	动态代理分为两大类：基于接口的动态代理，基于类的动态代理。
+
+​		基于接口：JDK动态代理，被代理类实现一个接口，生成的代理类是这个**接口的实现类**。
+
+​		基于类：cglib，生成的代理类是**被代理类的子类**。
+
+​		基于java字节码：javasist
+
+​	JDK的动态代理在java.lang.reflect包下，基于其中两个类来实现：
+
+​		Proxy
+
+​		InvocationHandler
+
+动态代理的优点：
+
+​	可以使真是角色的操作更加纯粹，不必关注一些公共的业务（如：余额不足）。
+
+​	公共功能交给你代理类，实现业务分工（逻辑增强）。
+
+​	公共业务发生扩展时，方便集中管理。
+
+​	一个动态代理类代理的是一个1接口，一般是对应一类业务。
+
+​	一个动态代理类可以代理多个类，只要这些类实现了同一个接口。
+
+
+
+# 密码
+
+密钥越长越安全，越短效率越高。	
+
+​	对称加密：加密密钥与解密密钥一样，效率高。但是一般密码比较短，安全性不够。如DES、AES等
+
+​	非对称加密：加密密钥与解密密钥不同，使用可以公开的公钥进行加密，使用私钥进行解密。其特点是效率低，但是安全性高。如RSA
+
+​	**使用非对称密码算法的公钥对 对称密码算法的密钥进行解密**
+
+（1） Alice需要在银行的网站做一笔交易，她的浏览器首先生成了一个随机数作为对称密钥。
+
+（2） Alice的浏览器向银行的网站请求公钥。
+
+（3） 银行将公钥发送给Alice。
+
+（4） Alice的浏览器使用银行的公钥将自己的对称密钥加密。
+
+（5） Alice的浏览器将加密后的对称密钥发送给银行。
+
+（6） 银行使用私钥解密得到Alice浏览器的对称密钥。
+
+（7） Alice与银行可以使用对称密钥来对沟通的内容进行加密与解密了。
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Hibernate
 
 ​	Hibernate是一种ORM（Object Relative DataBase-Mapping）框架，在Java对象和关系型数据库之间建立某种映射关系，以实现直接存取Java对象。是JPA的一种实现方式。
@@ -2173,15 +2381,140 @@ public @interface SpringBootApplication {
 
 
 
+
+
+# MyBatis
+
+​	MyBatis 前身为 IBatis，是一种**半自动化**的 ORM 实现。MyBatis 内部封装了 JDBC，简化了加载驱动、创建连接、创建 statement 等繁杂的过程，开发者只需要关注 SQL 语句本身。其封装性低于 Hibernate，但性能优秀、小巧、简单易学、应用广泛。
+
+**MyBatis与Hibernate对比**
+
+​	MyBatis 是一个小巧、方便、高效、简单、直接、半自动化的持久层框架，Hibernate 是一个强大、方便、高效、复杂、间接、全自动化的持久层框架。
+
+## JDBC
+
+​	JDBC允许用户访问任何形式的表格数据，尤其是存储在关系数据库中的数据。
+
+**JDBC执行流程**
+
+​	链接数据库
+
+​	为数据库传递SQL
+
+​	处理数据库响应并返回结果
+
+
+
+**三层结构**
+
+![Three-tier-Architecture-for-Data-Access](.\src\main\resources\img\JDBC.jpg)
+
+
+
+**JDBC 编程步骤**
+
+```java
+public class DbUtil {
+
+    public static final String URL = "jdbc:mysql://localhost:3306/imooc";
+    public static final String USER = "liulx";
+    public static final String PASSWORD = "123456";
+
+    public static void main(String[] args) throws Exception {
+        //1.加载驱动程序
+        Class.forName("com.mysql.jdbc.Driver");
+        //2. 获得数据库连接
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        //3.创建操作数据库对象
+        Statement stmt = conn.createStatement();
+        //4.SQL
+        //5.执行SQL
+        ResultSet rs = stmt.executeQuery("SELECT user_name, age FROM imooc_goddess");
+        //6. 处理结果集
+        while(rs.next()){
+            System.out.println(rs.getString("user_name")+" 年龄："+rs.getInt("age"));
+        }
+        //7. 关闭资源
+        if(rs != null) rs.close();          //释放结果集对象
+		if(stat != null) stat.close();      //释放操作数据库对象
+		if(conn != null) conn.close();      //释放连接数据库对象
+}
+```
+
+
+
+## MyBatis核心对象
+
+MyBatis有三个基本要素：
+
+​	核心接口和类
+
+​	MyBatis核心配置文件(mybatis-config.xml)
+
+​	SQL映射文件(mapper.xml)
+
+### 核心接口和类
+
+![MyBatis核心对象](.\src\main\resources\img\mybatis-sqlSessionFactory.jpg)
+
+
+
+​	每个MyBatis应用程序都以一个SqlSessionFactory对象的实例为核心。SqlSessionFactoryBuilder对象可以根据XML配置文件或者Configuration类来构建实例，然后通过SqlSessionFactoryBuilder获取SqlSessionFactory对象。SqlSessionFactoryBuilder在创建SqlSessionFactory后就被销毁。
+
+​	再通过SqlSessionFactory对象获取SqlSession实例，该实例中完全包含以数据库为背景的所有执行SQL操作的方法，用该实例可以直接执行已映射的SQL语句。
+
+三者生命周期：
+
+​	SqlSessionFactoryBuilder在创建SqlSessionFactory后就被销毁。
+
+​	SqlSessionFactory在整个应用程序期间都存在。
+
+​	SqlSession生命周期和作用域：SqlSession 对应一次数据库会话。每次访问数据库时都需要创建 SqlSession 对象。
+
+
+
+
+
+
+
 # Redis
 
+## 简介
+
+​	Redis 是一种基于内存的数据库，并且提供一定的持久化功能，它是一种键值（key-value）数据库。
+
+其优点主要有：**响应速度快、支持多种数据结构、操作都是原子的、MultiUtility工具等。**
 
 
-# Kafka
+
+### Redis支持的数据结构
+
+​	Redis支持String，List，Set，Hash，Sorted set，HyperLogLog六种数据结构。
+
+​	注意Java万物皆对象，而Redis中没有对象概念，主要使用String，因此需要将Java对象编码成String再将String解码成Java对象。
+
+| 数据类型            | 数据类型存储的值                                             | 说 明                                                        |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| STRING（字符串）    | 可以是保存字符串、整数和浮点数                               | 可以对字符串进行操作，比如增加字符或者求子串：如果是整数或者浮点数，可以实现计算，比如自增等 |
+| LIST（列表）        | 它是一个链表，它的每一个节点都包含一个字符串                 | Redis 支持从链表的两端插入或者弹出节点，或者通过偏移对它进行裁剪；还可以读取一个或者多个节点，根据条件删除或者查找节点等 |
+| SET（集合）         | 它是一个收集器，但是是无序的，在它里而每一个元素都是一个字符串，而且是独一无二，各不相同的 | 可以新增、读取、删除单个元素：检测一个元素是否在集合中；计算它和其他集合的交集、并集和差集等；随机从集合中读取元素 |
+| HASH（哈希散列表）  | 它类似于 [Java](http://c.biancheng.net/java/) 语言中的 Map，是一个键值对应的无序列表 | 可以増、删、査、改单个键值对，也可以获取所有的键值对         |
+| ZSET（有序集合）    | 它是一个有序的集合，可以包含字符 串、整数、浮点数、分值（score），元素 的排序是依据分值的大小来决定的 | 可以增、删、査、改元素，根据分值的范围或者成员 來获取对应的元索 |
+| HyperLogLog（基数） | 它的作用是计算重复的值，以确定存储的数量                     | 只提供基数的运算，不提供返回的功能                           |
 
 
 
+## 事务
 
+## 主从复制
+
+## 持久化
+
+## 订阅消息
+
+
+
+## Redis Epoll
 
 
 
@@ -2194,6 +2527,16 @@ public @interface SpringBootApplication {
 主从复制
 
 SQL执行流程
+
+
+
+
+
+
+
+# Kafka
+
+
 
 
 
@@ -2308,4 +2651,54 @@ destroyed: 实例销毁完成时 执行的钩子。
 ## vue-cli
 
 ​	vue-cli是官方提供的一个脚手架，用于快速生成一个vue项目的模板。类似天涯maven。
+
+
+
+
+
+# 注册登录系统调研
+
+核心技术：
+
+springboot 
+
+springSecurity 安全(shrio)
+
+redis 保存sessionId
+
+RSA 密码加密
+
+
+
+lombok get,set
+
+swagger 文档
+
+
+
+## 字段校验
+
+## 动态验证码
+
+### uuid 32位
+
+后端生成并检测，不能放在前端。
+
+## 访问权限
+
+## 保存登录信息，设置有效期
+
+### session
+
+### token
+
+## 事务
+
+@Transactionnal
+
+## 自动编写文档
+
+
+
+## 自动生成get,set方法
 
