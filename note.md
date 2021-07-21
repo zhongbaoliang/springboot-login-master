@@ -77,7 +77,7 @@ Content-Type: text/html;charset=utf-8
 
 Servlet处理HTTP请求流程
 
-![image-20210717235715844](./src/main/resources/img/servlet-01)
+![image-20210717235715844](.\src\main\resources\img\servlet-01.jpg)
 
 1. Servlet 容器接收到来自客户端的 HTTP 请求后，容器会针对该请求分别创建一个 HttpServletRequest 对象和 HttpServletReponse 对象。
 
@@ -167,7 +167,7 @@ RequestDispatcher 接口中提供了以下方法。
 
 在 Servlet 中，通常使用 forward() 方法将当前请求转发给其他的 Web 资源进行处理。请求转发的工作原理如下图所示。
 
-![image-20210718011912988](./src/main/resources/img/servlet-requestDispacher)
+![image-20210718011912988](.\src\main\resources\img\servlet-requestDispacher.jpg)
 
 ### 重定向
 
@@ -636,7 +636,7 @@ public class MyBeanFactory {
 
 ##### 自动装配
 
-​	自动装配就是指Spring容器可以自动装配（autowire）相互协作的Bean之间的关联方式，将一个Bean注入到其他的Property中。
+​	自动装配就是指Spring容器可以自动装配（**autowire**）相互协作的Bean之间的关联方式，将一个Bean注入到其他的Property中。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -2337,7 +2337,9 @@ public class Singleton{
 
 # 密码
 
-密钥越长越安全，越短效率越高。	
+​	密钥越长越安全，越短效率越高。	
+
+## 对称非对称
 
 ​	对称加密：加密密钥与解密密钥一样，效率高。但是一般密码比较短，安全性不够。如DES、AES等
 
@@ -2360,6 +2362,20 @@ public class Singleton{
 （7） Alice与银行可以使用对称密钥来对沟通的内容进行加密与解密了。
 
 
+
+## 可逆不可逆
+
+**可逆密码算法：**可以通过密文解析出明文
+
+​	对称密码算法和非对称密码算法都是可逆密码算法。
+
+**不可逆密码算法：**不可能通过密文知道明文
+
+​	种类：hash算法，散列算法，摘要算法
+
+​	如：MD5、SHA、HMAC、**BCrypt**
+
+​	主要用于密码加密。
 
 
 
@@ -2473,6 +2489,40 @@ MyBatis有三个基本要素：
 
 
 
+## 映射器（Mapper）
+
+​	映射器是 MyBatis 中最重要的文件，文件中包含一组 SQL 语句（例如查询、添加、删除、修改），这些语句称为映射语句或映射 SQL 语句。
+
+映射器由 Java 接口和 XML 文件（或注解）共同组成，它的作用如下。
+
+- 定义参数类型
+- 配置缓存
+
+- 提供 SQL 语句和动态 SQL
+- 定义查询结果和 POJO 的映射关系
+
+映射器有以下两种实现方式。
+
+- 通过 XML 文件方式实现，比如我们在 mybatis-config.xml 文件中描述的 XML 文件，用来生成 mapper。
+
+- 通过注解的方式实现，使用 Configuration 对象注册 Mapper 接口。
+
+  **所有XML方式都可以使用注解**
+
+  
+
+## MyBatis执行SQL方式
+
+通过SqlSession发送SQL
+
+通过SqlSession获取Mapper接口，通过Mapper接口发送SQL
+
+
+
+
+
+
+
 
 
 
@@ -2485,7 +2535,9 @@ MyBatis有三个基本要素：
 
 其优点主要有：**响应速度快、支持多种数据结构、操作都是原子的、MultiUtility工具等。**
 
+​	redis6.0之前是其核心模块是单线程处理的，因为当时开发者认为K-V模式瓶颈不在CPU。但是随着高并发的来临，Redis6.0才引入多线程。
 
+![img](.\src\main\resources\img\redis6-structure.jpg)
 
 ### Redis支持的数据结构
 
@@ -2505,6 +2557,8 @@ MyBatis有三个基本要素：
 
 
 ## 事务
+
+​	Redis 读/写数据要比数据库快得多，如果使用 Redis 事务在某种场合下去替代数据库事务，则可以在保证数据一致性的同时，大幅度提高数据读/写的响应速度。
 
 ## 主从复制
 
@@ -2530,17 +2584,305 @@ SQL执行流程
 
 
 
+# Zookeeper
+
+​	Zookeeper是一个典型的**分布式数据一致性**的解决方案，分布式应用程序可以基于它实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、**Master 选举**、分布式锁和分布式队列等功能。**冗余服务实现高可用性。（？）**
+
+
+
+## 基础理论
+
+### zookeeper 数据结构
+
+​	zookkeeper 提供的名称空间非常类似于标准文件系统，key-value 的形式存储。名称 key 由斜线 **/** 分割的一系列路径元素，zookeeper 名称空间中的每个节点都是由一个路径标识。**规定同一个目录下只能有一个唯一文件名**。
+
+![img](.\src\main\resources\img\zookeeper-dataStructure.jpg)
+
+### CAP理论
+
+![](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\zookeeper-CAP.jpg)
+
+​	CAP 理论指出对于一个分布式计算系统来说，不可能同时满足以下三点：
+
+- **一致性（Consistency）**：在分布式环境中，一致性是指数据在多个**副本之间**是否能够保持一致的特性，等同于所有节点访问同一份最新的数据副本。在一致性的需求下，当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据仍然处于一致的状态。
+- **可用性（Availability）：**每次请求都能获取到正确的响应，但是不保证获取的数据为**最新**数据。
+- **分区容错性（Partition tolerance）：**分布式系统在遇到任何网络分区**故障**的时候，仍然需要能够保证对外提供满足一致性和可用性的服务，除非是整个网络环境都发生了故障。
+
+​	在这三个基本需求中，最多只能同时满足其中的两项，P 是必须的，因此只能在 CP 和 AP 中选择，**zookeeper 保证的是 CP**，对比 spring cloud 系统中的注册中心 eruka 实现的是 AP。
+
+
+
+### BASE 理论
+
+​	BASE 是 Basically Available(基本可用)、Soft-state(软状态) 和 Eventually Consistent(最终一致性) 三个短语的缩写。
+
+- **基本可用：**在分布式系统出现故障，允许损失部分可用性（服务降级、页面降级）。
+- **软状态：**允许分布式系统出现中间状态。而且中间状态不影响系统的可用性。这里的中间状态是指不同的 data replication（数据备份节点）之间的数据更新可以出现延时的最终一致性。
+- **最终一致性：**data replications 经过一段时间达到一致性。
+
+
+
+​	BASE 理论是对 CAP 中的一致性和可用性进行一个权衡的结果，理论的核心思想就是：我们无法做到强一致，但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。
+
+
+
+### 数据同步
+
+​	主要依赖 ZAB 协议来实现分布式数据一致性。ZAB 协议分为两部分：消息广播和崩溃恢复。基本思想是少数服从多数（大于一半）。
+
+#### 消息广播
+
+​	Zookeeper 使用单一的主进程 Leader 来接收和处理客户端所有事务请求，并采用 ZAB 协议的原子广播协议，将事务请求以 **Proposal 提议**广播到所有 Follower 节点，当集群中**有过半的Follower 服务器进行正确的 ACK 反馈**，那么Leader就会再次向所有的 Follower 服务器**发送commit** 消息，将此次提案进行提交。这个过程可以简称为 2pc 事务提交，整个流程可以参考下图，注意 Observer 节点只负责同步 Leader 数据，不参与 2PC 数据同步过程。
+
+![img](.\src\main\resources\img\zookeeper-2PC.jpg)
+
+
+
+#### 崩溃恢复
+
+​	在正常情况消息广播情况下能运行良好，但是一旦 **Leader 服务器出现崩溃**，或者由于网络原理导致 Leader 服务器失去了与过半 Follower 的通信，那么就会进入崩溃恢复模式，**需要选举出一个新的 Leader 服务器**。在这个过程中可能会出现两种数据不一致性的隐患，需要 ZAB 协议的特性进行避免。
+
+- 1、Leader 服务器将消息 commit 发出后，立即崩溃
+- 2、Leader 服务器刚提出 proposal 后，立即崩溃
+
+ZAB 协议的恢复模式使用了以下策略：
+
+- 1、选举 zxid 最大的节点作为新的 leader
+- 2、新 leader 将事务日志中尚未提交的消息进行处理
+
+#### Leader选举
+
+​	leader 选举存在两个阶段，一个是服务器启动时 leader 选举，另一个是运行过程中 leader 服务器宕机。停止条件是有过半以上的server支持
+
+​	在分析选举原理前，先介绍几个重要的参数。
+
+- 服务器 ID(myid)：编号越大在选举算法中权重越大
+- 事务 ID(zxid)：值越大说明数据越新，权重越大
+- 逻辑时钟(epoch-logicalclock)：同一轮投票过程中的逻辑时钟值是相同的，每投完一次值会增加
+
+**选举状态：**
+
+- **LOOKING**: 竞选状态
+- **FOLLOWING**: 随从状态，同步 leader 状态，参与投票
+- **OBSERVING**: 观察状态，同步 leader 状态，不参与投票
+- **LEADING**: 领导者状态
+
+##### 选举流程
+
+![img](.\src\main\resources\img\zookeeper-vote.jpg)
+
+
+
+##### 服务器启动时的leader选举
+
+​	流程同上，只不过启动时事务id是一样的，并且所有server都是LOOKING状态。
+
+​	这里选取三台机器组成的集群为例。第一台服务器 server1启动时，无法进行 leader 选举，当第二台服务器 server2 启动时，两台机器可以相互通信，进入 leader 选举过程。
+
+- （1）每台 server 发出一个投票，由于是初始情况，server1 和 server2 都将自己作为 leader 服务器进行投票，每次投票包含所推举的服务器myid、zxid、epoch，使用（myid，zxid）表示，此时 server1 投票为（1,0），server2 投票为（2,0），（自己也算一票），然后将各自投票发送给集群中其他机器。
+- （2）接收来自各个服务器的投票。集群中的每个服务器收到投票后，首先判断该投票的有效性，如检查是否是本轮投票（epoch）、是否来自 LOOKING 状态的服务器。
+- （3）分别处理投票。针对每一次投票，服务器都需要将其他服务器的投票和自己的投票进行对比，对比规则如下：
+  - a. 优先比较 epoch
+  - b. 检查 zxid，zxid 比较大的服务器优先作为 leader
+  - c. 如果 zxid 相同，那么就比较 myid，myid 较大的服务器作为 leader 服务器
+- （4）统计投票。每次投票后，服务器统计投票信息，判断是都有过半机器接收到相同的投票信息。server1、server2 都统计出集群中有两台机器接受了（2,0）的投票信息，此时已经选出了 server2 为 leader 节点。
+- （5）改变服务器状态。一旦确定了 leader，每个服务器响应更新自己的状态，如果是 follower，那么就变更为 FOLLOWING，如果是 Leader，变更为 LEADING。此时 server3继续启动，直接加入变更自己为 FOLLOWING。
+
+
+
+##### 运行过程中的 leader 选举
+
+​	当集群中 leader 服务器出现宕机或者不可用情况时，整个集群无法对外提供服务，进入新一轮的 leader 选举。
+
+​	流程也与上面一样，只不过此时的zxid可能不一样，而且有些主机可能处于OBSERVING状态。
+
+
+
+### 分布式锁
+
+​	**分布式锁应该具备的条件**：
+
+​	在分布式系统环境下，一个**方法**在同一时间只能被一个机器的一个线程执行；
+​	**高可用**的获取锁与释放锁；
+​	**高性能**的获取锁与释放锁；
+​	具备**可重入**特性；
+​	具备锁失效机制，**防止死锁**；
+​	具备**非阻塞锁**特性，即没有获取到锁将直接返回获取锁失败。
+
+​	**分布式锁有三种实现方式：**
+
+​	基于数据库实现分布式锁；
+​	基于缓存（Redis等）实现分布式锁；
+​	基于Zookeeper实现分布式锁；
+
+#### 数据库实现
+
+​	基于数据库的实现方式的核心思想是：在数据库中创建一个表，表中包含**方法名**等字段，并在**方法名字段上创建唯一索引**，想要执行某个方法，就使用这个方法名向表中插入数据，成功插入则获取锁，执行完成后删除对应的行数据释放锁。
+
+​	使用基于数据库的这种实现方式很简单，但是对于分布式锁应该具备的条件来说，它有一些问题需要解决及优化：
+
+​	不具备可重入的特性，因为同一个线程在释放锁之前，行数据一直存在，无法再次成功插入数据，所以，需要在表中新增一列，用于记录当前获取到锁的机器和线程信息，在再次获取锁的时候，先查询表中机器和线程信息是否和当前机器和线程相同，若相同则直接获取锁；
+
+#### Redis实现
+
+​	选用Redis实现分布式锁原因：
+
+（1）Redis有很高的性能；
+（2）Redis命令对此支持较好，实现起来比较方便
+
+​	**使用命令介绍**：
+
+（1）SETNX
+
+SETNX key val：当且仅当key不存在时，set一个key为val的字符串，返回1；若key存在，则什么都不做，返回0。
+
+（2）expire
+
+expire key timeout：为key设置一个超时时间，单位为second，超过这个时间锁会自动释放，避免死锁。
+
+（3）delete
+
+delete key：删除key
+
+在使用Redis实现分布式锁的时候，主要就会使用到这三个命令。
+
+**实现思想：**
+
+（1）获取锁的时候，使用setnx加锁，并使用expire命令为锁添加一个超时时间，超过该时间则自动释放锁，锁的value值为一个随机生成的UUID，通过此在释放锁的时候进行判断。
+
+（2）获取锁的时候还设置一个获取的超时时间，若超过这个时间则放弃获取锁。
+
+（3）释放锁的时候，通过UUID判断是不是该锁，若是该锁，则执行delete进行锁释放。
+
+
+
+#### Zookeeper实现
+
+​	ZooKeeper是一个为分布式应用提供一致性服务的开源组件，它内部是一个分层的文件系统目录树结构，**规定同一个目录下只能有一个唯一文件名**。基于ZooKeeper实现分布式锁的步骤如下：
+
+（1）创建一个目录mylock；
+（2）线程A想获取锁就在mylock目录下创建临时顺序节点；
+（3）获取mylock目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；
+（4）线程B获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；
+（5）线程A处理完，删除自己的节点，线程B监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。
+
+优点：具备高可用、可重入、阻塞锁特性，可解决失效死锁问题。
+
+缺点：因为需要频繁的创建和删除节点，性能上不如Redis方式。
+
+
+
+
+
+
+
+### 负载均衡
+
+
+
+
+
+
+
+
+
 
 
 
 
 # Kafka
 
+​	Kafka是一个分布式、支持分区的（partition）、多副本的（replica），基于zookeeper协调的分布式消息系统，它的最大的特性就是可以实时的处理大量数据以满足各种需求场景：比如基于hadoop的批处理系统、低延迟的实时系统、storm/Spark流式处理引擎，web/nginx日志、访问日志，消息服务等等.
+
+​	**顺序写磁盘效率比随机写内存还要高**是Kafka高吞吐率的一个很重要的保证.
+
+## 消息系统
+
+​	一个消息系统负责将数据从一个应用传递到另外一个应用，应用只需关注于数据，无需关注数据在两个或多个应用间是如何传递的。**分布式消息传递基于可靠的消息队列，在客户端应用和消息系统之间异步传递消息。**
+
+​	消息系统按照消息z传递模式可分为点对点模式和发布-订阅模式（Kafka）。
+
+### 点对点模式
+
+​	在点对点消息系统中，消息持久化到一个队列中。此时，将有一个或多个消费者消费队列中的数据。但是一条消息只能被消费一次。当一个消费者消费了队列中的某条数据之后，该条数据则从消息队列中删除。该模式即使有多个消费者同时消费数据，也能保证数据处理的顺序。
+
+![img](.\src\main\resources\img\Kafka-P2P.jpg)
+
+​	此模式下生产者发送一条消息，只有一个消费者能够接收到（1对1）。
+
+### 发布-订阅模式
+
+​	在发布-订阅消息系统中，消息被持久化到一个topic中。与点对点消息系统不同的是，消费者可以订阅一个或多个topic，消费者可以消费该topic中所有的数据，同一条数据可以被多个消费者消费，数据被消费后不会立马删除。在发布-订阅消息系统中，消息的生产者称为发布者，消费者称为订阅者。
+
+![](.\src\main\resources\img\Kafka-P_S.jpg)
+
+​	发布者发送消息到Topic，所有订阅了该Topic的订阅者才会看到消息（多对多）。
+
+## Kafka优点
+
+​	高吞吐量、低延迟：kafka每秒可以处理几十万条消息，它的延迟最低只有几毫秒，每个topic可以分多个partition, consumer group 对partition进行consume操作。
+
+​	可扩展性：kafka集群支持热扩展
+
+​	持久性、可靠性：消息被持久化到本地磁盘，并且支持数据备份防止数据丢失
+
+​	容错性：允许集群中节点失败（若副本数量为n,则允许n-1个节点失败）
+
+​	高并发：支持数千个客户端同时读写
+
+## 常用Message Queue
+
+### RabbitMQ
+
+​	RabbitMQ是使用Erlang编写的一个开源的消息队列，本身支持很多的协议：AMQP，XMPP, SMTP, STOMP，也正因如此，它非常重量级，更适合于企业级的开发。同时实现了Broker构架，这意味着消息在发送给客户端时先在中心队列排队。对路由，负载均衡或者数据持久化都有很好的支持。
+
+### Redis
+
+​	Redis是一个基于Key-Value对的NoSQL数据库，开发维护很活跃。虽然它是一个Key-Value数据库存储系统，但它本身支持MQ功能，所以完全可以当做一个轻量级的队列服务来使用。对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。实验表明：入队时，当数据比较小时Redis的性能要高于RabbitMQ，而如果数据大小超过了10K，Redis则慢的无法忍受；出队时，无论数据大小，Redis都表现出非常好的性能，而RabbitMQ的出队性能则远低于Redis。
+
+### ZeroMQ
+
+​	**ZeroMQ号称最快的消息队列系统**，尤其针对大吞吐量的需求场景。ZeroMQ能够实现RabbitMQ不擅长的高级/复杂的队列，但是开发人员需要自己组合多种技术框架，技术上的复杂度是对这MQ能够应用成功的挑战。ZeroMQ具有一个独特的非中间件的模式，你不需要安装和运行一个消息服务器或中间件，因为你的应用程序将扮演这个服务器角色。你只需要简单的引用ZeroMQ程序库，可以使用NuGet安装，然后你就可以愉快的在应用程序之间发送消息了。但是ZeroMQ仅提供非持久性的队列，也就是说如果宕机，数据将会丢失。其中，Twitter的Storm 0.9.0以前的版本中默认使用ZeroMQ作为数据流的传输（Storm从0.9版本开始同时支持ZeroMQ和Netty作为传输模块）。
+
+### ActiveMQ
+
+​	ActiveMQ是Apache下的一个子项目。 类似于ZeroMQ，它能够以代理人和点对点的技术实现队列。同时类似于RabbitMQ，它少量代码就可以高效地实现高级应用场景。
+
+
+
+### Kafka/Jafka
+
+​	Kafka是Apache下的一个子项目，是一个高性能跨语言分布式发布/订阅消息队列系统，而Jafka是在Kafka之上孵化而来的，即Kafka的一个升级版。具有以下特性：快速持久化，可以在O(1)的系统开销下进行消息持久化；高吞吐，在一台普通的服务器上既可以达到10W/s的吞吐速率；完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现负载均衡；支持Hadoop数据并行加载，对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka通过Hadoop的并行加载机制统一了在线和离线的消息处理。Apache Kafka相对于ActiveMQ是一个非常轻量级的消息系统，除了性能非常好之外，还是一个工作良好的分布式系统。
+
+
+
+## Kafka架构
+
+### 术语
+
+![img](.\src\main\resources\img\Kafka-01.jpg)
+
+​	一条消息（Topic）可以由多个生产者（producer）制作，一条消息分为多个部分（Partition），分布式集群有多个服务器节点（broker）。服务器节点分为一个主站和多个从站，
+
+#### topic与partition
+
+​	topic中的数据分割为一个或多个partition。每个topic至少有一个partition。每个partition中的数据使用多个segment文件存储。partition中的数据是有序的，不同partition间的数据丢失了数据的顺序。如果topic有多个partition，消费数据时就不能保证数据的顺序。在需要严格保证消息的消费顺序的场景下，需要将partition数目设为1。
+
+#### partition与topic
+
+​	如果某topic有N个partition，集群有(N+M)个broker，那么其中有N个broker存储该topic的一个partition，剩下的M个broker不存储该topic的partition数据。
+
+​	如果某topic有N个partition，集群中broker数目少于N个，那么一个broker存储该topic的一个或多个partition。在实际生产环境中，尽量避免这种情况的发生，这种情况容易导致Kafka集群**数据不均衡。**
+
+#### Leader与Follower
+
+​	Follower跟随Leader，所有写请求都通过Leader路由，数据变更会广播给所有Follower，Follower与Leader保持数据同步。如果Leader失效，则从Follower中选举出一个新的Leader。当Follower与Leader挂掉、卡住或者同步太慢，leader会把这个follower从“in sync replicas”（ISR）列表中删除，重新创建一个Follower。
 
 
 
 
 
+<img src="C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\Kafka-structure.jpg" alt="img" style="zoom:150%;" />
 
 
 
@@ -2662,15 +3004,19 @@ destroyed: 实例销毁完成时 执行的钩子。
 
 springboot 
 
-springSecurity 安全(shrio)
+springSecurity  安全(shrio)
 
 redis 保存sessionId
 
-RSA 密码加密
+前后端分离：使用session，跨域问题，前端部署到docker问题
+
+mybatis 
+
+mysql
 
 
 
-lombok get,set
+lombok 自动get,set
 
 swagger 文档
 
@@ -2678,13 +3024,31 @@ swagger 文档
 
 ## 字段校验
 
+​	DTO
+
 ## 动态验证码
 
-### uuid 32位
+​	kaptcha bean
 
-后端生成并检测，不能放在前端。
+## 登录密码验证
 
-## 访问权限
+​	加密算法 BCrypt
+
+​	安全配置类继承spring security WebSecurityConfigurerAdapter
+
+​		重写三个compare方法（对应认证、授权、资源控制）
+
+​		注入BCrypt密码机、注入 数据认证（在compare中使用)
+
+​	service实现UserDetailsService接口，实现loadUserByName方法(给数据认证的bean使用)
+
+AOP原理，时机
+
+## 访问权限 
+
+​	同上
+
+
 
 ## 保存登录信息，设置有效期
 
@@ -2692,13 +3056,16 @@ swagger 文档
 
 ### token
 
+### redis
+
 ## 事务
 
 @Transactionnal
 
 ## 自动编写文档
 
-
+swagger
 
 ## 自动生成get,set方法
 
+lombok
