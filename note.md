@@ -1,3 +1,103 @@
+# Java基础
+
+## 锁
+
+### 常见锁
+
+​	按照获取锁的方式可以分为悲观锁和乐观锁。
+
+#### 乐观锁
+
+​	乐观锁认为自己在使用数据时**不会有别的线程修改数据**，所以不会添加锁，只是在更新数据的时候去判断之前有没有别的线程更新了这个数据。如果这个数据没有被更新，当前线程将自己修改的数据成功写入。如果数据已经被其他线程更新，则根据不同的实现方式执行不同的操作（例如报错或者自动重试）。
+
+​	乐观锁在Java中是通过使用无锁编程来实现，最常采用的是CAS算法。Java原子类中的递增操作就通过CAS自旋实现的。
+
+#### 悲观锁
+
+​	悲观锁认为自己在使用数据的时候**一定有别的线程来修改数据**，因此在获取数据的时候会先加锁，确保数据不会被别的线程修改。
+
+​	偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁，降低获取锁的代价。
+
+#### 自旋锁
+
+​	CAS自旋等待虽然避免了线程切换的开销，但它要占用处理器时间。如果锁被占用的时间很短，自旋等待的效果就会非常好。反之，如果锁被占用的时间很长，那么自旋的线程只会白浪费处理器资源。所以，自旋等待的时间必须要有一定的限度，如果自旋超过了限定次数（默认是10次，可以更改）没有成功获得锁，就应当挂起线程。
+
+​	自适应自旋锁就是自适应设置自旋次数，对于某个锁，自旋很少成功获得过，那在以后尝试获取这个锁时将可能省略掉自旋过程，直接阻塞线程，避免浪费处理器资源。
+
+​	自旋锁会产生**ABA**问题，就是别的线程将数据的值修改了多次恢复到之前的值。可以通过加version字段解决。
+
+#### **重量级锁**
+
+​	通过**获取互斥量来获取锁**，获取失败则阻塞并等待唤醒。重量级锁是一种悲观锁。
+
+#### 读写锁
+
+​	写锁是独占锁，读锁是共享锁。
+
+
+
+
+
+### 锁升级
+
+<img src=".\src\main\resources\img\java-lock.jpg" alt="img" style="zoom:200%;" />
+
+​	**无锁**：通过**自旋修改数据**。
+
+​	**偏向锁**：引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次CAS原子指令，而偏向锁只需要在置换ThreadID的时候依赖一次CAS原子指令即可。线程不会主动释放偏向锁。
+
+​	**轻量级锁**：当偏向锁的时候，数据被另外的线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过**自旋获取锁**，不会阻塞，从而提高性能。
+
+​	**重量级锁**：通过获取互斥量来获取锁，获取失败则阻塞并等待唤醒。
+
+
+
+### 总结
+
+​	乐观锁和悲观锁只是一种思想，具体有多种实现。Java中无锁、偏向锁、轻量级锁、原子操作都是乐观锁，都是基于CAS实现的。而重量级锁则是悲观锁的一种实现方式。
+
+
+
+## IO
+
+### IO控制方式
+
+#### 程序查询
+
+​	程序查询方式也称为程序轮询方式，该方式采用用户程序直接控制主机与外部设备之间输入/输出操作。CPU必须不停地循环测试I/O设备的状态端口，当发现设备处于准备好(Ready)状态时，CPU就可以与I/O设备进行数据存取操作。即应用程序**主动查询、自行处理**。
+
+#### 中断
+
+​	当I/O设备结束(完成、特殊或异常)时，就会向CPU发出**中断请求信号**，CPU收到信号就可以采取相应措施。当某个进程要启动某个设备时，CPU就向相应的设备控制器发出一条设备I/O启动指令，然后CPU又返回做原来的工作。
+
+#### DMA
+
+​	DMA方式也称为直接主存存取方式，其思想是：允许主存储器和I/O设备之间通过“DMA控制器(DMAC)”直接进行批量数据交换，除了在数据传输开始和结束时，整个过程无须CPU的干预。
+
+#### 通道
+
+​	通道(Channel)也称为外围设备处理器、输入输出处理机，是相对于CPU而言的。是一个处理器。也能执行指令和由指令的程序，只不过通道执行的指令是与外部设备相关的指令。是一种实现主存与I/O设备进行直接数据交换的控制方式。
+
+
+
+### Java IO方式
+
+#### BIO
+
+​	服务器为每一个客户端连接启动一个线程，读写必须阻塞在一个线程，一直到操作完成。无缓冲区，单向流。适用于小型且固定的网络架构。
+
+#### NIO
+
+
+
+#### AIO
+
+
+
+
+
+​	
+
 # Servlet
 
 ​	Servlet 是 Server Applet 的缩写，译为“服务器端小程序”，是一种使用 Java 语言来开发动态网站的技术。
@@ -2529,17 +2629,41 @@ MyBatis有三个基本要素：
 
 # Redis
 
+​	命令行使用
+
+redis-server.exe --service-install redis.windows-6389.conf --service-name redis6389 --loglevel verbose 安装服务
+
+redis-server.exe --service-start --service-name redis6389 启动服务
+redis-server.exe --service-stop --service-name redis6389 停止服务
+redis-server.exe --service-uninstall–service-name redis6389 卸载服务
+
+redis-cli -h 127.0.0.1 -p 6389
+
+redis-cli -h 127.0.0.1 -p 6379
+
 ## 简介
 
-​	Redis 是一种基于内存的数据库，并且提供一定的持久化功能，它是一种键值（key-value）数据库。
+​	**Redis 是一种基于内存的数据库，不仅可以作为一种缓存工具，还能提供一定的持久化功能，它是一种键值型数据库。**
 
 其优点主要有：**响应速度快、支持多种数据结构、操作都是原子的、MultiUtility工具等。**
 
-​	redis6.0之前是其核心模块是单线程处理的，因为当时开发者认为K-V模式瓶颈不在CPU。但是随着高并发的来临，Redis6.0才引入多线程。
+​	**redis6.0之前是其核心模块是单线程处理的**，因为当时开发者认为K-V模式**瓶颈不在CPU，而在于网络I/O和内存**。但是随着高并发的来临，Redis6.0才引入多线程。
 
 ![img](.\src\main\resources\img\redis6-structure.jpg)
 
-### Redis支持的数据结构
+### **Redis特性**
+
+​	**响应速度快**
+
+​	**支持六种数据类型**
+
+​	**操作都是原子的**
+
+​	**多用途工具**（如缓存、消息队列、分布式锁等等）
+
+
+
+**Redis支持的数据结构**
 
 ​	Redis支持String，List，Set，Hash，Sorted set，HyperLogLog六种数据结构。
 
@@ -2556,15 +2680,558 @@ MyBatis有三个基本要素：
 
 
 
+## Spring中使用Redis
+
+​	使用Redis需要配置RedisTemplate，通过RedisTemplate来操作Redis。
+
+###  配置连接池
+
+
+
+```xml
+<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+    <!-- 最大空闲数 -->
+    <property name="maxIdle" value="50" />
+    <!-- 最大连接数 -->
+    <property name="maxTotal" value="100" />
+    <!-- 最大等待时间 -->
+    <property name="maxWaitMillis" value="20000" />
+</bean>
+```
+
+
+
+### 配置连接工厂
+
+​	在使用 Spring 提供的 RedisTemplate 之前需要配置 Spring 所提供的连接工厂，在 Spring Data Redis 方案中它提供了 4 种工厂模型。
+
+- JredisConnectionFactory。
+- JedisConnectionFactory。
+- LettuceConnectionFactory。
+- SrpConnectionFactory。
+
+```xml
+<bean id="connectionFactory"
+    class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+    <property name="hostName" value="localhost" />
+    <property name="port" value="6379" />
+    <!--<property name="password" value="password"/> -->
+    <property name="poolConfig" ref="poolConfig" />
+</bean>
+```
+
+- hostName，代表的是服务器，默认值是 localhost，所以如果是本机可以不配置它。
+- port，代表的是接口端口，默认值是 6379，所以可以使用默认的 Redis 端口，也可以不配置它。
+- password，代表的是密码，在需要密码连接 Redis 的场合需要配置它。
+- poolConfig，是连接池配置对象，可以设置连接池的属性。
+
+
+
+### 配置序列化
+
+​	 Java 对象存入 Redis时，往往需要将对象序列化（转换成String），然后使用 Redis 进行存储，而取回时，在通过反序列化转变为 Java 对象，Spring 模板中提供了封装的方案，在它内部提供了 RedisSerializer 接口。
+
+![Spring序列化器](.\src\main\resources\img\redis-serializer.jpg)
+
+
+
+Spring 中提供了以下几种实现 RedisSerializer 接口的序列化器。
+
+- GenericJackson2JsonRedisSerializer，通用的使用 Json2.jar 的包，将 Redis 对象的序列化器。
+- Jackson2JsonRedisSerializer<T>，通过 Jackson2.jar 包提供的序列化进行转换（由于版本太旧，Spring 不推荐使用）。
+- JdkSerializationRedisSerializer<T>，使用 JDK 的序列化器进行转化。
+- OxmSerializer，使用 Spring O/X 对象 Object 和 XML 相互转换。
+- StringRedisSerializer，使用字符串进行序列化。
+- GenericToStringSerializer，通过通用的字符串序列化进行相互转换。
+
+```xml
+<bean id="jdkSerializationRedisSerializer"
+    class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+<bean id="stringRedisSerializer"
+    class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+```
+
+
+
+### 配置RedisTemplate
+
+​	通过RedisTemplate操作Redis。连接池里面注入了连接工厂，而RedisTemplate里面注入的连接池和k-v的序列化；前面的所有配置都是为了配置RedisTemplate的。
+
+```xml
+<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+    <property name="connectionFactory" ref="connectionFactory" />
+    <property name="keySerializer" ref="stringRedisSerializer" />
+    <property name="valueSerializer" ref="jdkSerializationRedisSerializer" />
+</bean>
+```
+
+
+
+### 角色类声明
+
+​	需要将这个类的对象存储到redis中。
+
+```java
+package com.pojo;
+import java.io.Serializable;
+public class Role implements Serializable {
+    /**
+     * 注意，对象要可序列化，需要实现Serializable接口，往往要重写serialVersionUID
+     */
+    private static final long serialVersionUID = 3447499459461375642L;
+
+    private long id;
+    private String roleName;
+    private String note;
+    //省略setter和getter方法
+}
+```
+
+
+
+### 使用实例
+
+```java
+ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+RedisTemplate redisTemplate = applicationContext.getBean(RedisTemplate.class);
+Role role = new Role();
+role.setId(1L);
+role.setRoleName("role_name_1");
+role.setNote ("note_l");
+redisTemplate.opsForValue().set("role_1", role);
+Role role1 = (Role) redisTemplate.opsForValue().get ("role_1");
+System.out.println(role1.getRoleName());
+```
+
+​	
+
+​	注意，以上的使用都是基于 RedisTemplate、基于连接池的操作，换句话说，并不能保证每次使用 RedisTemplate 是操作同一个对 Redis 的连接。比如set 和 get 方法，**它可能就来自于同一个 Redis 连接池的不同 Redis 的连接**（？）。
+
+​	**为了使得所有的操作都来自于同一个连接，可以使用 SessionCallback** 或者 RedisCallback 这两个接口，而 RedisCallback 是比较底层的封装，其使用不是很友好，所以更多的时候会使用 SessionCallback 这个接口，**通过这个接口就可以把多个命令放入到同一个 Redis 连接中去执行**，代码如下所示，它主要是实现了上面代码中的功能。
+
+```java
+package redisDemo;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
+
+import com.pojo.Role;
+
+public class Test {
+    public static void main(String[] args) {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        RedisTemplate<String, Role> redisTemplate = applicationContext.getBean(RedisTemplate.class);
+        Role role = new Role();
+        role.setId(1L);
+        role.setRoleName("role_name_1");
+        role.setNote("role_note_1");
+        Role savedRole = (Role) redisTemplate.execute((ops)->{
+            ops.boundValueOps("role_1").set(role);
+            return (Role) ops.boundValueOps("role_1").get();
+		});
+        /*SessionCallback callBack = new SessionCallback<Role>() {
+            @Override
+            public Role execute(RedisOperations ops) throws DataAccessException {
+                ops.boundValueOps("role_1").set(role);
+                return (Role) ops.boundValueOps("role_1").get();
+            }
+        };
+        Role savedRole = (Role) redisTemplate.execute(callBack);*/
+        
+        System.out.println(savedRole.getId());
+    }
+}
+```
+
+​	这样 set 和 get 命令就能够保证在同一个连接池的同一个 Redis 连接进行操作。由于前后使用的都是同一个连接，因此对于资源损耗就比较小，在使用 Redis 操作多个命令或者使用事务时也会常常用到它。
+
+
+
+### RedisTemplate在springboot中使用
+
+#### 导入配置
+
+pom.xml中导入依赖
+
+```xml
+<!--Redis-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+```
+
+应用模块配置文件
+
+```properties
+# Redis服务器连接端口
+spring.redis.port=6379
+# Redis服务器地址
+spring.redis.host=127.0.0.1
+# Redis数据库索引（默认为0）
+spring.redis.database=0
+# Redis服务器连接密码（默认为空）
+spring.redis.password=
+# 连接池最大连接数（使用负值表示没有限制）
+spring.redis.jedis.pool.max-active=8
+# 连接池最大阻塞等待时间（使用负值表示没有限制）
+spring.redis.jedis.pool.max-wait=-1ms
+# 连接池中的最大空闲连接
+spring.redis.jedis.pool.max-idle=8
+# 连接池中的最小空闲连接
+spring.redis.jedis.pool.min-idle=0
+# 连接超时时间（毫秒）
+spring.redis.timeout=5000ms
+
+```
+
+首先注入RedisTemplate。
+
+```java
+@Autowired
+private RedisTemplate redisTemplate;
+```
+
+
+
+
+
+#### RedisTemplate的通用方法
+
+​	key
+
+```java
+//    删除key
+public void delete(String key){
+    redisTemplate.delete(key);
+}
+//    删除多个key
+public void deleteKey (String ...keys){
+    redisTemplate.delete(keys);
+}
+//    判断key是否存在
+public boolean hasKey(String key){
+    return redisTemplate.hasKey(key);
+}
+```
+
+有效期——expire
+
+```java
+//设置key的失效时间
+public void expire(String key,long time){
+    redisTemplate.expire(key,time,TimeUnit.MINUTES);
+}
+//根据key获取过期时间
+public long getExpire(String key){
+    Long expire = redisTemplate.getExpire(key);
+    return expire;
+}
+```
+
+分布式锁
+
+```java
+    /**
+     * 最终加强分布式锁
+     * @param key key值
+     * @return 是否获取到
+     */
+public boolean lock(String key) {
+        String lock = LOCK_PREFIX + key;
+        // 利用lambda表达式
+        return (Boolean) redisTemplate.execute(new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
+                long expireAt = System.currentTimeMillis() + LOCK_EXPIRE + 1;
+                Boolean acquire = redisConnection.setNX(lock.getBytes(), String.valueOf(expireAt).getBytes());
+                if (acquire) {
+                    return true;
+                } else {
+                    byte[] value = redisConnection.get(lock.getBytes());
+                    if (Objects.nonNull(value) && value.length > 0) {
+                        long expireTime = Long.parseLong(new String(value));
+                        if (expireTime < System.currentTimeMillis()) {
+                            // 如果锁已经过期
+                            byte[] oldValue = redisConnection.getSet(lock.getBytes(), String.valueOf(System.currentTimeMillis() + LOCK_EXPIRE + 1).getBytes());
+                            // 防止死锁
+                            return Long.parseLong(new String(oldValue)) < System.currentTimeMillis();
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+    }
+```
+
+
+
+
+
+
+
+#### String类型
+
+##### 添加缓存
+
+```java
+//1、通过redisTemplate设置值
+redisTemplate.boundValueOps("StringKey").set("StringValue");
+redisTemplate.boundValueOps("StringKey").set("StringValue",1, TimeUnit.MINUTES);
+
+//2、通过BoundValueOperations设置值
+BoundValueOperations stringKey = redisTemplate.boundValueOps("StringKey");
+stringKey.set("StringVaule");
+stringKey.set("StringValue",1, TimeUnit.MINUTES);
+
+//3、通过ValueOperations设置值
+ValueOperations ops = redisTemplate.opsForValue();
+ops.set("StringKey", "StringVaule");
+ops.set("StringValue","StringVaule",1, TimeUnit.MINUTES);
+```
+
+##### 设置过期时间
+
+```java
+redisTemplate.boundValueOps("StringKey").expire(1,TimeUnit.MINUTES);
+redisTemplate.expire("StringKey",1,TimeUnit.MINUTES);
+```
+
+##### 删除key
+
+```java
+Boolean result = redisTemplate.delete("StringKey");
+```
+
+##### 递增递减
+
+```java
+redisTemplate.boundValueOps("StringKey").increment(3L);
+redisTemplate.boundValueOps("StringKey").increment(-3L);
+
+```
+
+
+
+#### Set类型...
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 事务
+
+​	存在多个客户端同时向 Redis 系统发送命令的并发可能性，因此同一个数据，可能在不同的时刻被不同的线程所操纵，这样就出现了并发下的数据一致的问题。为了保证异性数据的安全性，Redis 为提供了事务方案。
 
 ​	Redis 读/写数据要比数据库快得多，如果使用 Redis 事务在某种场合下去替代数据库事务，则可以在保证数据一致性的同时，大幅度提高数据读/写的响应速度。
 
-## 主从复制
+​	Redis 的事务是使用 **MULTI-EXEC** 的命令组合，使用它可以提供两个重要的保证：
+
+- **隔离性**：事务是一个被隔离的操作，事务中的方法都会被 Redis 进行序列化并按顺序执行，事务在执行的过程中不会被其他客户端发生的命令所打断。
+- **原子性**：事务是一个原子性的操作，它要么全部执行，要么就什么都不执行。
+
+​	在一个 Redis 的**连接**中，更多时候使用Spring中**SessionCallback** 接口进行处理，在 Redis 中使用事务会经过 3 个过程：
+
+- **开启事务**。
+- **命令进入队列**。
+- **执行事务**。
+
+
+
+### Redis事务命令表
+
+| 命 令                     | 说 明                                                        | 备 注                                                        |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| multi                     | **开启事务**命令，之后的命令就进入队列，而不会马上被执行     | 在事务生存期间，所有的 Redis 关于数据结构的命令都会入队      |
+| watch key1 [key2......]   | **监听某些键**，当被监听的键在事务执行前被修改，则事务会被回滚 | 使用**乐观锁**（CAS）                                        |
+| unwatch key1 [key2......] | **取消监听**某些键                                           | ——                                                           |
+| exec                      | **执行事务**，如果被监听的键没有被修改，则采用执行命令，否则就回滚命令 | 在执行事务队列存储的命令前，Redis 会检测被监听的键值对有没有发生变化，如果没有则执行命令, 否则就回滚事务 |
+| discard                   | **回滚事务**                                                 | 回滚进入队列的事务命令，之后就不能再用 exec 命令提交了       |
+
+
+
+### 创建事务
+
+```c
+C:\Users\zhongbl1>d:
+D:\>cd D:\REDIS\Redis-x64-3.2.100
+D:\REDIS\Redis-x64-3.2.100>redis-cli.exe
+127.0.0.1:6379> multi
+OK
+127.0.0.1:6379> set key1 value1
+QUEUED
+127.0.0.1:6379> get key1
+QUEUED
+127.0.0.1:6379> exec
+1) OK
+2) "value1"
+127.0.0.1:6379>
+```
+
+	1. 使用 multi 启动了 Redis 的事务
+ 	2. 使用 set 和 get 命令，我们可以发现它并未马上执行，而是返回了一个“QUEUED”的结果。说明 Redis 将其放入队列中，并不会马上执行。
+ 	3. 命令执行到 exec 的时候它就会把队列中的命令发送给 Redis 服务器，这样存储在队列中的命令就会被执行了，所以才会有“OK”和“value1”的输出返回。
+
+```java
+ApplicationContext applicationContext= new ClassPathXmlApplicationContext("applicationContext.xml");
+RedisTemplate redisTemplate = applicationContext.getBean(RedisTemplate.class);
+SessionCallback callBack = (SessionCallback) (RedisOperations ops)-> {
+    ops.multi();
+    ops.boundValueOps("key1").set("value1");
+    //注意由于命令只是进入队列，而没有被执行，所以此处采用get命令，而value却返回为null
+    String value = (String) ops.boundValueOps("key1").get();
+    System.out.println ("事务执行过程中，命令入队列，而没有被执行，所以value为空： value="+value);
+    //此时list会保存之前进入队列的所有命令的结果
+    List list = ops.exec(); //执行事务
+    //事务结束后，获取value1
+    value = (String) redisTemplate.opsForValue().get("key1");
+    return value;
+};
+//执行Redis的命令
+String value = (String)redisTemplate.execute(callBack);
+System.out.println(value);
+```
+
+​	注意在exec后面再获取结果。
+
+### 事务回滚
+
+​	redis对于事务故障处理分两种情况：命令错误和数据结构错误。
+
+#### 命令错误
+
+​	在命令入队列时就会报错。其前后命令都不执行。
+
+```c
+127.0.0.1:6379> get key1
+(nil)
+127.0.0.1:6379> get key2
+(nil)
+127.0.0.1:6379> multi
+OK
+127.0.0.1:6379> set key1 value1
+QUEUED
+127.0.0.1:6379> incr
+(error) ERR wrong number of arguments for 'incr' command
+127.0.0.1:6379> set key2 value2
+QUEUED
+127.0.0.1:6379> exec
+(error) EXECABORT Transaction discarded because of previous errors.
+127.0.0.1:6379> get key1
+(nil)
+127.0.0.1:6379> get key2
+(nil)
+```
+
+
+
+#### 数据结构错误
+
+​	exec 命令执行后，之前进入队列的命令就依次执行，当遇到 incr 时**发生命令操作的数据类型错误**，所以显示出了错误，而**其之前和之后的命令都会被正常执行**。
+
+```c
+127.0.0.1:6379> get key1
+(nil)
+127.0.0.1:6379> get key2
+(nil)
+127.0.0.1:6379> mutil
+(error) ERR unknown command 'mutil'
+127.0.0.1:6379> get key1
+(nil)
+127.0.0.1:6379> get key2
+(nil)
+127.0.0.1:6379> multi
+OK
+127.0.0.1:6379> set key1 value1
+QUEUED
+127.0.0.1:6379> incr key1
+QUEUED
+127.0.0.1:6379> set key2 value2
+QUEUED
+127.0.0.1:6379> exec
+1) OK
+2) (error) ERR value is not an integer or out of range
+3) OK
+127.0.0.1:6379> get key1
+"value1"
+127.0.0.1:6379> get key2
+"value2"
+```
+
+
+
+### 监控事务
+
+​	在 Redis 中使用 watch 命令可以决定事务是执行还是回滚。一般而言，可以在 multi 命令之前使用 watch 命令监控某些键值对，然后使用 multi 命令开启事务，执行各类对数据结构进行操作的命令，这个时候这些命令就会进入队列。
+
+​	当 Redis 使用 exec 命令执行事务的时候，它首先会去比对被 watch 命令所监控的键值对，如果没有发生变化，那么它会执行事务队列中的命令，提交事务；如果发生变化，那么它不会执行任何事务中的命令，而去事务回滚。无论事务是否回滚，Redis 都会去取消执行事务前的 watch 命令，这个过程如图 1 所示。
+
+![Redis执行事务过程](.\src\main\resources\img\redis-watch.jpg)
+
+​	Redis 参考了多线程中使用的 **CAS**（比较与交换，Compare And Swap）去执行的。在数据高并发环境的操作中，我们把这样的一个机制称为**乐观锁**。
+
+
+
+
+
+
+
+## 主从同步
+
+### 主从同步基础概念
+
+​	互联网系统一般是以主从架构为基础的，所谓主从架构设计的思路大概是：
+
+- 在多台数据服务器中，只有一台主服务器，而**主服务器只负责写入数据，不负责让外部程序读取数据**。
+- 存在多台从服务器，**从服务器不写入数据，只负责同步主服务器的数据，并让外部程序读取数据**。
+- 主服务器在写入数据后，即刻将写入数据的命令发送给从服务器，从而使得主从数据同步。
+- 应用程序可以随机读取某一台从服务器的数据，这样就分摊了读数据的压力。
+- 当从服务器不能工作的时候，整个系统将不受影响；当主服务器不能工作的时候，可以方便地从从服务器中选举一台来当主服务器。
+
+![主从同步机制](.\src\main\resources\img\redis-master-follower.jpg)
+
+
+
+
+
+
+
+
 
 ## 持久化
 
-## 订阅消息
+## 发布-订阅
+
+
+
+​	
+
+![交易信息发布订阅机制](.\src\main\resources\img\redis-S-B.jpg)
+
+
+
+![image-20210722162423164](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\redis-P-S.jpg)
+
+
+
+
+
+
+
+## 多路复用
 
 
 
@@ -2626,11 +3293,11 @@ SQL执行流程
 
 
 
-### 数据同步
+## 数据同步
 
 ​	主要依赖 ZAB 协议来实现分布式数据一致性。ZAB 协议分为两部分：消息广播和崩溃恢复。基本思想是少数服从多数（大于一半）。
 
-#### 消息广播
+### 消息广播
 
 ​	Zookeeper 使用单一的主进程 Leader 来接收和处理客户端所有事务请求，并采用 ZAB 协议的原子广播协议，将事务请求以 **Proposal 提议**广播到所有 Follower 节点，当集群中**有过半的Follower 服务器进行正确的 ACK 反馈**，那么Leader就会再次向所有的 Follower 服务器**发送commit** 消息，将此次提案进行提交。这个过程可以简称为 2pc 事务提交，整个流程可以参考下图，注意 Observer 节点只负责同步 Leader 数据，不参与 2PC 数据同步过程。
 
@@ -2638,7 +3305,7 @@ SQL执行流程
 
 
 
-#### 崩溃恢复
+### 崩溃恢复
 
 ​	在正常情况消息广播情况下能运行良好，但是一旦 **Leader 服务器出现崩溃**，或者由于网络原理导致 Leader 服务器失去了与过半 Follower 的通信，那么就会进入崩溃恢复模式，**需要选举出一个新的 Leader 服务器**。在这个过程中可能会出现两种数据不一致性的隐患，需要 ZAB 协议的特性进行避免。
 
@@ -2650,7 +3317,7 @@ ZAB 协议的恢复模式使用了以下策略：
 - 1、选举 zxid 最大的节点作为新的 leader
 - 2、新 leader 将事务日志中尚未提交的消息进行处理
 
-#### Leader选举
+### Leader选举
 
 ​	leader 选举存在两个阶段，一个是服务器启动时 leader 选举，另一个是运行过程中 leader 服务器宕机。停止条件是有过半以上的server支持
 
@@ -2667,7 +3334,7 @@ ZAB 协议的恢复模式使用了以下策略：
 - **OBSERVING**: 观察状态，同步 leader 状态，不参与投票
 - **LEADING**: 领导者状态
 
-##### 选举流程
+#### 选举流程
 
 ![img](.\src\main\resources\img\zookeeper-vote.jpg)
 
@@ -2698,7 +3365,7 @@ ZAB 协议的恢复模式使用了以下策略：
 
 
 
-### 分布式锁
+## 分布式锁
 
 ​	**分布式锁应该具备的条件**：
 
@@ -2776,7 +3443,7 @@ delete key：删除key
 
 
 
-### 负载均衡
+## 负载均衡
 
 ​	这属于集群的范畴，集群中每个部件功能相同。用户是直连到 web 服务器（可以认为是一个分布式集群），如果这个服务器宕机了，那么用户自然也就没办法访问了。另外，如果同时有很多用户试图访问服务器，超过了其能处理的极限，就会出现加载速度缓慢或根本无法连接的情况。即单点故障情况。
 
@@ -3014,6 +3681,8 @@ destroyed: 实例销毁完成时 执行的钩子。
 ## vue-cli
 
 ​	vue-cli是官方提供的一个脚手架，用于快速生成一个vue项目的模板。类似天涯maven。
+
+
 
 
 
