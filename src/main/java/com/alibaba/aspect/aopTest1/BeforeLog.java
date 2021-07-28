@@ -22,4 +22,6 @@ public class BeforeLog   {
     public void before() throws Throwable {
         System.out.println("函数执行之前");
     }
+    
+
 }

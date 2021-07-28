@@ -1,6 +1,7 @@
 package com.alibaba.aspect.aopTest1.service;
 
 public class UserService1Impl implements UserService1{
+
     @Override
     public void add() {
         System.out.println("增加一个用户");

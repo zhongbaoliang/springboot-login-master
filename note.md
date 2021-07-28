@@ -822,41 +822,85 @@ public class MockConfiguration {
 
 ​	AOP采取横向抽取机制取代了传统的纵向继承机制，减少系统间的重复代码。
 
+​	过滤器、拦截器、监听器都属于面向切面编程的具体实现。
+
 ​	例如传统OOP中 通过一个类Access 对一个资源resource进行加锁解锁控制，要访问这个资源就需要继承Access类，而java只支持单继承（解决多继承中函数冲突问题），导致另外一个父类需要重复写入Access中的方法。而AOP可以将这一模块横向提取出来，提高代码复用，降低耦合。主要应用于日志管理、权限控制、异常处理等方面（百度百科举例)。
 
-​	过滤器、拦截器、监听器都属于面向切面编程的具体实现。
+​	
 
 ![image-20210712205442787](./src/main/resources/img/AOP.jpg)
 
-### Spring AOP术语
+### Spring AOP
 
-横切关注点：跨越应用程序多个模块的方法和功能。即与业务逻辑无关的，但是需要关注的部分。如：日志，安全，缓存，事务等**公共功能**。
+#### 术语
 
-切面（ASPECT）：横切关注点 被模块化的特殊对象，他是一个类，**如Log类。**
+​	横切关注点：跨越应用程序多个模块的方法和功能。即与业务逻辑无关的，但是需要关注的部分。如：日志，安全，缓存，事务等**公共功能**。
 
-通知（Advice）：切面必须要完成的工作，即一个方法，**如Log类中的写日志方法。**
+**目标**（Target）：被通知对象，即被代理类。
 
-目标（Target）：被通知对象，**即被代理类。**
+代理（Proxy）：向目标对象应用通知之后创建的对象，即·通过Log类和目标类生成的代理类。
 
-代理（Proxy）：向目标对象应用通知之后创建的对象，即·通过Log类和目标类生成的**代理类**。
-
-切入点（PointCut）：切面通知 执行的 位置。
+**切入点**（PointCut）：切面通知 执行的 位置。
 
 连接点（joinPoint）：与切入点匹配的执行点。
 
-增强：
+**切面**（ASPECT）：横切关注点 被模块化的特殊对象，他是一个类，如Log类。
 
-前置通知、后置通知、异常通知、返回通知、环绕通知
+**通知**：又叫增强，分为前置通知、后置通知、异常通知、返回通知、环绕通知。
+
+​	作用于业务层代码（函数）前后。
+
+​	前置增强@Before：在业务代码执行前
+
+​	后置增强@After：方法结束后（无论是正常执行完，还是抛出异常)
+
+​	返回增强@AfterReturning: 正确返回后
+
+​	环绕增强@Around ：目标方法执行前后增强
+
+​	异常抛出增强@AfterThrowing：目标方法抛出异常后增强
 
 
 
+#### 实例
+
+```java
+@Aspect//声明一个切面类
+@Component//注入给spring
+public class LoginLogAspect {
+
+	//方法1
+    @Pointcut("execution(public * com.test.sg.service.impl.LoginServiceImpl.login(..))")
+    public void login() {}
+    @AfterThrowing("login()")
+    public void loginFail(JoinPoint joinPoint) {
+        // fail
+        // 从切点获取方法的参数
+        Object[] args = joinPoint.getArgs();
+    }
+    
+    
+    //方法2  常用，直接给出包全名
+    public void regist(){}
+    @AfterReturning("execution(public * com.test.sg.service.impl.LoginServiceImpl.regist(..))")
+    public void loginSuccess(JoinPoint joinPoint) {
+        // success
+        // 从切点获取方法的参数
+        Object[] args = joinPoint.getArgs();
+    }
+}
+
+```
 
 
 
+​	execution表明连接点（被增强方法）的位置，以 *  号开头，最后面的*表示匹配目标（被代理类）任意方法，(..)表示任意参数。
 
-### 作用时机
 
-#### 过滤器
+
+### 过滤器
+
+作用时机：
 
 ​	服务启动
 
@@ -864,7 +908,28 @@ public class MockConfiguration {
 
 ​	每个请求
 
-#### 拦截器
+作用：
+
+* 过滤器是servlet中最实用的技术之一，可以用来过滤掉不符合要求的请求，通常用作session校验，判断用户权限，如果不符合条件，则会被拦截到特殊的地址或者基于特殊的响应。
+  
+* 它是JavaEE的标准，依赖于servlet，生命周期也与容器一致
+* 因此可以其在注销时释放资源或者数据入库
+* 基于回调函数实现，无法注入成为IOC容器的bean
+
+* 配置方式（见项目）：
+* 1. 直接使用@WebFilter。
+* 2. 在webConfig配置类中注册。
+
+* init 方法：在容器中创建当前过滤器的时候自动调用
+* destroy 方法：在容器中销毁当前过滤器的时候自动调用
+* doFilter 方法：过滤的具体操作
+
+* 总结：过滤器属于JavaEE，基于回调函数实现
+* 回调函数通过接口来实现
+
+### 拦截器
+
+作用时机：
 
 ​	作用域controller函数前后，或者MVC渲染之后。
 
@@ -874,33 +939,11 @@ public class MockConfiguration {
 
 ​	渲染之后
 
-#### 监听器
 
-​	可作用于整个服务期间
-
-#### 切面
-
-​	作用于业务层代码（函数）前后。
-
-​	前置增强：在业务代码执行前
-
-​	后置增强：方法结束后（无论是正常执行完，还是抛出异常)
-
-​	环绕增强：目标方法执行前后增强
-
-​	异常抛出增强：目标方法抛出异常后增强
-
-​	引介增强：在目标类中添加新的方法属性
-
-```java
-@After("execution(* com.alibaba.aspect.aopTest1.service.UserService1Impl.*(..))")
-```
-
-​	@After表明通知（增强方法）位于连接点（被增强的方法）之前，execution表明连接点（被增强方法）的位置，以 *  号开头，最后面的*表示匹配目标（被代理类）任意方法，(..)表示任意参数。
 
 过滤器与拦截器区别：
 
-所属范畴不同：过滤器属于JavaEE，拦截器属于SpringMVC
+所属范畴不同：过滤器属于Servlet，拦截器属于SpringMVC
 
 实现方式不同：过滤器基于回调函数，拦截器基于反射机制
 
@@ -909,6 +952,12 @@ public class MockConfiguration {
 作用范围不同：过滤器适用于所有请求，拦截器只适用于SpringMVC的action。
 
 ​	使用过滤器对Web资源进行保护，使用拦截器对方法调用进行保护。
+
+
+
+### 监听器
+
+​	可作用于整个服务期间
 
 
 

@@ -18,7 +18,11 @@ import javax.servlet.http.HttpSession;
  * 拦截器是SpringMVC的内容，依赖于web框架，通常用于用户权限验证或者记录日志
  * 拦截器是基于反射来实现，因此拦截器可以注入到IOC容器中
  *
+ *
+ *
  * 总结：拦截器属于SpringMVC，基于反射，主要用于权限验证和记录日志
+ *
+ *
  */
 
 @Log4j2
