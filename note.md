@@ -959,7 +959,12 @@ public class Test {
 
 ```java
 package proxy;
- 
+
+
+//代理类与被代理类实现同一个接口
+interface DoSomething {
+	void doIt();
+}
 //被代理类（目标）
 class Model implements DoSomething {
 	@Override
@@ -988,10 +993,6 @@ class Proxy implements DoSomething {
 	}
 }
 
-//代理类与被代理类实现同一个接口
-interface DoSomething {
-	void doIt();
-}
 
 public class Test {
 	public static void main(String[] args) {
@@ -1288,6 +1289,140 @@ public class UserDaoImpl implements UserDao {
     <tx:annotation-driven
         transaction-manager="transactionManager" />
 ```
+
+
+
+## Spring 多线程
+
+​	Spring通过任务执行器（TaskExecutor）来实现多线程和并发编程。使用ThreadPoolTaskExecutor可实现一个基于线程池的TaskExecutor。而实际开发中任务一般是非阻碍的，即异步的，所以我们要在配置类中通过@EnableAsync开启对异步任务的支持，并通过在实际执行的Bean的方法中使用@Async注解声明其是一个异步任务。
+
+​	1. 配置线程池参数，利用@EnableAsync注解开启异步任务支持。
+
+​	2. 使用@Async注解声明一个异步任务。
+
+```java
+import java.util.concurrent.Executor;
+
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+/**
+ * @Description: 配置类实现AsyncConfigurer接口，并重写getAsyncExecutor方法，并返回一个ThreadPoolTaskExecutor，
+ * 这样我们就获得一个基于线程池TaskExecutor
+ * @ClassName: CustomMultiThreadingConfig
+ * @Author: OnlyMate
+ * @Date: 2018年9月21日 下午2:50:14
+ */
+@Configuration
+@ComponentScan("com.only.mate.springboot.multithreading")
+@EnableAsync//利用@EnableAsync注解开启异步任务支持
+public class CustomMultiThreadingConfig implements AsyncConfigurer{
+
+    @Override
+    public Executor getAsyncExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(5);
+        taskExecutor.setMaxPoolSize(10);
+        taskExecutor.setQueueCapacity(25);
+        taskExecutor.initialize();
+        return taskExecutor;
+    }
+
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return AsyncConfigurer.super.getAsyncUncaughtExceptionHandler();
+    }
+    
+}
+```
+
+
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+/**
+ * @Description: 创建线程任务服务
+ * @ClassName: CustomMultiThreadingService
+ * @Author: OnlyMate
+ * @Date: 2018年9月21日 下午3:17:57
+ */
+@Service
+public class CustomMultiThreadingService {
+    private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
+    /**
+     * @Description:通过@Async注解表明该方法是一个异步方法，
+     * 如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
+     * @Title: executeAysncTask1
+     * @Date: 2018年9月21日 下午2:54:32
+     * @Author: OnlyMate
+     * @Throws
+     * @param i
+     */
+    @Async
+    public void executeAysncTask1(Integer i){
+        logger.info("CustomMultiThreadingService ==> executeAysncTask1 method: 执行异步任务{} ", i);
+    }
+    
+    /**
+     * @Description:通过@Async注解表明该方法是一个异步方法，
+     * 如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
+     * @Title: executeAsyncTask2
+     * @Date: 2018年9月21日 下午2:55:04
+     * @Author: OnlyMate
+     * @Throws
+     * @param i
+     */
+    @Async
+    public void executeAsyncTask2(Integer i){
+        logger.info("CustomMultiThreadingService ==> executeAsyncTask2 method: 执行异步任务{} ", i);
+    }
+}
+```
+
+
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.only.mate.springboot.multithreading.CustomMultiThreadingService;
+
+/**
+ * @Description:自定义多线程Controller
+ * @ClassName: CustomMultiThreadingController
+ * @Author: OnlyMate
+ * @Date: 2018年9月21日 下午3:02:49
+ */
+@Controller
+@RequestMapping(value="/multithreading")
+public class CustomMultiThreadingController {
+    @Autowired
+    private CustomMultiThreadingService customMultiThreadingService;
+    
+    @ResponseBody
+    @RequestMapping(value="/dotask")
+    public String doTask() {
+        for (int i=0;i<10;i++){
+            customMultiThreadingService.executeAysncTask1(i);
+            customMultiThreadingService.executeAsyncTask2(i);
+        }
+        
+        return "success";
+    }
+}
+```
+
+
 
 
 
@@ -2220,18 +2355,22 @@ public class UserServiceImpl implements UserService {
 ### 参数传递
 
 1. @**RequestParam** 可获取多个参数，POST,PUT中使用
-
 2. @**PathVariable**
-
 3. **@ModelAttribute** 修饰方法，表明该方法在当前Controller的所有响应方法前面执行。主要用来做一些权限校验等。
-
 4. 
-
 5. @**RequestBody** 用于将请求体中的数据绑定到方法的形参中，该注解应用在方法的形参上。。只适用于post方法，因为get方法没有请求体。
-
 6. **@ResponseBody** 用于直接返回 return 对象，该注解应用在方法上。用于ajax异步传输。
-
 7. **@RestController**  @Controller + @ResponseBody，主要是为了使 http 请求返回 json 或者xml格式数据，一般情况下都是使用这个注解。
+
+
+
+
+
+## 异步任务
+
+1. **@EnableAsync**  利用@EnableAsync注解开启异步任务支持。
+
+2. **@Async** 通过@Async注解表明该方法是一个异步方法，如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
 
    
 
@@ -2445,7 +2584,7 @@ public class Singleton{
 
 ​	非对称加密：加密密钥与解密密钥不同，使用可以公开的公钥进行加密，使用私钥进行解密。其特点是效率低，但是安全性高。如RSA
 
-​	**使用非对称密码算法的公钥对 对称密码算法的密钥进行解密**
+​	**使用非对称密码算法的公钥对 对称密码算法的密钥进行加密**
 
 （1） Alice需要在银行的网站做一笔交易，她的浏览器首先生成了一个随机数作为对称密钥。
 
@@ -2473,17 +2612,39 @@ public class Singleton{
 
 ​	种类：hash算法，散列算法，摘要算法
 
-​	如：MD5、SHA、HMAC、**BCrypt**
+​	如：MD5、**SHA**系列、HMAC
 
 ​	主要用于密码加密。
 
 
 
+## 数字签名
+
+​	就是接收方能够验证 发送方信息 接受内容是否被篡改。
+
+​	方法就是发送方 通过私钥对数据进行签名，将明文和密文一起发送，接收方能够通过公钥对密文和明文进行验签。
 
 
 
+## 流程
 
 
+
+![img](.\src\main\resources\img\safe-structure01.jpg)
+
+
+
+​	一次性加盐OTP。
+
+内网：前端通过RSA公钥对明文（密码+OTP一次性盐）进行加密。
+
+​			后端通过RSA私钥对明文进行解密，验证并去除OTP，得到密文的原文，对其进行不可逆加密存入数据库（注册）或加密后与数据库对应字段值进行比对（登录）。
+
+BCrypt
+
+​	每次加密使用的盐都不相同，并且不存储盐。注册时加盐加密后将密文写到数据库中。
+
+​	登录时，通过数据库中的密文 和 用户输入的密码明文去判断是否能再次生成原来的密文。
 
 
 
@@ -2677,6 +2838,40 @@ redis-cli -h 127.0.0.1 -p 6379
 | HASH（哈希散列表）  | 它类似于 [Java](http://c.biancheng.net/java/) 语言中的 Map，是一个键值对应的无序列表 | 可以増、删、査、改单个键值对，也可以获取所有的键值对         |
 | ZSET（有序集合）    | 它是一个有序的集合，可以包含字符 串、整数、浮点数、分值（score），元素 的排序是依据分值的大小来决定的 | 可以增、删、査、改元素，根据分值的范围或者成员 來获取对应的元索 |
 | HyperLogLog（基数） | 它的作用是计算重复的值，以确定存储的数量                     | 只提供基数的运算，不提供返回的功能                           |
+
+
+
+## 命令行操作
+
+​	
+
+```c
+cd /d  D:\REDIS\Redis-x64-3.2.100
+redis-server.exe redis.windows.conf //临时开启服务
+
+redis-cli.exe //进入服务
+redis-cli -p 6389  //进入特定端口的redis服务
+shutdown  //关闭服务
+exit  //退出服务
+
+redis-server.exe --service-install redis.windows-6389.conf --service-name redis6389 --loglevel verbose //安装服务
+redis-server.exe --service-start --service-name redis6389 //启动服务
+redis-server.exe --service-stop --service-name redis6389 //停止服务
+redis-server.exe --service-uninstall–service-name redis6389 //卸载服务
+    
+    
+//在lenovo电脑上已经新建了两个redis服务  redis和redis6389
+cd /d  D:\REDIS\Redis-x64-3.2.100 
+redis-server.exe --service-start --service-name redis//开启了6379端口的redis
+redis-cli -p 6379
+    
+redis-server.exe --service-start --service-name redis6389//开启了6389端口的redis
+redis-cli -p 6389
+```
+
+
+
+多个端口redis配置：https://blog.csdn.net/liuqinen/article/details/103993134
 
 
 
@@ -3082,8 +3277,8 @@ QUEUED
 ```
 
 	1. 使用 multi 启动了 Redis 的事务
- 	2. 使用 set 和 get 命令，我们可以发现它并未马上执行，而是返回了一个“QUEUED”的结果。说明 Redis 将其放入队列中，并不会马上执行。
- 	3. 命令执行到 exec 的时候它就会把队列中的命令发送给 Redis 服务器，这样存储在队列中的命令就会被执行了，所以才会有“OK”和“value1”的输出返回。
+	2. 使用 set 和 get 命令，我们可以发现它并未马上执行，而是返回了一个“QUEUED”的结果。说明 Redis 将其放入队列中，并不会马上执行。
+	3. 命令执行到 exec 的时候它就会把队列中的命令发送给 Redis 服务器，这样存储在队列中的命令就会被执行了，所以才会有“OK”和“value1”的输出返回。
 
 ```java
 ApplicationContext applicationContext= new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -3171,7 +3366,7 @@ QUEUED
 "value2"
 ```
 
-
+​	Redis 之所以保持这样简易的事务，完全是为了保证移动互联网的核心问题——性能。
 
 ### 监控事务
 
@@ -3191,13 +3386,15 @@ QUEUED
 
 ## 主从同步
 
+​	读/写分离的前提是读操作远远比写操作频繁得多，如果把数据都存放在多台服务器上那么就可以从多台服务器中读取数据，从而消除了单台服务器的压力，读/写分离的技术已经广泛用于数据库中了。
+
 ### 主从同步基础概念
 
 ​	互联网系统一般是以主从架构为基础的，所谓主从架构设计的思路大概是：
 
 - 在多台数据服务器中，只有一台主服务器，而**主服务器只负责写入数据，不负责让外部程序读取数据**。
 - 存在多台从服务器，**从服务器不写入数据，只负责同步主服务器的数据，并让外部程序读取数据**。
-- 主服务器在写入数据后，即刻将写入数据的命令发送给从服务器，从而使得主从数据同步。
+- 主服务器在写入数据后，即刻**将写入数据的命令发送给从服务器**，从而使得主从数据同步。
 - 应用程序可以随机读取某一台从服务器的数据，这样就分摊了读数据的压力。
 - 当从服务器不能工作的时候，整个系统将不受影响；当主服务器不能工作的时候，可以方便地从从服务器中选举一台来当主服务器。
 
@@ -3207,11 +3404,39 @@ QUEUED
 
 
 
+### Redis主从同步流程
+
+​	新加从服务器或者从服务器重启时：
+
+![Redis主从同步](.\src\main\resources\img\redis-syn.jpg)
+
+​	
+
+1）无论如何要先保证主服务器的开启，开启主服务器后，从服务器通过命令或者重启配置项可以同步到主服务器。
+
+2）当从服务器启动时，读取同步的配置，根据配置决定是否使用当前数据响应客户端，然后发送 SYNC 命令。
+
+当主服务器接收到同步命令的时候，就会执行 bgsave 命令备份数据，但是主服务器并不会拒绝客户端的读/写，而是将来自客户端的写命令写入缓冲区。从服务器未收到主服务器备份的快照文件的时候，会根据其配置决定使用现有数据响应客户端或者拒绝。
+
+3）当 bgsave 命令被主服务器执行完后，开始向从服务器发送备份文件，这个时候从服务器就会丢弃所有现有的数据，开始载入发送的快照文件。
+
+4）当主服务器发送完备份文件后，从服务器就会执行这些写入命令。此时就会把 bgsave 执行之后的缓存区内的写命令也发送给从服务器，从服务完成备份文件解析，就开始像往常一样，接收命令，等待命令写入。
+
+5）缓冲区的命令发送完成后，当主服务器执行一条写命令后，就同时往从服务器发送同步写入命令，从服务器就和主服务器保持一致了。而此时当从服务器完成主服务器发送的缓冲区命令后，就开始等待主服务器的命令了。
+
+总结
+
+​	主要就是两种情况：
+
+​	**从服务器请求同步**，主要用于新加从服务器或者重启从服务器。
+
+​	所有从服务器与主服务器同步后，**主服务器将每一条写指令分发给从服务器。**
 
 
 
 
-## 持久化
+
+
 
 ## 发布-订阅
 
@@ -3221,11 +3446,37 @@ QUEUED
 
 ![交易信息发布订阅机制](.\src\main\resources\img\redis-S-B.jpg)
 
+​	建立了一个消息渠道，短信系统、邮件系统和微信系统都在监听这个渠道，一旦记账系统把交易消息发送到消息渠道，则**监听**这个渠道的各个系统就可以拿到这个消息，这样就能处理各自的任务了。
 
+从上面的分析可以知道以下两点：
+
+- 要有发送的消息渠道，让记账系统能够发送消息。
+- 要有订阅者（短信、邮件、微信等系统）订阅这个渠道的消息。
 
 ![image-20210722162423164](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\redis-P-S.jpg)
 
 
+
+## 垃圾回收
+
+​	和 Java 虚拟机一样，当内存不足时 Redis 会触发自动垃圾回收的机制。	
+
+​	如果 key 超时了，Redis 会回收 key 的存储空间吗？
+
+​	Redis 的 key 超时不会被其自动回收，它只会标识哪些键值对超时了。
+
+Redis 提供两种方式回收这些超时键值对，它们是定时回收和惰性回收。
+
+- **定时回收**是指在确定的某个时间触发一段代码，回收超时的键值对。
+- **惰性回收**则是当一个超时的键，被再次用 get 命令访问时，将触发 Redis 将其从内存中清空。
+
+​	定时回收可以完全回收那些超时的键值对，但是缺点也很明显，如果这些键值对比较多，则 Redis 需要运行较长的时间，从而导致停顿。所以系统设计者一般会选择在没有业务发生的时刻触发 Redis 的定时回收，以便清理超时的键值对。
+
+​	对于惰性回收而言，它的优势是可以指定回收超时的键值对，它的缺点是要执行一个莫名其妙的 get 操作，或者在某些时候，我们也难以判断哪些键值对已经超时。
+
+
+
+## 持久化
 
 
 
@@ -3251,19 +3502,21 @@ SQL执行流程
 
 
 
-# Zookeeper
+# 分布式系统
 
-​	Zookeeper是一个典型的**分布式数据一致性**的解决方案，分布式应用程序可以基于它实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、**Master 选举**、分布式锁和分布式队列等功能。**冗余服务实现高可用性。（？）**
+​	分布式：一个业务分拆多个子业务，部署在不同的服务器上。
+
+​	集群：同一个业务，部署在多个服务器上。
+
+
+
+​	分布式系统的目标是提升系统的**整体性能和吞吐量**另外还要尽量保证分布式系统的**容错性**。
 
 
 
 ## 基础理论
 
-### zookeeper 数据结构
 
-​	zookkeeper 提供的名称空间非常类似于标准文件系统，key-value 的形式存储。名称 key 由斜线 **/** 分割的一系列路径元素，zookeeper 名称空间中的每个节点都是由一个路径标识。**规定同一个目录下只能有一个唯一文件名**。
-
-![img](.\src\main\resources\img\zookeeper-dataStructure.jpg)
 
 ### CAP理论
 
@@ -3272,10 +3525,41 @@ SQL执行流程
 ​	CAP 理论指出对于一个分布式计算系统来说，不可能同时满足以下三点：
 
 - **一致性（Consistency）**：在分布式环境中，一致性是指数据在多个**副本之间**是否能够保持一致的特性，等同于所有节点访问同一份最新的数据副本。在一致性的需求下，当一个系统在数据一致的状态下执行更新操作后，应该保证系统的数据仍然处于一致的状态。
-- **可用性（Availability）：**每次请求都能获取到正确的响应，但是不保证获取的数据为**最新**数据。
-- **分区容错性（Partition tolerance）：**分布式系统在遇到任何网络分区**故障**的时候，仍然需要能够保证对外提供满足一致性和可用性的服务，除非是整个网络环境都发生了故障。
+- **可用性（Availability）：**每次请求**都能获取到正确的响应**，但是**不保证获取的数据为最新数据**（即数据可能会有短暂的不一致）。
+- **分区容错性（Partition tolerance）：**分布式系统在遇到任何网络分区**故障**的时候，仍然需要能够保证对外提供满足一致性和可用性的服务（一个子系统发生故障不影响其他子系统），除非是整个网络环境都发生了故障。
 
-​	在这三个基本需求中，最多只能同时满足其中的两项，P 是必须的，因此只能在 CP 和 AP 中选择，**zookeeper 保证的是 CP**，对比 spring cloud 系统中的注册中心 eruka 实现的是 AP。
+​	在这三个基本需求中，最多只能同时满足其中的两项，P 是分布式系统必须的。因此只能在 CP 和 AP 中选择，即保证分区容错性后，只能选择一致性或者可用性。**zookeeper 保证的是 CP**，对比 spring cloud 系统中的注册中心 **eureka实现的是 AP**。
+
+------
+
+​	*（跳过）理解：一致性可以理解为每次请求获取的数据都是最新的；*
+
+​				*而可用性就是保证每次请求都能拿到数据；*
+
+​	*一致性与可用性不可兼得的：要保证一致性，则要更新每一个服务器中的副本，但是网络延时会导致更新速度较慢，甚至可能出现网络断开情况，要满足一致性则不能响应请求，即不可用；要满足可用性则无法满足一致性。*
+
+​	*CA without P：如果不要求P（不允许分区），则C（强一致性）和A（可用性）是可以保证的。但放弃P的同时也就意味着放弃了系统的扩展性，也就是分布式节点受限，没办法部署子节点，这是违背分布式系统设计的初衷的。*
+
+​	*CP without A：如果不要求A（可用），相当于每个请求都需要在服务器之间保持强一致，而P（分区）会导致同步时间无限延长(也就是等待数据同步完才能正常访问服务)，一旦发生网络故障或者消息丢失等情况，就要牺牲用户的体验，等待所有数据全部一致了之后再让用户访问系统。设计成CP的系统其实不少，最典型的就是分布式数据库，如Redis、HBase等。对于这些分布式数据库来说，数据的一致性是最基本的要求，因为如果连这个标准都达不到，那么直接采用关系型数据库就好，没必要再浪费资源来部署分布式数据库。*
+
+ 	*AP wihtout C：要高可用并允许分区，则需放弃一致性。一旦分区发生，节点之间可能会失去联系，为了高可用，每个节点只能用本地数据提供服务，而这样会导致全局数据的不一致性。典型的应用就如某米的抢购手机场景，可能前几秒你浏览商品的时候页面提示是有库存的，当你选择完商品准备下单的时候，系统提示你下单失败，商品已售完。这其实就是先在 A（可用性）方面保证系统可以正常的服务，然后在数据的一致性方面做了些牺牲，虽然多少会影响一些用户体验，但也不至于造成用户购物流程的严重阻塞。*
+
+
+------
+
+
+
+### 模式
+
+#### 主从模式
+
+​	主从模式（C/S)：master负责处理客户端写数据请求，并将数据更新传递给follower，follower负责处理客户端读取数据请求。（zookeeper）
+
+#### 对等模式
+
+​	对等模式(P2P)：没有主从之分，每台机器都可以用来读写。一般用作高容灾方案。（Eureka）
+
+
 
 
 
@@ -3284,7 +3568,7 @@ SQL执行流程
 ​	BASE 是 Basically Available(基本可用)、Soft-state(软状态) 和 Eventually Consistent(最终一致性) 三个短语的缩写。
 
 - **基本可用：**在分布式系统出现故障，允许损失部分可用性（服务降级、页面降级）。
-- **软状态：**允许分布式系统出现中间状态。而且中间状态不影响系统的可用性。这里的中间状态是指不同的 data replication（数据备份节点）之间的数据更新可以出现延时的最终一致性。
+- **软状态：**允许分布式系统出现中间状态。而且中间状态不影响系统的可用性。这里的中间状态是指不同的 data replication（数据备份节点）之间的数据更新可以出现**延时的最终一致性。**
 - **最终一致性：**data replications 经过一段时间达到一致性。
 
 
@@ -3293,11 +3577,92 @@ SQL执行流程
 
 
 
-## 数据同步
+### 心跳机制
+
+#### 分布式系统存在的问题
+
+- 各个模块（节点/服务）如何保证当前状态正常，如果让调用者知道服务还活着。部署多个相同服务时如何能调用服务正常的那个节点？
+- 如何保证服务中的高可用？
+- 分布式中系统容错怎么处理？
+- 分布式的负载均衡时怎么做的？
+
+#### 分布式之心跳机制
+
+​	分布式系统架构中会有多个节点（node），有的时多个不同的节点服务，有的时多个一样的服务节点。这些节点分担着任务的运行、计算、或者程序逻辑的处理，如果一个节点出现了故障有时将使整个系统无法工作。
+
+​	心跳机制就应运而生，**以固定的频率向其他节点汇报当前节点状态的方式，收到心跳后一般认为当前节点和网络拓扑是良好的**。在进行汇报时也携带上元数据等信息，方便管理中心进行管理。
+
+#### 单方面传递心跳的弊端
+
+​	若server收不到node1的心跳，则说明node1失去了联系，但是并不一定是出现故障，也有可能出现node1服务处于繁忙状态，导致心跳传输超时。也有可能是server于node1之间的网络链路出现故障或者闪断，所以这种单方面传递的心跳不是万能的。
+
+#### 解决方案
+
+1. 使用周期性检测心跳机制：server每隔s秒向各个node发送检测请求，设定一个超时时间，如果超过超时时间，则进入死亡列表。
+2. 累计失效检测机制：在1 的基础之上，统计一定周期内节点的返回情况，以此来计算节点的死亡概率（超过超时次数/总检测次数）。对于死亡列表中的节点发起有限次数的重试，来做进一步判断。
+3. 对于设定的概率进行比对如果达到设定的概率可以进行一个真实踢出局的操作。
+
+
+
+### 注册中心
+
+注册中心主要涉及到三大角色：
+
+1. 服务提供者
+2. 服务消费者
+3. 注册中心
+
+它们之间的关系大致如下：
+
+1. 各个微服务在启动时，将自己的网络地址等信息注册到注册中心，注册中心存储这些数据。
+2. 服务消费者从注册中心查询服务提供者的地址，并通过该地址调用服务提供者的接口。
+3. 各个微服务与注册中心使用一定机制（例如心跳）通信。如果注册中心与某微服务长时间无法通信，就会注销该实例。
+4. 微服务网络地址发送变化（例如实例增加或IP变动等）时，会重新注册到注册中心。这样，服务消费者就无需人工修改提供者的网络地址了。
+
+​	![img](.\src\main\resources\img\center-of-regist.jpg)
+
+注册中心应具备以下功能：
+
+1. **服务注册表**
+   服务注册表是注册中心的核心，它用来记录各个微服务的信息，例如微服务的名称、IP、端口等。服务注册表提供查询API和管理API，查询API用于查询可用的微服务实例，管理API用于服务的注册与注销。
+2. **服务注册与发现**
+   服务注册是指微服务在启动时，将自己的信息注册到注册中心的过程。服务发现是指查询可用的微服务列表及网络地址的机制。
+3. **服务检查**
+   注册中心使用一定的机制定时检测已注册的服务，如发现某实例长时间无法访问，就会从服务注册表移除该实例。
+
+​	Spring Cloud提供了多种注册中心的支持，例如Eureka、Consul和ZooKeeper等
+
+
+
+
+
+
+
+
+
+## Zookeeper
+
+​	Zookeeper是一个典型的**分布式数据一致性**的解决方案。分布式应用程序可以基于它实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、**Master 选举**、分布式锁和分布式队列等功能。**冗余服务实现高可用性。**
+
+​	
+
+### 基础理论
+
+#### zookeeper 数据结构
+
+​	zookkeeper 提供的名称空间非常类似于标准文件系统，key-value 的形式存储。名称 key 由斜线 **/** 分割的一系列路径元素，zookeeper 名称空间中的每个节点都是由一个路径标识。**规定同一个目录下只能有一个唯一文件名**。
+
+![img](.\src\main\resources\img\zookeeper-dataStructure.jpg)
+
+
+
+
+
+### 数据同步
 
 ​	主要依赖 ZAB 协议来实现分布式数据一致性。ZAB 协议分为两部分：消息广播和崩溃恢复。基本思想是少数服从多数（大于一半）。
 
-### 消息广播
+#### 消息广播
 
 ​	Zookeeper 使用单一的主进程 Leader 来接收和处理客户端所有事务请求，并采用 ZAB 协议的原子广播协议，将事务请求以 **Proposal 提议**广播到所有 Follower 节点，当集群中**有过半的Follower 服务器进行正确的 ACK 反馈**，那么Leader就会再次向所有的 Follower 服务器**发送commit** 消息，将此次提案进行提交。这个过程可以简称为 2pc 事务提交，整个流程可以参考下图，注意 Observer 节点只负责同步 Leader 数据，不参与 2PC 数据同步过程。
 
@@ -3305,7 +3670,7 @@ SQL执行流程
 
 
 
-### 崩溃恢复
+#### 崩溃恢复
 
 ​	在正常情况消息广播情况下能运行良好，但是一旦 **Leader 服务器出现崩溃**，或者由于网络原理导致 Leader 服务器失去了与过半 Follower 的通信，那么就会进入崩溃恢复模式，**需要选举出一个新的 Leader 服务器**。在这个过程中可能会出现两种数据不一致性的隐患，需要 ZAB 协议的特性进行避免。
 
@@ -3317,7 +3682,7 @@ ZAB 协议的恢复模式使用了以下策略：
 - 1、选举 zxid 最大的节点作为新的 leader
 - 2、新 leader 将事务日志中尚未提交的消息进行处理
 
-### Leader选举
+#### Leader选举
 
 ​	leader 选举存在两个阶段，一个是服务器启动时 leader 选举，另一个是运行过程中 leader 服务器宕机。停止条件是有过半以上的server支持
 
@@ -3365,7 +3730,7 @@ ZAB 协议的恢复模式使用了以下策略：
 
 
 
-## 分布式锁
+### 分布式锁
 
 ​	**分布式锁应该具备的条件**：
 
@@ -3402,6 +3767,8 @@ ZAB 协议的恢复模式使用了以下策略：
 （1）SETNX
 
 SETNX key val：当且仅当key不存在时，set一个key为val的字符串，返回1；若key存在，则什么都不做，返回0。
+
+​	**每个资源对应一个key。每个客户端对应一个val（如token），才能保证只能释放自己加的锁**。
 
 （2）expire
 
@@ -3443,7 +3810,7 @@ delete key：删除key
 
 
 
-## 负载均衡
+### 负载均衡
 
 ​	这属于集群的范畴，集群中每个部件功能相同。用户是直连到 web 服务器（可以认为是一个分布式集群），如果这个服务器宕机了，那么用户自然也就没办法访问了。另外，如果同时有很多用户试图访问服务器，超过了其能处理的极限，就会出现加载速度缓慢或根本无法连接的情况。即单点故障情况。
 
@@ -3478,19 +3845,15 @@ delete key：删除key
 
 
 
-# Kafka
-
-​	Kafka是一个分布式、支持分区的（partition）、多副本的（replica），基于zookeeper协调的分布式消息系统，它的最大的特性就是可以实时的处理大量数据以满足各种需求场景：比如基于hadoop的批处理系统、低延迟的实时系统、storm/Spark流式处理引擎，web/nginx日志、访问日志，消息服务等等.
-
-​	**顺序写磁盘效率比随机写内存还要高**是Kafka高吞吐率的一个很重要的保证.
-
 ## 消息系统
+
+### 消息系统
 
 ​	一个消息系统负责将数据从一个应用传递到另外一个应用，应用只需关注于数据，无需关注数据在两个或多个应用间是如何传递的。**分布式消息传递基于可靠的消息队列，在客户端应用和消息系统之间异步传递消息。**
 
-​	消息系统按照消息z传递模式可分为点对点模式和发布-订阅模式（Kafka）。
+​	消息系统按照消息传递模式可分为点对点模式和发布-订阅模式（Kafka）。
 
-### 点对点模式
+#### 点对点模式
 
 ​	在点对点消息系统中，消息持久化到一个队列中。此时，将有一个或多个消费者消费队列中的数据。但是一条消息只能被消费一次。当一个消费者消费了队列中的某条数据之后，该条数据则从消息队列中删除。该模式即使有多个消费者同时消费数据，也能保证数据处理的顺序。
 
@@ -3498,7 +3861,7 @@ delete key：删除key
 
 ​	此模式下生产者发送一条消息，只有一个消费者能够接收到（1对1）。
 
-### 发布-订阅模式
+#### 发布-订阅模式
 
 ​	在发布-订阅消息系统中，消息被持久化到一个topic中。与点对点消息系统不同的是，消费者可以订阅一个或多个topic，消费者可以消费该topic中所有的数据，同一条数据可以被多个消费者消费，数据被消费后不会立马删除。在发布-订阅消息系统中，消息的生产者称为发布者，消费者称为订阅者。
 
@@ -3506,7 +3869,39 @@ delete key：删除key
 
 ​	发布者发送消息到Topic，所有订阅了该Topic的订阅者才会看到消息（多对多）。
 
-## Kafka优点
+
+
+### 常用Message Queue
+
+#### RabbitMQ
+
+​	RabbitMQ是使用Erlang编写的一个开源的消息队列，本身支持很多的协议：AMQP，XMPP, SMTP, STOMP，也正因如此，它非常重量级，更适合于企业级的开发。同时实现了Broker构架，这意味着消息在发送给客户端时先在中心队列排队。对路由，负载均衡或者数据持久化都有很好的支持。
+
+#### Redis
+
+​	Redis是一个基于Key-Value对的NoSQL数据库，开发维护很活跃。虽然它是一个Key-Value数据库存储系统，但它本身支持MQ功能，所以完全可以当做一个轻量级的队列服务来使用。对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。实验表明：入队时，当数据比较小时Redis的性能要高于RabbitMQ，而如果数据大小超过了10K，Redis则慢的无法忍受；出队时，无论数据大小，Redis都表现出非常好的性能，而RabbitMQ的出队性能则远低于Redis。
+
+#### ZeroMQ
+
+​	**ZeroMQ号称最快的消息队列系统**，尤其针对大吞吐量的需求场景。ZeroMQ能够实现RabbitMQ不擅长的高级/复杂的队列，但是开发人员需要自己组合多种技术框架，技术上的复杂度是对这MQ能够应用成功的挑战。ZeroMQ具有一个独特的非中间件的模式，你不需要安装和运行一个消息服务器或中间件，因为你的应用程序将扮演这个服务器角色。你只需要简单的引用ZeroMQ程序库，可以使用NuGet安装，然后你就可以愉快的在应用程序之间发送消息了。但是ZeroMQ仅提供非持久性的队列，也就是说如果宕机，数据将会丢失。其中，Twitter的Storm 0.9.0以前的版本中默认使用ZeroMQ作为数据流的传输（Storm从0.9版本开始同时支持ZeroMQ和Netty作为传输模块）。
+
+#### ActiveMQ
+
+​	ActiveMQ是Apache下的一个子项目。 类似于ZeroMQ，它能够以代理人和点对点的技术实现队列。同时类似于RabbitMQ，它少量代码就可以高效地实现高级应用场景。
+
+
+
+#### Kafka/Jafka
+
+​	Kafka是Apache下的一个子项目，是一个高性能跨语言分布式发布/订阅消息队列系统，而Jafka是在Kafka之上孵化而来的，即Kafka的一个升级版。具有以下特性：快速持久化，可以在O(1)的系统开销下进行消息持久化；高吞吐，在一台普通的服务器上既可以达到10W/s的吞吐速率；完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现负载均衡；支持Hadoop数据并行加载，对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka通过Hadoop的并行加载机制统一了在线和离线的消息处理。Apache Kafka相对于ActiveMQ是一个非常轻量级的消息系统，除了性能非常好之外，还是一个工作良好的分布式系统。
+
+### Kafka
+
+​	Kafka是一个分布式、支持分区的（partition）、多副本的（replica），基于zookeeper协调的**分布式消息系统**，它的最大的特性就是可以实时的处理大量数据以满足各种需求场景：比如基于hadoop的批处理系统、低延迟的实时系统、storm/Spark流式处理引擎，web/nginx日志、访问日志，消息服务等等.
+
+​	**顺序写磁盘效率比随机写内存还要高**是Kafka高吞吐率的一个很重要的保证.
+
+#### 优点
 
 ​	高吞吐量、低延迟：kafka每秒可以处理几十万条消息，它的延迟最低只有几毫秒，每个topic可以分多个partition, consumer group 对partition进行consume操作。
 
@@ -3518,51 +3913,25 @@ delete key：删除key
 
 ​	高并发：支持数千个客户端同时读写
 
-## 常用Message Queue
-
-### RabbitMQ
-
-​	RabbitMQ是使用Erlang编写的一个开源的消息队列，本身支持很多的协议：AMQP，XMPP, SMTP, STOMP，也正因如此，它非常重量级，更适合于企业级的开发。同时实现了Broker构架，这意味着消息在发送给客户端时先在中心队列排队。对路由，负载均衡或者数据持久化都有很好的支持。
-
-### Redis
-
-​	Redis是一个基于Key-Value对的NoSQL数据库，开发维护很活跃。虽然它是一个Key-Value数据库存储系统，但它本身支持MQ功能，所以完全可以当做一个轻量级的队列服务来使用。对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。实验表明：入队时，当数据比较小时Redis的性能要高于RabbitMQ，而如果数据大小超过了10K，Redis则慢的无法忍受；出队时，无论数据大小，Redis都表现出非常好的性能，而RabbitMQ的出队性能则远低于Redis。
-
-### ZeroMQ
-
-​	**ZeroMQ号称最快的消息队列系统**，尤其针对大吞吐量的需求场景。ZeroMQ能够实现RabbitMQ不擅长的高级/复杂的队列，但是开发人员需要自己组合多种技术框架，技术上的复杂度是对这MQ能够应用成功的挑战。ZeroMQ具有一个独特的非中间件的模式，你不需要安装和运行一个消息服务器或中间件，因为你的应用程序将扮演这个服务器角色。你只需要简单的引用ZeroMQ程序库，可以使用NuGet安装，然后你就可以愉快的在应用程序之间发送消息了。但是ZeroMQ仅提供非持久性的队列，也就是说如果宕机，数据将会丢失。其中，Twitter的Storm 0.9.0以前的版本中默认使用ZeroMQ作为数据流的传输（Storm从0.9版本开始同时支持ZeroMQ和Netty作为传输模块）。
-
-### ActiveMQ
-
-​	ActiveMQ是Apache下的一个子项目。 类似于ZeroMQ，它能够以代理人和点对点的技术实现队列。同时类似于RabbitMQ，它少量代码就可以高效地实现高级应用场景。
 
 
-
-### Kafka/Jafka
-
-​	Kafka是Apache下的一个子项目，是一个高性能跨语言分布式发布/订阅消息队列系统，而Jafka是在Kafka之上孵化而来的，即Kafka的一个升级版。具有以下特性：快速持久化，可以在O(1)的系统开销下进行消息持久化；高吞吐，在一台普通的服务器上既可以达到10W/s的吞吐速率；完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现负载均衡；支持Hadoop数据并行加载，对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。Kafka通过Hadoop的并行加载机制统一了在线和离线的消息处理。Apache Kafka相对于ActiveMQ是一个非常轻量级的消息系统，除了性能非常好之外，还是一个工作良好的分布式系统。
-
-
-
-## Kafka架构
-
-### 术语
+#### Kafka组成
 
 ![img](.\src\main\resources\img\Kafka-01.jpg)
 
 ​	一条消息（Topic）可以由多个生产者（producer）制作，一条消息分为多个部分（Partition），分布式集群有多个服务器节点（broker）。服务器节点分为一个主站和多个从站，
 
-#### topic与partition
+##### topic与partition
 
 ​	topic中的数据分割为一个或多个partition。每个topic至少有一个partition。每个partition中的数据使用多个segment文件存储。partition中的数据是有序的，不同partition间的数据丢失了数据的顺序。如果topic有多个partition，消费数据时就不能保证数据的顺序。在需要严格保证消息的消费顺序的场景下，需要将partition数目设为1。
 
-#### partition与topic
+##### partition与topic
 
 ​	如果某topic有N个partition，集群有(N+M)个broker，那么其中有N个broker存储该topic的一个partition，剩下的M个broker不存储该topic的partition数据。
 
 ​	如果某topic有N个partition，集群中broker数目少于N个，那么一个broker存储该topic的一个或多个partition。在实际生产环境中，尽量避免这种情况的发生，这种情况容易导致Kafka集群**数据不均衡。**
 
-#### Leader与Follower
+##### Leader与Follower
 
 ​	Follower跟随Leader，所有写请求都通过Leader路由，数据变更会广播给所有Follower，Follower与Leader保持数据同步。如果Leader失效，则从Follower中选举出一个新的Leader。当Follower与Leader挂掉、卡住或者同步太慢，leader会把这个follower从“in sync replicas”（ISR）列表中删除，重新创建一个Follower。
 
@@ -3571,6 +3940,51 @@ delete key：删除key
 
 
 <img src="C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\Kafka-structure.jpg" alt="img" style="zoom:150%;" />
+
+
+
+
+
+## K8S
+
+​	K8S是一个开源的**容器集群管理系统**，可以实现容器集群的自动化部署，自动扩缩容，维护等功能。
+
+​	Docker是一个开源的**应用容器**引擎，开发者可以打包他们的应用及依赖到一个可移植的容器中，发布到流行的Linux机器上，也可以实现虚拟化。
+
+### Docker
+
+​		Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的镜像中，然后发布到任何流行的 Linux或Windows 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口。
+
+​	Docker 容器通过 Docker 镜像来创建。容器与镜像的关系类似于面向对象编程中的对象与类。
+
+| Docker | 面向对象 |
+| ------ | -------- |
+| 容器   | 对象     |
+| 镜像   | 类       |
+
+
+
+
+
+### 容器与虚拟机
+
+​	虚拟机和容器都用于创建隔离的虚拟环境，都是提高应用程序的**可移植性**。
+
+![img](.\src\main\resources\img\docker.jpg)
+
+​	虚拟机：将宿主计算机（拥有硬件、操作系统、软件等）的物理硬件虚拟分割成多套，**需要在每一套硬件上部署一个操作系统**，接着在这些操作系统上运行相应的应用程序。说白了虚拟机还是一个操作系统。
+
+​	容器：容器只是将应用程序和它们所需的依赖打包，直接将应用程序运行在宿主计算机的内核上。说白了就是将依赖于APP一起打包。
+
+
+
+![img](.\src\main\resources\img\docker01.jpg)
+
+​	传统方式是将所有的应用直接部署到同一个物理机器节点上，各个APP会有相同的依赖，无法做到**APP之间的隔离**。
+
+​	每个APP部署到一个单独虚拟机上又过于繁重，因为运行虚拟机也需要硬件资源。
+
+​	将每个APP部署到一个容器里面，再将容器放到一个操作系统中（可以是虚拟机）就可以实现APP之间相互隔离。
 
 
 
@@ -3720,9 +4134,48 @@ swagger 文档
 
 ​	kaptcha bean
 
+
+
+## 单点登录
+
+​	单点登录（Single Sign On），简称为 SSO，是目前比较流行的企业业务整合的解决方案之一。SSO 的定义是在多个应用系统中，用户只需要登录一次就可以访问所有相互信任的应用系统。
+
+​	我们目前的系统存在诸多子系统，而这些子系统是分别部署在不同的服务器中，那么使用传统方式的 session 是无法解决的，我们需要使用相关的单点登录技术来解决。
+
+![在这里插入图片描述](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\sso.jpg)
+
+​	CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。CAS 具有以下特点：
+
+【1】开源的企业级单点登录解决方案。
+【2】CAS Server 为需要独立部署的 Web 应用。这个CAS框架已经提供
+【3】CAS Client 支持非常多的客户端(这里指单点登录系统中的各个 Web 应用)，包括Java, .Net, PHP, Perl, Apache, uPortal, Ruby 等。
+	从结构上看，CAS 包含两个部分： CAS Server 和 CAS Client。CAS Server 需要独立部署，主要负责对用户的认证工作；CAS Client 负责处理对客户端受保护资源的访问请求，需要登录时，重定向到 CAS Server。下图是 CAS 最基本的协议过程：
+
+![在这里插入图片描述](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\sso-cas.jpg)
+
+
+
 ## 登录密码验证
 
-​	加密算法 BCrypt
+​	前端——crypto-js
+
+​	后端-加密算法 BCrypt原理。
+
+
+
+​	
+
+![注册登录安全问题](.\src\main\resources\img\regist-login-safty.jpg)
+
+
+
+
+
+![记住密码](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\regist-login-remember.jpg)
+
+
+
+
 
 ​	安全配置类继承spring security WebSecurityConfigurerAdapter
 
@@ -3733,6 +4186,12 @@ swagger 文档
 ​	service实现UserDetailsService接口，实现loadUserByName方法(给数据认证的bean使用)
 
 AOP原理，时机
+
+
+
+
+
+
 
 ## 访问权限 
 
@@ -3759,3 +4218,10 @@ swagger
 ## 自动生成get,set方法
 
 lombok
+
+
+
+
+
+
+
