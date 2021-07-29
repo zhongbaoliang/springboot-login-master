@@ -1274,7 +1274,7 @@ public class UserDaoImpl implements UserDao {
 <tx:annotation-driven transaction-manager="txManager"/>
 ```
 
-2） 在需要使用事务的业务或者方法上添加注解@Transactional。该注解只能应用在Public方法上。
+2） 在需要使用事务的业务或者方法上**添加注解@Transactional。该注解只能应用在Public方法上。**
 
 @Transactional常用属性说明如下：
 
@@ -1282,7 +1282,7 @@ public class UserDaoImpl implements UserDao {
 
 - isolation：设置事务的隔离级别；
 
-  ​	DEFAULT；使用底层数据库默认的隔离级别
+  ​	**DEFAULT；默认隔离级别，使用底层数据库默认的隔离级别**
 
   ​	READ_UNCOMMITTED；读未提交
 
@@ -3310,9 +3310,9 @@ public class Test {
 
 
 
-### RedisTemplate在springboot中使用
+## 在springboot中使用
 
-#### 导入配置
+### 导入配置
 
 pom.xml中导入依赖
 
@@ -3359,7 +3359,7 @@ private RedisTemplate redisTemplate;
 
 
 
-#### RedisTemplate的通用方法
+### RedisTemplate的通用方法
 
 ​	key
 
@@ -3478,10 +3478,6 @@ redisTemplate.boundValueOps("StringKey").increment(-3L);
 
 
 #### Set类型...
-
-
-
-
 
 
 
@@ -4127,7 +4123,7 @@ start transaction;
 3. **服务检查**
    注册中心使用一定的机制定时检测已注册的服务，如发现某实例长时间无法访问，就会从服务注册表移除该实例。
 
-​	Spring Cloud提供了多种注册中心的支持，例如Eureka、Consul和ZooKeeper等
+​	Spring Cloud提供了多种注册中心的支持，例如**Eureka**、Consul和**ZooKeeper**等
 
 
 
