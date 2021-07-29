@@ -1,199 +1,450 @@
-2021-07-15 12:56:02.485 DEBUG 39148 --- [background-preinit] .h.v.m.ResourceBundleMessageInterpolator : Loaded expression factory via original TCCL
-2021-07-15 12:56:02.594  INFO 39148 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 39148 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
-2021-07-15 12:56:02.595  INFO 39148 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
-2021-07-15 12:56:02.639  INFO 39148 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-07-15 12:56:02.639  INFO 39148 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-07-15 12:56:04.365  INFO 39148 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2021-07-15 12:56:04.386  INFO 39148 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-07-15 12:56:04.386  INFO 39148 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
-2021-07-15 12:56:04.487  INFO 39148 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-07-15 12:56:04.487  INFO 39148 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1848 ms
-2021-07-15 12:56:04.542  INFO 39148 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
-2021-07-15 12:56:04.841  INFO 39148 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2021-07-15 12:56:04.941  INFO 39148 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
-2021-07-15 12:56:05.061  WARN 39148 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
-2021-07-15 12:56:05.096 ERROR 39148 --- [restartedMain] org.apache.catalina.util.LifecycleBase   : Failed to start component [Connector[HTTP/1.1-9090]]
+2021-07-29 16:43:47.132  INFO 212204 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 212204 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
+2021-07-29 16:43:47.141  INFO 212204 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
+2021-07-29 16:43:47.183  INFO 212204 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-29 16:43:47.184  INFO 212204 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-29 16:43:48.931  INFO 212204 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2021-07-29 16:43:48.955  INFO 212204 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-07-29 16:43:48.956  INFO 212204 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
+2021-07-29 16:43:49.065  INFO 212204 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-07-29 16:43:49.065  INFO 212204 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1881 ms
+2021-07-29 16:43:49.118  INFO 212204 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
+2021-07-29 16:43:49.421  INFO 212204 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-07-29 16:43:49.558  INFO 212204 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
+2021-07-29 16:43:49.688  INFO 212204 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-07-29 16:43:49.732  INFO 212204 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2021-07-29 16:43:49.735  INFO 212204 --- [restartedMain] com.alibaba.Application                  : Started Application in 3.029 seconds (JVM running for 3.515)
+2021-07-29 16:44:00.698  INFO 212204 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-29 16:44:00.698  INFO 212204 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-07-29 16:44:00.707  INFO 212204 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2021-07-29 16:44:00.719  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:44:00.724  INFO 212204 --- [http-nio-9090-exec-1] c.a.listener.MyHttpSessionListener       : 【在线人数】人数增加为:1
+2021-07-29 16:44:00.736  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:44:00.749  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:00.750  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:13ms
+2021-07-29 16:44:00.821  INFO 212204 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:44:00.840  INFO 212204 --- [http-nio-9090-exec-4] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:44:00.841  INFO 212204 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:44:00.843  INFO 212204 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:00.843  INFO 212204 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:44:22.736  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.filter.MyFilter              : 请求的地址是 /user/login
+2021-07-29 16:44:22.738  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
+2021-07-29 16:44:22.768  INFO 212204 --- [http-nio-9090-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-07-29 16:44:22.955  INFO 212204 --- [http-nio-9090-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-07-29 16:44:23.063  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:23.064  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:326ms
+2021-07-29 16:44:23.109  INFO 212204 --- [http-nio-9090-exec-7] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:44:23.112  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:44:23.112  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:44:23.114  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:23.114  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:44:47.386  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:44:47.387  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:44:47.389  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:47.389  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:44:47.402  INFO 212204 --- [http-nio-9090-exec-10] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:44:47.428  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:44:47.429  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:44:47.431  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:47.431  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:44:51.565  INFO 212204 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /user/login
+2021-07-29 16:44:51.566  INFO 212204 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
+2021-07-29 16:44:51.570  INFO 212204 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:51.570  INFO 212204 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:4ms
+2021-07-29 16:44:51.581  INFO 212204 --- [http-nio-9090-exec-4] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:44:51.583  INFO 212204 --- [http-nio-9090-exec-5] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:44:51.584  INFO 212204 --- [http-nio-9090-exec-5] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:44:51.586  INFO 212204 --- [http-nio-9090-exec-5] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:44:51.586  INFO 212204 --- [http-nio-9090-exec-5] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:45:44.693  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:45:44.694  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:45:44.696  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:45:44.696  INFO 212204 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:45:44.709  INFO 212204 --- [http-nio-9090-exec-7] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:45:44.732  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:45:44.732  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:45:44.734  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:45:44.735  INFO 212204 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:3ms
+2021-07-29 16:45:53.568  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.filter.MyFilter              : 请求的地址是 /user/login
+2021-07-29 16:45:53.568  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
+2021-07-29 16:45:53.574  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:45:53.575  INFO 212204 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:7ms
+2021-07-29 16:45:53.588  INFO 212204 --- [http-nio-9090-exec-10] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:45:53.590  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:45:53.590  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:45:53.592  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
+2021-07-29 16:45:53.592  INFO 212204 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:1ms
+2021-07-29 16:48:47.883  INFO 219120 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 219120 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
+2021-07-29 16:48:47.886  INFO 219120 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
+2021-07-29 16:48:47.921  INFO 219120 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-29 16:48:47.922  INFO 219120 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-29 16:48:49.515  INFO 219120 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2021-07-29 16:48:49.539  INFO 219120 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-07-29 16:48:49.539  INFO 219120 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
+2021-07-29 16:48:49.646  INFO 219120 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-07-29 16:48:49.647  INFO 219120 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1725 ms
+2021-07-29 16:48:49.695  INFO 219120 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
+2021-07-29 16:48:49.980  INFO 219120 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-07-29 16:48:50.112  INFO 219120 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
+2021-07-29 16:48:50.250  INFO 219120 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-07-29 16:48:50.292  INFO 219120 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2021-07-29 16:48:50.294  INFO 219120 --- [restartedMain] com.alibaba.Application                  : Started Application in 2.776 seconds (JVM running for 3.207)
+2021-07-29 16:48:54.799  INFO 219120 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-29 16:48:54.799  INFO 219120 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-07-29 16:48:54.807  INFO 219120 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2021-07-29 16:48:54.817  INFO 219120 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:48:54.823  INFO 219120 --- [http-nio-9090-exec-1] c.a.listener.MyHttpSessionListener       : 【在线人数】人数增加为:1
+2021-07-29 16:48:54.833  INFO 219120 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:48:54.847  INFO 219120 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:14ms
+2021-07-29 16:48:54.852 ERROR 219120 --- [http-nio-9090-exec-1] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
 
-org.apache.catalina.LifecycleException: Protocol handler start failed
-	at org.apache.catalina.connector.Connector.startInternal(Connector.java:1008) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:183) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.catalina.core.StandardService.addConnector(StandardService.java:226) [tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.addPreviouslyRemovedConnectors(TomcatWebServer.java:259) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.start(TomcatWebServer.java:197) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.startWebServer(ServletWebServerApplicationContext.java:311) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.finishRefresh(ServletWebServerApplicationContext.java:164) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:552) [spring-context-5.1.7.RELEASE.jar:5.1.7.RELEASE]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248) [spring-boot-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-	at com.alibaba.Application.main(Application.java:43) [classes/:na]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_291]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_291]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_291]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_291]
-	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-2.1.5.RELEASE.jar:2.1.5.RELEASE]
-Caused by: java.net.BindException: Address already in use: bind
-	at sun.nio.ch.Net.bind0(Native Method) ~[na:1.8.0_291]
-	at sun.nio.ch.Net.bind(Net.java:438) ~[na:1.8.0_291]
-	at sun.nio.ch.Net.bind(Net.java:430) ~[na:1.8.0_291]
-	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:225) ~[na:1.8.0_291]
-	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:74) ~[na:1.8.0_291]
-	at org.apache.tomcat.util.net.NioEndpoint.initServerSocket(NioEndpoint.java:239) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.tomcat.util.net.NioEndpoint.bind(NioEndpoint.java:213) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.tomcat.util.net.AbstractEndpoint.bindWithCleanup(AbstractEndpoint.java:1116) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.tomcat.util.net.AbstractEndpoint.start(AbstractEndpoint.java:1202) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.coyote.AbstractProtocol.start(AbstractProtocol.java:568) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	at org.apache.catalina.connector.Connector.startInternal(Connector.java:1005) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
-	... 19 common frames omitted
+java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at com.alibaba.filter.MyFilter.doFilter(MyFilter.java:53) ~[classes/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:92) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
 
-2021-07-15 12:56:05.100  INFO 39148 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2021-07-15 12:56:05.101  INFO 39148 --- [restartedMain] com.alibaba.filter.MyFilter              : 销毁过滤器
-2021-07-15 12:56:05.107  INFO 39148 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+2021-07-29 16:48:54.860  INFO 219120 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:48:54.873  INFO 219120 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:12ms
+2021-07-29 16:48:54.874 ERROR 219120 --- [http-nio-9090-exec-1] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] threw exception
 
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2021-07-15 12:56:05.109 ERROR 39148 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:712) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.doInclude(ApplicationDispatcher.java:580) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.include(ApplicationDispatcher.java:516) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:388) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:253) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:348) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:173) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
 
-***************************
-APPLICATION FAILED TO START
-***************************
+2021-07-29 16:48:54.874 ERROR 219120 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost]           : Exception Processing ErrorPage[errorCode=0, location=/error]
 
-Description:
+org.springframework.web.util.NestedServletException: Request processing failed; nested exception is java.lang.NullPointerException
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1013) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:712) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.doInclude(ApplicationDispatcher.java:580) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.include(ApplicationDispatcher.java:516) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:388) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:253) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:348) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:173) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
+Caused by: java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	... 25 common frames omitted
 
-The Tomcat connector configured to listen on port 9090 failed to start. The port may already be in use or the connector may be misconfigured.
+2021-07-29 16:48:54.878  INFO 219120 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:48:54.886  INFO 219120 --- [http-nio-9090-exec-2] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:48:54.887  INFO 219120 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:48:54.889  INFO 219120 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:48:54.890 ERROR 219120 --- [http-nio-9090-exec-2] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
 
-Action:
+java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at com.alibaba.filter.MyFilter.doFilter(MyFilter.java:53) ~[classes/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:92) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
 
-Verify the connector's configuration, identify and stop any process that's listening on port 9090, or configure this application to listen on another port.
+2021-07-29 16:48:54.891  INFO 219120 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:48:54.897  WARN 219120 --- [http-nio-9090-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: Could not find acceptable representation]
+2021-07-29 16:48:54.897  INFO 219120 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:6ms
+2021-07-29 16:48:59.997  INFO 219120 --- [http-nio-9090-exec-4] com.alibaba.filter.MyFilter              : 请求的地址是 /user/login
+2021-07-29 16:48:59.998  INFO 219120 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
+2021-07-29 16:49:00.020  INFO 219120 --- [http-nio-9090-exec-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-07-29 16:49:00.159  INFO 219120 --- [http-nio-9090-exec-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-07-29 16:49:00.280  INFO 219120 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:282ms
+2021-07-29 16:49:00.281 ERROR 219120 --- [http-nio-9090-exec-4] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
 
-2021-07-15 12:56:05.112  INFO 39148 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
-2021-07-15 12:57:14.768  INFO 38732 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 38732 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
-2021-07-15 12:57:14.770  INFO 38732 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
-2021-07-15 12:57:14.806  INFO 38732 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-07-15 12:57:14.806  INFO 38732 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-07-15 12:57:16.402  INFO 38732 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2021-07-15 12:57:16.426  INFO 38732 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-07-15 12:57:16.426  INFO 38732 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
-2021-07-15 12:57:16.522  INFO 38732 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-07-15 12:57:16.522  INFO 38732 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1716 ms
-2021-07-15 12:57:16.573  INFO 38732 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
-2021-07-15 12:57:16.856  INFO 38732 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2021-07-15 12:57:16.959  INFO 38732 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
-2021-07-15 12:57:17.086  INFO 38732 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2021-07-15 12:57:17.127  INFO 38732 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
-2021-07-15 12:57:17.130  INFO 38732 --- [restartedMain] com.alibaba.Application                  : Started Application in 2.707 seconds (JVM running for 3.116)
-2021-07-15 12:57:45.389  INFO 38732 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2021-07-15 12:57:45.389  INFO 38732 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2021-07-15 12:57:45.395  INFO 38732 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
-2021-07-15 12:57:45.406  INFO 38732 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 12:57:45.412  INFO 38732 --- [http-nio-9090-exec-1] c.a.listener.MyHttpSessionListener       : 【在线人数】人数增加为:1
-2021-07-15 12:57:45.426  INFO 38732 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 12:57:45.440  INFO 38732 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 12:57:45.440  INFO 38732 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:13ms
-2021-07-15 12:57:45.500  INFO 38732 --- [http-nio-9090-exec-2] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
-2021-07-15 12:57:45.503  INFO 38732 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 12:57:45.504  INFO 38732 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 12:57:45.506  INFO 38732 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 12:57:45.506  INFO 38732 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
-2021-07-15 12:57:51.858  INFO 38732 --- [http-nio-9090-exec-7] com.alibaba.filter.MyFilter              : 请求的地址是 /user/login
-2021-07-15 12:57:51.864  INFO 38732 --- [http-nio-9090-exec-7] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
-2021-07-15 12:57:51.906  INFO 38732 --- [http-nio-9090-exec-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2021-07-15 12:57:52.064  INFO 38732 --- [http-nio-9090-exec-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2021-07-15 12:57:52.181  INFO 38732 --- [http-nio-9090-exec-7] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 12:57:52.181  INFO 38732 --- [http-nio-9090-exec-7] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:317ms
-2021-07-15 12:57:52.205  INFO 38732 --- [http-nio-9090-exec-8] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
-2021-07-15 12:57:52.210  INFO 38732 --- [http-nio-9090-exec-6] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 12:57:52.211  INFO 38732 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 12:57:52.212  INFO 38732 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 12:57:52.212  INFO 38732 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:1ms
-2021-07-15 13:16:24.593  INFO 40900 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 40900 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
-2021-07-15 13:16:24.595  INFO 40900 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
-2021-07-15 13:16:24.631  INFO 40900 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-07-15 13:16:24.631  INFO 40900 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-07-15 13:16:26.259  INFO 40900 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2021-07-15 13:16:26.282  INFO 40900 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-07-15 13:16:26.282  INFO 40900 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
-2021-07-15 13:16:26.387  INFO 40900 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-07-15 13:16:26.388  INFO 40900 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1757 ms
-2021-07-15 13:16:26.439  INFO 40900 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
-2021-07-15 13:16:26.712  INFO 40900 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2021-07-15 13:16:26.844  INFO 40900 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
-2021-07-15 13:16:26.960  INFO 40900 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2021-07-15 13:16:26.998  INFO 40900 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
-2021-07-15 13:16:27.000  INFO 40900 --- [restartedMain] com.alibaba.Application                  : Started Application in 2.787 seconds (JVM running for 3.207)
-2021-07-15 13:16:35.291  INFO 40900 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2021-07-15 13:16:35.292  INFO 40900 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2021-07-15 13:16:35.299  INFO 40900 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
-2021-07-15 13:16:35.308  INFO 40900 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /lo1gin
-2021-07-15 13:16:35.314  INFO 40900 --- [http-nio-9090-exec-1] c.a.listener.MyHttpSessionListener       : 【在线人数】人数增加为:1
-2021-07-15 13:16:35.323  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:16:35.332  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:16:35.343  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:16:35.343  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:11ms
-2021-07-15 13:16:35.364  INFO 40900 --- [http-nio-9090-exec-5] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
-2021-07-15 13:16:35.368  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:16:35.368  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:16:35.370  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:16:35.370  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:1ms
-2021-07-15 13:16:41.030  INFO 40900 --- [http-nio-9090-exec-4] com.alibaba.filter.MyFilter              : 请求的地址是 /2
-2021-07-15 13:16:41.034  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:16:41.035  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:16:41.038  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:16:41.038  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
-2021-07-15 13:16:41.054  INFO 40900 --- [http-nio-9090-exec-7] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
-2021-07-15 13:16:41.056  INFO 40900 --- [http-nio-9090-exec-9] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:16:41.056  INFO 40900 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:16:41.058  INFO 40900 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:16:41.058  INFO 40900 --- [http-nio-9090-exec-9] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:1ms
-2021-07-15 13:16:46.382  INFO 40900 --- [http-nio-9090-exec-10] com.alibaba.filter.MyFilter              : 请求的地址是 /logi5
-2021-07-15 13:16:46.385  INFO 40900 --- [http-nio-9090-exec-8] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:16:46.385  INFO 40900 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:16:46.387  INFO 40900 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:16:46.387  INFO 40900 --- [http-nio-9090-exec-8] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
-2021-07-15 13:16:46.399  INFO 40900 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
-2021-07-15 13:16:46.401  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:16:46.402  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:16:46.404  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:16:46.405  INFO 40900 --- [http-nio-9090-exec-2] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:3ms
-2021-07-15 13:17:06.259  INFO 40900 --- [http-nio-9090-exec-5] com.alibaba.filter.MyFilter              : 请求的地址是 /lo1
-2021-07-15 13:17:06.263  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:17:06.264  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:17:06.266  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:17:06.266  INFO 40900 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
-2021-07-15 13:17:06.283  INFO 40900 --- [http-nio-9090-exec-4] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
-2021-07-15 13:17:06.285  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
-2021-07-15 13:17:06.286  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
-2021-07-15 13:17:06.289  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】当前浏览器存在 session:null
-2021-07-15 13:17:06.289  INFO 40900 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
-2021-07-15 13:21:26.925  INFO 40872 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 40872 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
-2021-07-15 13:21:26.928  INFO 40872 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
-2021-07-15 13:21:26.959  INFO 40872 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-07-15 13:21:26.959  INFO 40872 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-07-15 13:21:28.537  INFO 40872 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2021-07-15 13:21:28.559  INFO 40872 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-07-15 13:21:28.559  INFO 40872 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
-2021-07-15 13:21:28.652  INFO 40872 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-07-15 13:21:28.652  INFO 40872 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1692 ms
-2021-07-15 13:21:28.699  INFO 40872 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
-2021-07-15 13:21:28.963  INFO 40872 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2021-07-15 13:21:29.092  INFO 40872 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
-2021-07-15 13:21:29.205  INFO 40872 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2021-07-15 13:21:29.246  INFO 40872 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
-2021-07-15 13:21:29.247  INFO 40872 --- [restartedMain] com.alibaba.Application                  : Started Application in 2.688 seconds (JVM running for 3.094)
-2021-07-15 15:56:43.805  INFO 54708 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 54708 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
-2021-07-15 15:56:43.807  INFO 54708 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
-2021-07-15 15:56:43.841  INFO 54708 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-07-15 15:56:43.841  INFO 54708 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-07-15 15:56:45.438  INFO 54708 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2021-07-15 15:56:45.465  INFO 54708 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-07-15 15:56:45.465  INFO 54708 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
-2021-07-15 15:56:45.564  INFO 54708 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-07-15 15:56:45.564  INFO 54708 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1722 ms
-2021-07-15 15:56:45.607  INFO 54708 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
-2021-07-15 15:56:45.871  INFO 54708 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2021-07-15 15:56:45.996  INFO 54708 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
-2021-07-15 15:56:46.121  WARN 54708 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
-2021-07-15 15:56:46.161  INFO 54708 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
-2021-07-15 15:56:46.163  INFO 54708 --- [restartedMain] com.alibaba.Application                  : Started Application in 2.722 seconds (JVM running for 3.149)
+java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:908) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at com.alibaba.filter.MyFilter.doFilter(MyFilter.java:53) ~[classes/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:92) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
+
+2021-07-29 16:49:00.283  INFO 219120 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
+2021-07-29 16:49:00.286  INFO 219120 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:3ms
+2021-07-29 16:49:00.287 ERROR 219120 --- [http-nio-9090-exec-4] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] threw exception
+
+java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:908) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:712) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.doInclude(ApplicationDispatcher.java:580) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.include(ApplicationDispatcher.java:516) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:388) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:253) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:348) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:173) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
+
+2021-07-29 16:49:00.288 ERROR 219120 --- [http-nio-9090-exec-4] o.a.c.c.C.[Tomcat].[localhost]           : Exception Processing ErrorPage[errorCode=0, location=/error]
+
+org.springframework.web.util.NestedServletException: Request processing failed; nested exception is java.lang.NullPointerException
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1013) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:908) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:712) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.doInclude(ApplicationDispatcher.java:580) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationDispatcher.include(ApplicationDispatcher.java:516) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:388) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:253) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:348) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:173) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_291]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_291]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_291]
+Caused by: java.lang.NullPointerException: null
+	at com.alibaba.interceptor.MyInterceptor.postHandle(MyInterceptor.java:56) ~[classes/:na]
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPostHandle(HandlerExecutionChain.java:156) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1046) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	... 25 common frames omitted
+
+2021-07-29 16:51:39.142  INFO 214628 --- [restartedMain] com.alibaba.Application                  : Starting Application on ZHONGBL1-1QLQBG with PID 214628 (C:\Users\zhongbl1\IdeaProjects\springboot-login-master\target\classes started by zhongbl1 in C:\Users\zhongbl1\IdeaProjects\springboot-login-master)
+2021-07-29 16:51:39.145  INFO 214628 --- [restartedMain] com.alibaba.Application                  : No active profile set, falling back to default profiles: default
+2021-07-29 16:51:39.181  INFO 214628 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-29 16:51:39.181  INFO 214628 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-29 16:51:40.809  INFO 214628 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2021-07-29 16:51:40.832  INFO 214628 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-07-29 16:51:40.833  INFO 214628 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.19]
+2021-07-29 16:51:40.933  INFO 214628 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-07-29 16:51:40.934  INFO 214628 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1752 ms
+2021-07-29 16:51:40.982  INFO 214628 --- [restartedMain] com.alibaba.filter.MyFilter              : 初始化过滤器
+2021-07-29 16:51:41.252  INFO 214628 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-07-29 16:51:41.379  INFO 214628 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [templates/index.html]
+2021-07-29 16:51:41.501  INFO 214628 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-07-29 16:51:41.543  INFO 214628 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2021-07-29 16:51:41.546  INFO 214628 --- [restartedMain] com.alibaba.Application                  : Started Application in 2.774 seconds (JVM running for 3.202)
+2021-07-29 16:51:51.651  INFO 214628 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-29 16:51:51.651  INFO 214628 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-07-29 16:51:51.657  INFO 214628 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2021-07-29 16:51:51.666  INFO 214628 --- [http-nio-9090-exec-1] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:51:51.671  INFO 214628 --- [http-nio-9090-exec-1] c.a.listener.MyHttpSessionListener       : 【在线人数】人数增加为:1
+2021-07-29 16:51:51.679  INFO 214628 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:51:51.690  INFO 214628 --- [http-nio-9090-exec-1] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:11ms
+2021-07-29 16:51:51.704  INFO 214628 --- [http-nio-9090-exec-2] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:51:51.726  INFO 214628 --- [http-nio-9090-exec-3] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:51:51.727  INFO 214628 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:51:51.729  INFO 214628 --- [http-nio-9090-exec-3] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:2ms
+2021-07-29 16:51:58.730  INFO 214628 --- [http-nio-9090-exec-4] com.alibaba.filter.MyFilter              : 请求的地址是 /user/login
+2021-07-29 16:51:58.732  INFO 214628 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/user/login
+2021-07-29 16:51:58.760  INFO 214628 --- [http-nio-9090-exec-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-07-29 16:51:58.888  INFO 214628 --- [http-nio-9090-exec-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-07-29 16:51:58.995  INFO 214628 --- [http-nio-9090-exec-4] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/user/login]调用耗时:263ms
+2021-07-29 16:51:59.028  INFO 214628 --- [http-nio-9090-exec-5] com.alibaba.filter.MyFilter              : 请求的地址是 /favicon.ico
+2021-07-29 16:51:59.047  INFO 214628 --- [http-nio-9090-exec-6] com.alibaba.filter.MyFilter              : 请求的地址是 /login.html
+2021-07-29 16:51:59.048  INFO 214628 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】调用了:/login.html
+2021-07-29 16:51:59.049  INFO 214628 --- [http-nio-9090-exec-6] com.alibaba.interceptor.MyInterceptor    : 【MyInterceptor】[/login.html]调用耗时:1ms
+2021-07-29 17:22:42.464  INFO 214628 --- [Catalina-utility-1] c.a.listener.MyHttpSessionListener       : 【在线人数】人数减少为:0

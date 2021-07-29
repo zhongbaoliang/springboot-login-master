@@ -941,7 +941,7 @@ public class LoginLogAspect {
 
 
 
-过滤器与拦截器区别：
+**过滤器与拦截器区别**：
 
 所属范畴不同：过滤器属于Servlet，拦截器属于SpringMVC
 
@@ -959,7 +959,9 @@ public class LoginLogAspect {
 
 ​	可作用于整个服务期间
 
+​	是指专门用于对其他对象身上发生的事件或状态改变进行监听和相应处理的对象，当被监视的对象发生变化时，立即采取相应的行动。
 
+用途：统计在线人数，累计访问人数等。
 
 ### 代理模式与回调函数
 
@@ -2456,17 +2458,27 @@ public class UserServiceImpl implements UserService {
 
 ​	是六大设计原则的简称，分别表示：
 
-​	S即Single,单一职责原则
+​	S即Single**,单一职责原则**：一个类只干一件事。
 
-​	O即Open,开闭原则
+​	O即Open,**开闭原则**：扩展开放，修改关闭。
 
-​	L可以是里氏替换原则
+​	L可以是**里氏替换原则：**子类替换父类。
 
-​	L还可以是Least，最少知识原则
+​	L还可以是Law，**迪米特法则**：实体不通信，则不调用（不依赖）。
 
-​	I是Interface，接口隔离原则
+​	I是Interface，**接口隔离原则**：不依赖于不需要的接口，依赖于最小的接口。
 
-​	D是Dependence，依赖倒转原则
+​	D是Dependence，**依赖倒转原则**：向上依赖，依赖于抽象。
+
+
+
+​	多态是同一个行为具有多个不同表现形式或形态的能力。就是同一个接口，使用不同的实例而执行不同操作。
+
+多态存在的三个必要条件
+
+- 继承
+- 重写
+- 父类引用指向子类对象：**Parent p = new Child();**（里氏替换）
 
 
 
@@ -2559,6 +2571,8 @@ public class Singleton{
 
 
 
+
+
 ### 代理模式
 
 ​	代理类A帮被代理类B做事，隐藏被代理类的信息。分为静态代理和动态代理。在代理类中可以对被代理类进行逻辑增强。
@@ -2623,6 +2637,205 @@ public class Singleton{
 
 
 
+### 工厂模式
+
+​	工厂模式属于创建型模式，它提供了一种创建对象的最佳方式。创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。就是**通过工厂可以构建同一类型的各种实例。**
+
+#### 简单工厂模式
+
+​	又分为静态工厂和实例化工厂。区别在于方法是静态方法还是成员方法。
+
+​	构建不同类型实例的 核心都在于**public Shape getShape(String shapeType)**。通过传入的string决定要构造哪种类型的实例。
+
+```java
+//形状接口
+public interface Shape {
+   void draw();
+}
+
+class Rectangle implements Shape {
+ 
+   @Override
+   public void draw() {
+      System.out.println("Inside Rectangle::draw() method.");
+   }
+}
+class Square implements Shape {
+ 
+   @Override
+   public void draw() {
+      System.out.println("Inside Square::draw() method.");
+   }
+}
+class Circle implements Shape {
+ 
+   @Override
+   public void draw() {
+      System.out.println("Inside Circle::draw() method.");
+   }
+}
+```
+
+
+
+```java
+//形状工厂
+public class ShapeFactory {
+   //使用 getShape 方法获取形状类型的对象
+   public Shape getShape(String shapeType){
+      if(shapeType == null){
+         return null;
+      }        
+      if(shapeType.equalsIgnoreCase("CIRCLE")){
+         return new Circle();
+      } else if(shapeType.equalsIgnoreCase("RECTANGLE")){
+         return new Rectangle();
+      } else if(shapeType.equalsIgnoreCase("SQUARE")){
+         return new Square();
+      }
+      return null;
+   }
+}
+```
+
+
+
+#### 抽象工厂模式
+
+​	抽象工厂模式（Abstract Factory Pattern）是围绕一个超级工厂创建其他工厂。该超级工厂又称为**其他工厂的工厂**。**工厂使用类，抽象工厂使用抽象类**。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。
+
+**何时使用：**系统的产品有多于一个的产品族，而系统只消费其中某一族的产品。
+
+![img](.\src\main\resources\img\design-factory.jpg)
+
+##### 举例
+
+1. 多种类型的接口及其实现类
+
+```java
+//颜色接口及其实现类，省略
+//形状接口及其实现类，省略
+```
+
+2. 抽象工厂
+
+```java
+//抽象工厂——工厂的工厂，用抽象类
+public abstract class AbstractFactory {
+   public abstract Color getColor(String color);
+   public abstract Shape getShape(String shape) ;
+}
+```
+
+3. 各种类型的工厂继承抽象工厂
+
+```java
+//形状工厂实现抽象工厂
+class ShapeFactory extends AbstractFactory {
+   @Override
+   public Shape getShape(String shapeType){
+      if(shapeType == null){
+         return null;
+      }        
+      if(shapeType.equalsIgnoreCase("CIRCLE")){
+         return new Circle();
+      } else if(shapeType.equalsIgnoreCase("RECTANGLE")){
+         return new Rectangle();
+      } else if(shapeType.equalsIgnoreCase("SQUARE")){
+         return new Square();
+      }
+      return null;
+   }
+   @Override
+   public Color getColor(String color) {
+      return null;
+   }
+}
+//颜色工厂实现抽象工厂
+class ColorFactory extends AbstractFactory {
+   @Override
+   public Shape getShape(String shapeType){
+      return null;
+   }
+   @Override
+   public Color getColor(String color) {
+      if(color == null){
+         return null;
+      }        
+      if(color.equalsIgnoreCase("RED")){
+         return new Red();
+      } else if(color.equalsIgnoreCase("GREEN")){
+         return new Green();
+      } else if(color.equalsIgnoreCase("BLUE")){
+         return new Blue();
+      }
+      return null;
+   }
+}
+```
+
+4. 工厂生成类
+
+```java
+public class FactoryProducer {
+   public static AbstractFactory getFactory(String choice){
+      if(choice.equalsIgnoreCase("SHAPE")){
+         return new ShapeFactory();
+      } else if(choice.equalsIgnoreCase("COLOR")){
+         return new ColorFactory();
+      }
+      return null;
+   }
+}
+```
+
+5. 使用
+
+```java
+public class AbstractFactoryPatternDemo {
+   public static void main(String[] args) {
+      //获取形状工厂
+      AbstractFactory shapeFactory = FactoryProducer.getFactory("SHAPE");
+      //获取形状为 Circle 的对象
+      Shape shape1 = shapeFactory.getShape("CIRCLE");
+      //调用 Circle 的 draw 方法
+      shape1.draw();
+      //获取形状为 Rectangle 的对象
+      Shape shape2 = shapeFactory.getShape("RECTANGLE");
+      //调用 Rectangle 的 draw 方法
+      shape2.draw();
+      //获取形状为 Square 的对象
+      Shape shape3 = shapeFactory.getShape("SQUARE");
+      //调用 Square 的 draw 方法
+      shape3.draw();
+      //获取颜色工厂
+      AbstractFactory colorFactory = FactoryProducer.getFactory("COLOR");
+      //获取颜色为 Red 的对象
+      Color color1 = colorFactory.getColor("RED");
+      //调用 Red 的 fill 方法
+      color1.fill();
+      //获取颜色为 Green 的对象
+      Color color2 = colorFactory.getColor("Green");
+      //调用 Green 的 fill 方法
+      color2.fill();
+      //获取颜色为 Blue 的对象
+      Color color3 = colorFactory.getColor("BLUE");
+      //调用 Blue 的 fill 方法
+      color3.fill();
+   }
+}
+```
+
+
+
+### 建造者模式
+
+​	建造者模式（Builder Pattern）使用多个简单的对象一步一步构建成一个复杂的对象。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。
+
+**主要解决：**主要解决在软件系统中，有时候面临着**"一个复杂对象"的创建工作**，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。
+
+
+
 # 密码
 
 ​	密钥越长越安全，越短效率越高。	
@@ -2671,7 +2884,7 @@ public class Singleton{
 
 ​	就是接收方能够验证 发送方信息 接受内容是否被篡改。
 
-​	方法就是发送方 通过私钥对数据进行签名，将明文和密文一起发送，接收方能够通过公钥对密文和明文进行验签。
+​	方法就是发送方 通过**私钥**对数据进行签名，将明文和密文一起发送，接收方能够通过公钥对密文和明文进行验签。
 
 
 
@@ -2694,6 +2907,8 @@ BCrypt
 ​	每次加密使用的盐都不相同，并且不存储盐。注册时加盐加密后将密文写到数据库中。
 
 ​	登录时，通过数据库中的密文 和 用户输入的密码明文去判断是否能再次生成原来的密文。
+
+
 
 
 
@@ -3541,13 +3756,246 @@ Redis 提供两种方式回收这些超时键值对，它们是定时回收和�
 
 # MySQL
 
-存储引擎
+## 数据库设计
 
-索引
+### ER图
 
-主从复制
+​	
 
-SQL执行流程
+### 范式
+
+​	主要就是消除属性的依赖关系。
+
+#### 1范式
+
+​	所有属性都是原子的
+
+#### 2范式
+
+​	消除了非主属性对码的部份依赖
+
+#### 3范式
+
+​	消除了非主属性对码的传递依赖
+
+#### BCD范式
+
+​	消除了主属性对码的部份依赖
+
+
+
+## 数据库数据类型
+
+整形，小数，日期，字符串...
+
+
+
+## 存储引擎
+
+InnoDB
+
+MyISAM
+
+
+
+## 数据库操作
+
+表操作
+
+数据操作
+
+
+
+
+
+## 视图
+
+
+
+​	MySQL 视图（View）是一种**虚拟存在的表**，同真实表一样，视图也由列和行构成，但视图并不实际存在于数据库中。行和列的数据来自于定义视图的查询中所使用的表，并且还是在**使用视图时动态生成的**。
+
+​		**数据库中只存放了视图的定义，并没有存放视图中的数据。**视图经过定义以后，结构形式和表一样，可以进行查询、修改、更新和删除等操作。一旦真实表中的数据发生改变，显示在视图中的数据也会发生改变。
+
+​	视图可以从原有的表上选取对用户有用的信息，那些对用户没用，或者用户没有权限了解的信息，都可以直接屏蔽掉，作用类似于筛选。这样做既使应用**简单化**，也保证了系统的**安全**。
+
+​	
+
+```sql
+CREATE VIEW <视图名> AS <SELECT语句>
+```
+
+
+
+
+
+## 索引
+
+​	索引是一种特殊的数据库结构，由数据表中的一列或多列组合而成，可以用来快速查询数据表中有某一特定值的记录。基于B+树。
+
+优点：
+
+- 通过创建唯一索引可以保证数据库表中每一行数据的唯一性。
+- 可以给所有的 MySQL 列类型设置索引。
+- 可以**大大加快数据的查询速度**，这是使用索引最主要的原因。
+- 在实现数据的参考完整性方面可以加速表与表之间的连接。
+- 在使用分组和排序子句进行数据查询时也可以显著减少查询中分组和排序的时间
+
+缺点：
+
+- **创建和维护索引组要耗费时间**，并且随着数据量的增加所耗费的时间也会增加。
+- 索引需要**占磁盘空间**，除了数据表占数据空间以外，每一个索引还要占一定的物理空间。如果有大量的索引，索引文件可能比数据文件更快达到最大文件尺寸。
+- 当对表中的数据进行增加、删除和修改的时候，索引也要动态维护，这样就降低了数据的维护速度。
+
+
+
+### 索引分类
+
+主键索引
+
+唯一索引
+
+普通索引
+
+组合索引
+
+
+
+## 事务
+
+​	一组数据库命令要么都执行，要么都不执行，因此事务是一个不可分割的工作逻辑单元。
+
+事务具有 4 个特性，即原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability），这 4 个特性通常简称为 ACID。
+
+```sql
+set session transaction isolation level read uncommitted；
+start transaction;
+...
+commit;
+```
+
+| 隔离级别\数据问题 | 丢失修改 | 脏读 | 不可重复读 | 幻读 |
+| :---------------: | -------- | ---- | ---------- | ---- |
+|     读未提交      | 不会     | 会   | 会         | 会   |
+|     读已提交      | 不会     | 不会 | 会         | 会   |
+|     可重复读      | 不会     | 不会 | 不会       | 会   |
+|      串行化       | 不会     | 不会 | 不会       | 不会 |
+
+
+
+
+
+### 数据不一致性问题
+
+丢失修改：一个事务写操作尚未生效（写到数据库），另外一个事务就开始读取并写入。解决：写锁，事务结束释放。
+
+脏读：读取了其他事务已修改而未提交的数据。
+
+不可重复读：一个事务读取同一个数据两次结果不一样。
+
+幻影：针对插入操作而言，其它事务看不到当前事务对表中数据的插入。
+
+
+
+### 隔离级别
+
+https://www.jianshu.com/p/4e3edbedb9a8
+
+​	设置事务隔离级别
+
+```sql
+set session transaction isolation level ...
+```
+
+```sql
+set global transaction isolation level ...
+```
+
+
+
+
+
+#### 读未提交
+
+**read  uncommitted；**
+
+```sql
+set session transaction isolation level read uncommitted；
+start transaction;
+update account set account=account+200 where id = 1;
+rollback;
+```
+
+​	即便事务没有commit，其他用户也能获取修改后的数据。
+
+​	注意：没有commit最终就不会被写入数据库。个人觉得会先写入数据库，如果没有commit的话，事务abort就会回滚。
+
+​	//写锁，事务结束释放。
+
+​	问题：脏读，不可重复读，幻影。
+
+
+
+​	
+
+
+
+#### 读已提交
+
+**read  committed；**
+
+```sql
+set session transaction isolation level read uncommitted；
+start transaction;
+update account set account=account+200 where id = 1;
+commit;
+```
+
+​	数据的修改只能在提交后才能被读取到。
+
+​	//写锁，事务结束释放；读锁，读完释放。
+
+​	问题：不可重复读，幻影。
+
+
+
+
+
+#### 可重复读
+
+**repeatable read;**
+
+​	这是MySQL默认隔离级别。
+
+```bash
+set session transaction isolation level repeatable read;
+start transaction;
+```
+
+​	保证了同一事务多次读取一条数据的结果是一样的。	
+
+​	//写锁，事务结束释放；读锁，事务结束释放。
+
+​	问题：幻影。
+
+
+
+
+
+#### 串行化
+
+​	并发调度等价于串行调度。
+
+
+
+
+
+
+
+## 主从复制
+
+
+
+## SQL执行流程
 
 
 
@@ -3680,6 +4128,261 @@ SQL执行流程
    注册中心使用一定的机制定时检测已注册的服务，如发现某实例长时间无法访问，就会从服务注册表移除该实例。
 
 ​	Spring Cloud提供了多种注册中心的支持，例如Eureka、Consul和ZooKeeper等
+
+
+
+
+
+## 单点登录
+
+​	单点登录（Single Sign On），简称为 SSO，是目前比较流行的企业业务整合的解决方案之一。SSO 的定义是在多个应用系统中，用户只需要登录一次就可以访问所有相互信任的应用系统。
+
+![在这里插入图片描述](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\sso.jpg)
+
+​	
+
+------
+
+了解：
+
+​	CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。CAS 具有以下特点：
+
+【1】开源的企业级单点登录解决方案。
+【2】CAS Server 为需要独立部署的 Web 应用。这个CAS框架已经提供
+【3】CAS Client 支持非常多的客户端(这里指单点登录系统中的各个 Web 应用)，包括Java, .Net, PHP, Perl, Apache, uPortal, Ruby 等。
+	从结构上看，CAS 包含两个部分： CAS Server 和 CAS Client。CAS Server 需要独立部署，主要负责对用户的认证工作；CAS Client 负责处理对客户端受保护资源的访问请求，需要登录时，重定向到 CAS Server。下图是 CAS 最基本的协议过程：
+
+![在这里插入图片描述](.\src\main\resources\img\sso-cas.jpg)
+
+​	
+
+------
+
+
+
+​	这个ticket必须要在每次请求时传递给服务端。ticket应该保存在请求头里，请求行（url不安全）、请求体（get方法没有请求体）都不可能。
+
+
+
+### session
+
+```java
+public class LoginInterceptor implements HandlerInterceptor {
+
+  @Override
+  public void afterCompletion(HttpServletRequest request,
+                HttpServletResponse response, Object obj, Exception err)
+      throws Exception {
+  }
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response,
+              Object obj, ModelAndView mav) throws Exception {
+
+  }
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response,Object obj) throws Exception {
+    //获取session里的登录状态值
+    String str = (String) request.getSession().getAttribute("isLogin");
+    //如果登录状态不为空则返回true，返回true则会执行相应controller的方法
+    if(str!=null){
+      return true;
+    }
+    //如果登录状态为空则重定向到登录页面，并返回false，不执行原来controller的方法
+    response.sendRedirect("/backend/loginPage");
+    return false;
+  }
+}
+```
+
+
+
+```java
+@Controller
+@RequestMapping("/backend")
+public class BackendController {
+
+  @RequestMapping(value = "/loginPage", method = {RequestMethod.GET})
+  public String loginPage(HttpServletRequest request,String account, String password){
+    return "login";
+  }
+
+  @RequestMapping(value = "/login", method = {RequestMethod.POST})
+  public String login(HttpServletRequest request,RedirectAttributes model, String account, String password){
+    //验证账号密码，如果符合则改变session里的状态，并重定向到主页
+    if ("jack".equals(account)&&"jack2017".equals(password)){
+      request.getSession().setAttribute("isLogin","yes");
+      return "redirect:IndexPage";
+    }else {
+      //密码错误则重定向回登录页，并返回错误，因为是重定向所要要用到RedirectAttributes
+      model.addFlashAttribute("error","密码错误");
+      return "redirect:loginPage";
+    }
+  }
+  //登出，移除登录状态并重定向的登录页
+  @RequestMapping(value = "/loginOut", method = {RequestMethod.GET})
+  public String loginOut(HttpServletRequest request) {
+    request.getSession().removeAttribute("isLogin");
+    return "redirect:loginPage";
+  }
+  @RequestMapping(value = "/IndexPage", method = {RequestMethod.GET})
+  public String IndexPage(HttpServletRequest request){
+    return "Index";
+  }
+
+}
+```
+
+
+
+### cookie
+
+```java
+public class LoginInterceptor implements HandlerInterceptor {
+
+  @Override
+  public void afterCompletion(HttpServletRequest request,
+                HttpServletResponse response, Object obj, Exception err)
+      throws Exception {
+  }
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response,
+              Object obj, ModelAndView mav) throws Exception {
+
+  }
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+               Object obj) throws Exception {
+//    获取request的cookie
+    Cookie[] cookies = request.getCookies();
+    if (null==cookies) {
+      System.out.println("没有cookie==============");
+    } else {
+//      遍历cookie如果找到登录状态则返回true执行原来controller的方法
+      for(Cookie cookie : cookies){
+        if(cookie.getName().equals("isLogin")){
+          return true;
+        }
+      }
+    }
+//    没有找到登录状态则重定向到登录页，返回false，不执行原来controller的方法
+    response.sendRedirect("/backend/loginPage");
+    return false;
+  }
+}
+
+
+```
+
+```java
+@Controller
+@RequestMapping("/backend")
+public class BackendController {
+
+  @RequestMapping(value = "/loginPage", method = {RequestMethod.GET})
+  public String loginPage(HttpServletRequest request, String account, String password) {
+    return "login";
+  }
+
+  @RequestMapping(value = "/login", method = {RequestMethod.POST})
+  public String login(HttpServletRequest request, HttpServletResponse response, RedirectAttributes model, String account, String password) {
+    if ("edehou".equals(account) && "aidou2017".equals(password)) {
+      Cookie cookie = new Cookie("isLogin", "yes");
+      cookie.setMaxAge(30 * 60);// 设置为30min
+      cookie.setPath("/");
+      response.addCookie(cookie);
+      return "redirect:IndexPage";
+    } else {
+      model.addFlashAttribute("error", "密码错误");
+      return "redirect:loginPage";
+    }
+  }
+
+  @RequestMapping(value = "/logOut", method = {RequestMethod.GET})
+  public String loginOut(HttpServletRequest request, HttpServletResponse response) {
+    Cookie[] cookies = request.getCookies();
+    for (Cookie cookie : cookies) {
+      if (cookie.getName().equals("isLogin")) {
+        cookie.setValue(null);
+        cookie.setMaxAge(0);// 立即销毁cookie
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        break;
+      }
+    }
+    return "redirect:loginPage";
+  }
+
+  @RequestMapping(value = "/IndexPage", method = {RequestMethod.GET})
+  public String IndexPage(HttpServletRequest request) {
+    return "Index";
+  }
+
+}
+```
+
+​	传统session认证只适合单机服务器；若应用到分布式服务，要么需要Session共享，要么需要解决跨域问题。
+
+
+
+### Token
+
+​	Token与session类似，不同点session是一种会话机制，可以记录会话信息，而token是令牌，访问资源时所需的凭证。
+
+​	Session存放在web容器里面；而token一般存放在redis里面。
+
+
+
+​	Token、session身份认证都是让一台服务器来做的（认证中心）,需要解决跨域问题。
+
+​	而cookie存在浏览器，每台服务器都可以拿来直接认证，但是不安全。
+
+
+
+### JWT
+
+​	Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准。它是一种特定格式的Token。
+
+JWT由三个部分组成：
+
+​	头部：加密算法，数据类型（JWT）
+
+​	有效载荷：用户信息
+
+​	签名：基于加密算法进行签名，一般RSA。
+
+​	
+
+**Token流程**
+
+![在这里插入图片描述](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\sso.jpg)
+
+**JWT流程**
+
+
+
+![img](.\src\main\resources\img\jwt.jpg)
+
+
+
+二者异同：
+
+​	JWT：由认证中心生成；携带用户信息；不需要在服务器端存储；每台服务器都可以验证。
+
+​	Token：由认证中心生成；不携带用户信息；需要在服务器端（授权中心）存储；认证中心进行验证。
+
+
+
+### Oauth2
+
+​	OAuth简单说就是一种授权的协议，只要**授权方和被授权方遵守**这个协议去写代码提供服务，那双方就是实现了OAuth模式。
+
+![img](.\src\main\resources\img\oauth2.jpg)
+
+​	允许第三方应用代表用户获得访问的权限。
 
 
 
@@ -4115,6 +4818,67 @@ beforeDestroed: 实例销毁之前 执行的钩子。
 
 destroyed: 实例销毁完成时 执行的钩子。
 
+文件结构
+
+```vue
+<template>
+  <div class="container">
+   </div>
+</template>
+
+<script type="text/ecmascript-6">
+export default {
+    data(){
+        return{
+        // 数据
+        };
+    },
+    components:{
+      // 组件注册
+    },
+    beforeCreate(){
+      // 在实例初始化之后，数据观测(data observer) 和 event/watcher 事件配置之前被调用。
+    },
+    create(){
+      // 实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，属性和方法的运算， watch/event 事件回调。然而，挂载阶段还没开始，$el 属性目前不可见。
+    },
+    beforeMount(){
+      // 在挂载开始之前被调用：相关的 render 函数首次被调用。
+    },
+    mounted(){
+      // el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。
+    },
+    beforeUpdate(){
+      // 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。
+    },
+    updated(){
+      // 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+      // 当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。然而在大多数情况下，你应该避免在此期间更改状态，因为这可能会导致更新无限循环
+    },
+    beforeDestroy(){
+      // 实例销毁之前调用。在这一步，实例仍然完全可用。 
+    },
+    destroyed(){
+      // Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。 该钩子在服务器端渲染期间不被调用。
+    },
+    computed:{
+      // 计算属性
+    },
+    watch:{
+      // 数据监听
+    },
+    methods:{
+      // 方法定义
+    }
+}
+</script>
+<style>
+  // css 样式
+</style>
+```
+
+
+
 ## Axios
 
 ​	vue.js是一个视图层框架，严格遵循SOC原则（关注度分离原则），所以Vue.js并不包含AJAX的通信功能，而Axios完美的解决了通信问题。少用使用jQuery，因为它操作Dom过于频繁。Axios是一个开源的可以用在浏览器端和Node.js的异步通信框架。主要作用是实现AJAX异步通信。
@@ -4269,6 +5033,84 @@ swagger
 lombok
 
 
+
+
+
+# 工具
+
+
+
+## lombok
+
+### 注解
+
+ @Getter/@Setter
+
+​	自动产生 getter/setter
+
+
+
+ @ToString
+
+​	自动重写 `toString()` 方法，会印出所有变量
+
+
+
+ @EqualsAndHashCode
+
+​	自动生成 `equals(Object other)` 和 `hashcode()` 方法，包括所有非静态变量和非 transient 的变量
+
+
+
+@NoArgsConstructor,@AllArgsConstructor,@RequiredArgsConstructor
+
+​	这三个很像，都是在自动生成该类的构造器，差别只在生成的构造器的参数不一样而已。@NoArgsConstructor 生成一个没有参数的构造器。@RequiredArgsConstructor 生成一个包含 "特定参数" 的构造器，特定参数指的是那些有加上 final 修饰词的变量们.如果所有的变量都是正常的，都没有用 final 修饰的话，那就会生成一个没有参数的构造器.
+
+
+
+@Data 
+
+​	整合包，只要加了 @Data 这个注解，等于同时加了以下注解
+
+- @Getter/@Setter
+- @ToString
+- @EqualsAndHashCode
+- @RequiredArgsConstructor
+
+
+
+@Value
+
+​	 也是整合包，但是他会把所有的变量都设成 final 的，其他的就跟 @Data 一样，等于同时加了以下注解
+
+- @Getter (注意没有setter)
+- @ToString
+- @EqualsAndHashCode
+- @RequiredArgsConstructor
+
+@Builder
+
+​	自动生成流式 set 值写法，从此之后再也不用写一堆 set了
+
+![img](D:\川哥文件集\ccsNote\img\lombok-builder.jpg)
+
+@Slf4j
+
+​	引入Slf4j日志，lombok 也提供其他日志框架的变种注解可以用，像是 @Log、@Log4j...等。
+
+
+
+## Mybatis-Plus
+
+### 注解
+
+@TableName   表名
+
+@TableId   主键
+
+@TableField   字段
+
+@Version   乐观锁注解版本号
 
 
 

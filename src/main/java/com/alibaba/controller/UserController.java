@@ -46,7 +46,7 @@ public class UserController {
         Result login = userService.login(user);
         if(login.isSuccess()){
             //System.out.println("controller getSession "+servletRequest.getSession().getId());
-            servletRequest.getSession().setAttribute("",user.getUsername());
+            servletRequest.getSession().setAttribute("user",user);
 
         }
         return login;

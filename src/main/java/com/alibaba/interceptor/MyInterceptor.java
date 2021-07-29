@@ -1,5 +1,6 @@
 package com.alibaba.interceptor;
 
+import com.alibaba.bean.User;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -51,10 +52,11 @@ public class MyInterceptor implements HandlerInterceptor {
         if (!request.getRequestURI().contains("/login")||!request.getRequestURI().contains("/regist")) {
             HttpSession session = request.getSession();
             //System.out.println("Interceptor getSession(): " + request.getSession().getId());
-            System.out.println(session.getId());
-            String sessionName = (String) session.getAttribute("username");
+            User user=(User) session.getAttribute("user");
+            //System.out.println(user.getUsername());
+            //String sessionName = (String) session.getAttribute("username");
             //if ("username".equals(sessionName)) {
-                log.info("【MyInterceptor】当前浏览器存在 session:{}",sessionName);
+               // log.info("【MyInterceptor】当前浏览器存在 session:{}",sessionName);
             //}
         }
     }

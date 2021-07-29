@@ -47,7 +47,7 @@ public class MyFilter implements Filter {
         HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) servletResponse);
         String requestUri = request.getRequestURI();
         log.info("请求的地址是 "+requestUri);
-        Object user = request.getSession().getAttribute("username");
+        Object user = request.getSession().getAttribute("user");
         //System.out.println("filter getSession(): " + request.getSession().getId());
         if (user != null ||requestUri.contains("login"))
             filterChain.doFilter(servletRequest,servletResponse);//转交给下一个过滤器
