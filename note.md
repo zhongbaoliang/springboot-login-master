@@ -3044,7 +3044,197 @@ MyBatis有三个基本要素：
 
 
 
+# Mybatis-Plus
 
+https://mp.baomidou.com/guide/crud-interface.html#service-crud-%E6%8E%A5%E5%8F%A3
+
+​	MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的基础上**只做增强不做改变**，为简化开发、提高效率而生。
+
+
+
+## 注解
+
+@TableName   表名
+
+@TableId   主键
+
+@TableField   字段
+
+@Version   乐观锁注解版本号
+
+## 核心功能
+
+### 代码生成器
+
+​	AutoGenerator 是 MyBatis-Plus 的代码生成器，通过 AutoGenerator 可以快速**生成 Entity、Mapper、Mapper XML、Service、Controller 等各个模块的代码**，极大的提升了开发效率。
+
+
+
+## Service
+
+​	通用 Service CRUD 封装IService接口，进一步封装 CRUD 采用 `get 查询单行` `remove 删除` `list 查询集合` `page 分页` 前缀命名方式区分 `Mapper` 层避免混淆。
+
+
+
+### save
+
+```java
+// 插入一条记录（选择字段，策略插入）
+boolean save(T entity);
+// 插入（批量）
+boolean saveBatch(Collection<T> entityList);
+// 插入（批量），每次插入batchSize条
+boolean saveBatch(Collection<T> entityList, int batchSize);
+```
+
+
+
+有则改没则增
+
+```java
+// TableId 注解存在更新记录，否插入一条记录
+boolean saveOrUpdate(T entity);
+// 根据updateWrapper尝试更新，否继续执行saveOrUpdate(T)方法
+boolean saveOrUpdate(T entity, Wrapper<T> updateWrapper);
+// 批量修改插入
+boolean saveOrUpdateBatch(Collection<T> entityList);
+// 批量修改插入
+boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize);
+```
+
+
+
+### remove
+
+```java
+// 根据 entity 条件，删除记录
+boolean remove(Wrapper<T> queryWrapper);
+// 根据 ID 删除
+boolean removeById(Serializable id);
+// 根据 columnMap 条件，删除记录
+boolean removeByMap(Map<String, Object> columnMap);
+// 删除（根据ID 批量删除）
+boolean removeByIds(Collection<? extends Serializable> idList);
+```
+
+
+
+### update
+
+```java
+// 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
+boolean update(Wrapper<T> updateWrapper);
+// 根据 whereWrapper 条件，更新记录
+boolean update(T updateEntity, Wrapper<T> whereWrapper);
+// 根据 ID 选择修改
+boolean updateById(T entity);
+// 根据ID 批量更新
+boolean updateBatchById(Collection<T> entityList);
+// 根据ID 批量更新
+boolean updateBatchById(Collection<T> entityList, int batchSize);
+```
+
+链式修改
+
+```java
+// 链式更改 普通
+UpdateChainWrapper<T> update();
+// 链式更改 lambda 式。注意：不支持 Kotlin 
+LambdaUpdateChainWrapper<T> lambdaUpdate();
+
+// 示例：
+update().eq("column", value).remove();
+lambdaUpdate().eq(Entity::getId, value).update(entity);
+```
+
+
+
+### get
+
+#### 查一条
+
+```java
+// 根据 ID 查询
+T getById(Serializable id);
+// 根据 Wrapper，查询一条记录。结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
+T getOne(Wrapper<T> queryWrapper);
+// 根据 Wrapper，查询一条记录
+T getOne(Wrapper<T> queryWrapper, boolean throwEx);
+// 根据 Wrapper，查询一条记录
+Map<String, Object> getMap(Wrapper<T> queryWrapper);
+// 根据 Wrapper，查询一条记录
+<V> V getObj(Wrapper<T> queryWrapper, Function<? super Object, V> mapper);
+```
+
+#### 查多条
+
+```java
+// 查询所有
+List<T> list();
+// 查询列表
+List<T> list(Wrapper<T> queryWrapper);
+// 查询（根据ID 批量查询）
+Collection<T> listByIds(Collection<? extends Serializable> idList);
+// 查询（根据 columnMap 条件）
+Collection<T> listByMap(Map<String, Object> columnMap);
+// 查询所有列表
+List<Map<String, Object>> listMaps();
+// 查询列表
+List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper);
+// 查询全部记录
+List<Object> listObjs();
+// 查询全部记录
+<V> List<V> listObjs(Function<? super Object, V> mapper);
+// 根据 Wrapper 条件，查询全部记录
+List<Object> listObjs(Wrapper<T> queryWrapper);
+// 根据 Wrapper 条件，查询全部记录
+<V> List<V> listObjs(Wrapper<T> queryWrapper, Function<? super Object, V> mapper);
+```
+
+#### 分页查
+
+```java
+// 无条件分页查询
+IPage<T> page(IPage<T> page);
+// 条件分页查询
+IPage<T> page(IPage<T> page, Wrapper<T> queryWrapper);
+// 无条件分页查询
+IPage<Map<String, Object>> pageMaps(IPage<T> page);
+// 条件分页查询
+IPage<Map<String, Object>> pageMaps(IPage<T> page, Wrapper<T> queryWrapper);
+```
+
+查条数
+
+```java
+// 查询总记录数
+int count();
+// 根据 Wrapper 条件，查询总记录数
+int count(Wrapper<T> queryWrapper);
+```
+
+
+
+链式查询
+
+```java
+// 链式查询 普通
+QueryChainWrapper<T> query();
+// 链式查询 lambda 式。注意：不支持 Kotlin
+LambdaQueryChainWrapper<T> lambdaQuery(); 
+
+// 示例：
+query().eq("column", value).one();
+lambdaQuery().eq(Entity::getId, value).list();
+```
+
+
+
+Mapper
+
+
+
+![在这里插入图片描述](.\src\main\resources\img\mybatisplus-wrapper.jpg)
 
 
 
@@ -3853,6 +4043,16 @@ CREATE VIEW <视图名> AS <SELECT语句>
 普通索引
 
 组合索引
+
+
+
+## 锁机制
+
+​	人们认为行级锁总会增加开销。但实际上，只有当实现本身会增加开销时，行级锁才会增加开销。InnoDB引擎不需要锁升级过程，因为
+
+
+
+
 
 
 
@@ -5096,17 +5296,7 @@ lombok
 
 
 
-## Mybatis-Plus
 
-### 注解
-
-@TableName   表名
-
-@TableId   主键
-
-@TableField   字段
-
-@Version   乐观锁注解版本号
 
 
 
