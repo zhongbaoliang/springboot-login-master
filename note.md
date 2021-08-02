@@ -1352,6 +1352,7 @@ public class UserDaoImpl implements UserDao {
 ​	2. 使用@Async注解声明一个异步任务。
 
 ```java
+//线程池配置类
 import java.util.concurrent.Executor;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -1364,9 +1365,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 /**
  * @Description: 配置类实现AsyncConfigurer接口，并重写getAsyncExecutor方法，并返回一个ThreadPoolTaskExecutor，
  * 这样我们就获得一个基于线程池TaskExecutor
- * @ClassName: CustomMultiThreadingConfig
- * @Author: OnlyMate
- * @Date: 2018年9月21日 下午2:50:14
  */
 @Configuration
 @ComponentScan("com.only.mate.springboot.multithreading")
@@ -1394,6 +1392,7 @@ public class CustomMultiThreadingConfig implements AsyncConfigurer{
 
 
 ```java
+//service层
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -1401,9 +1400,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @Description: 创建线程任务服务
- * @ClassName: CustomMultiThreadingService
- * @Author: OnlyMate
- * @Date: 2018年9月21日 下午3:17:57
  */
 @Service
 public class CustomMultiThreadingService {
@@ -1411,11 +1407,6 @@ public class CustomMultiThreadingService {
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，
      * 如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
-     * @Title: executeAysncTask1
-     * @Date: 2018年9月21日 下午2:54:32
-     * @Author: OnlyMate
-     * @Throws
-     * @param i
      */
     @Async
     public void executeAysncTask1(Integer i){
@@ -1425,11 +1416,6 @@ public class CustomMultiThreadingService {
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，
      * 如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
-     * @Title: executeAsyncTask2
-     * @Date: 2018年9月21日 下午2:55:04
-     * @Author: OnlyMate
-     * @Throws
-     * @param i
      */
     @Async
     public void executeAsyncTask2(Integer i){
@@ -1441,6 +1427,7 @@ public class CustomMultiThreadingService {
 
 
 ```java
+//controller层
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -1450,9 +1437,6 @@ import com.only.mate.springboot.multithreading.CustomMultiThreadingService;
 
 /**
  * @Description:自定义多线程Controller
- * @ClassName: CustomMultiThreadingController
- * @Author: OnlyMate
- * @Date: 2018年9月21日 下午3:02:49
  */
 @Controller
 @RequestMapping(value="/multithreading")
@@ -1473,7 +1457,43 @@ public class CustomMultiThreadingController {
 }
 ```
 
+## MultiPart
 
+```java
+MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();//获取多个文件
+for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
+	MultipartFile file = entity.getValue();// 获取上传文件对象
+	ImportParams params = new ImportParams();
+    ...
+}
+```
+
+## 缓存
+
+​	和Spring对事务管理的支持一样，Spring对Cache的支持也有基于注解和基于XML配置两种方式。
+
+常用注解形式。要在Springboot中使用缓存需要以下几步:
+
+   第一步： 导入spring-boot-starter-cache模块
+
+   第二步： @EnableCaching开启缓存
+
+   第三步： 使用缓存注解
+
+![img](.\src\main\resources\img\spring-cache.jpg)
+
+​	**@EnableCaching作用在配置类上。**当标记在一个方法上时表示该方法是支持缓存的，当标记在一个类上时则表示该类所有的方法都是支持缓存的。对于一个支持缓存的方法，Spring会在其被调用后将其返回值缓存起来，以保证下次利用同样的参数来执行该方法时可以直接从缓存中获取结果，而不需要再次执行该方法。Spring在缓存方法的返回值时是以键值对进行缓存的，值就是方法的返回结果，至于键的话，Spring又支持两种策略，默认策略和自定义策略。需要注意的是当一个支持缓存的方法在对象内部被调用时是不会触发缓存功能的。@Cacheable可以指定三个属性，value、key和condition。
+
+​	**@Cacheable作用在一个方法或者类上**，当标记在一个方法上时表示该方法是支持缓存的，当标记在一个类上时则表示该类所有的方法都是支持缓存的。对于一个支持缓存的方法，Spring会在其被调用后将其返回值缓存起来，以保证**下次利用同样的参数来执行该方法时可以直接从缓存中获取结果，而不需要再次执行该方法**。需要注意的是**当一个支持缓存的方法在对象内部被调用时是不会触发缓存**功能的。
+
+​	**@CachePut也是声明一个方法支持缓存功能。**与@Cacheable不同的是使用**@CachePut标注的方法在执行前不会去检查缓存中是否存在之前执行过的结果，而是每次都会执行该方法，并将执行结果以键值对的形式存入指定的缓存中。**
+
+​	**@CacheEvict是用来标注在需要清除缓存元素的方法或类上的**。当标记在一个类上时表示其中所有的方法的执行都会触发缓存的清除操作。
+
+
+
+**@Cacheable 适用于查询数据的方法，@CachePut 适用于更新数据的方法。@CacheEvict适用于删除数据的方法。**
 
 
 
@@ -2926,6 +2946,12 @@ BCrypt
 
 # MyBatis
 
+​	**mybatis不区分大小写，但是查询语句里面的参数区分，因为查询语句由mysql引擎执行，而mysql可以设置为区分大小写。**	 
+
+ 	**utf8_genera_ci** 不区分大小写，ci为case insensitive的缩写，即大小写不敏感。
+
+ 	 **utf8_general_cs** 区分大小写，cs为case sensitive的缩写，即大小写敏感。
+
 ​	MyBatis 前身为 IBatis，是一种**半自动化**的 ORM 实现。MyBatis 内部封装了 JDBC，简化了加载驱动、创建连接、创建 statement 等繁杂的过程，开发者只需要关注 SQL 语句本身。其封装性低于 Hibernate，但性能优秀、小巧、简单易学、应用广泛。
 
 **MyBatis与Hibernate对比**
@@ -2984,6 +3010,8 @@ public class DbUtil {
 
 
 
+
+
 ## MyBatis核心对象
 
 MyBatis有三个基本要素：
@@ -2994,23 +3022,78 @@ MyBatis有三个基本要素：
 
 ​	SQL映射文件(mapper.xml)
 
-### 核心接口和类
+
+
+​	每个MyBatis应用程序都以一个SqlSessionFactory对象的实例为核心。
 
 ![MyBatis核心对象](.\src\main\resources\img\mybatis-sqlSessionFactory.jpg)
 
 
 
-​	每个MyBatis应用程序都以一个SqlSessionFactory对象的实例为核心。SqlSessionFactoryBuilder对象可以根据XML配置文件或者Configuration类来构建实例，然后通过SqlSessionFactoryBuilder获取SqlSessionFactory对象。SqlSessionFactoryBuilder在创建SqlSessionFactory后就被销毁。
+### SqlSessionFactoryBuilder
+
+​	SqlSessionFactoryBuilder对象可以根据XML配置文件或者Configuration类来构建实例。
+
+### SqlSessionFactory
+
+​	通过SqlSessionFactoryBuilder获取SqlSessionFactory对象。SqlSessionFactoryBuilder在创建SqlSessionFactory后就被销毁。
+
+### SqlSession
 
 ​	再通过SqlSessionFactory对象获取SqlSession实例，该实例中完全包含以数据库为背景的所有执行SQL操作的方法，用该实例可以直接执行已映射的SQL语句。
 
-三者生命周期：
+### 三者生命周期
 
 ​	SqlSessionFactoryBuilder在创建SqlSessionFactory后就被销毁。
 
 ​	SqlSessionFactory在整个应用程序期间都存在。
 
 ​	SqlSession生命周期和作用域：SqlSession 对应一次数据库会话。每次访问数据库时都需要创建 SqlSession 对象。
+
+​	**Spring+mybatis里面每一个方法对应一个sqlSession。**
+
+
+
+## MyBatis执行SQL方式
+
+​	通过SqlSession发送SQL。
+
+​	通过SqlSession获取Mapper接口，通过Mapper接口发送SQL。（spring中都用这种方式）。
+
+
+
+## 配置文件
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="LOG4J" />
+    </settings>
+    <!-- 配置mybatis运行环境 -->
+    <environments default="development">
+        <environment id="development">
+            <!-- 使用JDBC的事务管理 -->
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <!-- MySQL数据库驱动 -->
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <!-- 连接数据库的URL -->
+                <property name="url"
+                    value="jdbc:mysql://localhost:3306/test?characterEncoding=utf8" />
+                <property name="username" value="root" />
+                <property name="password" value="root" />
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 将mapper文件加入到配置文件中 -->
+    <mappers>
+        <mapper resource="net/biancheng/mapper/WebsiteMapper.xml" />
+    </mappers>
+</configuration>
+```
 
 
 
@@ -3034,13 +3117,651 @@ MyBatis有三个基本要素：
 
   **所有XML方式都可以使用注解**
 
-  
 
-## MyBatis执行SQL方式
 
-通过SqlSession发送SQL
+## #与$
 
-通过SqlSession获取Mapper接口，通过Mapper接口发送SQL
+| #{name}                              | ${name}  |
+| ------------------------------------ | -------- |
+| #字符串拼接，加引号                  | 参数替换 |
+| 编译预处理                           |          |
+| 安全                                 | 不       |
+| 不可order by 和in（通过foreach解决） | 可以     |
+
+## 参数
+
+​	**使用@Param注解便可不设置parameterType**。
+
+### 单参数
+
+MyBatis的传入参数parameterType类型分三种
+
+基础类型：int、string、long、Date;
+
+复杂类型：实体类、集合等（JavaBean等）
+
+Map类型：map
+
+#### **基础类型**
+
+```xml
+<select id="findUserById" parameterType="java.lang.Long" resultType="User">    
+        select * from user where  id = #{id};    
+</select>  
+```
+
+
+
+#### 复杂类型
+
+```xml
+<select id="findUserListByIdList" parameterType="java.util.ArrayList" resultType="User">    
+    select * from user user    
+    <where>    
+        user.ID in (    
+          <foreach collection="list"  item="id" index="index" separator=",">   
+             #{id}   
+          </foreach>    
+        )    
+    </where>    
+</select>
+```
+
+```xml
+<select id="findUserListByIdList" parameterType="java.util.HashList" resultType="User">    
+    select * from user user    
+    <where>    
+        user.ID in (    
+           <foreach collection="array"  item="id" index="index"  separator=",">   
+                #{id}   
+           </foreach>    
+        )    
+    </where>    
+</select>
+```
+
+```xml
+<select id="findUserList" parameterType="User" resultType="java.lang.Integer">    
+        SELECT COUNT(*) FROM USER user    
+        <where>    
+            <if test="code != null">     
+                and user.CODE = #{code}     
+            </if>    
+            <if test="id != null">     
+                and user.ID = #{id}     
+            </if>    
+            <if test="idList !=null ">    
+                and user.ID in (    
+                    <foreach  collection="idList" item="id" index="index" separator=",">   
+                         #{id}   
+                    </foreach>    
+                )    
+            </if>    
+        </where>    
+</select>
+```
+
+
+
+#### Map类型
+
+```xml
+<!--更新语句接收 Map 传递的参数-->
+<update id="updateWebsiteByMap" parameterType="map">
+    update website set name = #{name},url= #{url} where id = #{id}
+</update>
+```
+
+
+
+### 多参数
+
+####  **@Param**（参数较少时推荐）
+
+public List<XXXBean> getXXXBeanList(@Param("id")String id, @Param("code")String code);  
+
+```xml
+<select id="getXXXBeanList" resultType="XXBean"> 　　
+	select t.* from tableName where id = #{id} and name = #{code} 
+</select> <!-- 由于是多参数那么就不能使用parameterType， 这里用@Param来指定哪一个 -->
+```
+
+#### 实体类（参数较多时推荐）
+
+​	在参数过多的情况下，MyBatis 允许组织一个 JavaBean，通过简单的 setter 和 getter 方法设置参数，提高可读性。如下所示。
+
+```xml
+<!-- 根据name和url模糊查询网站信息 -->
+<select id="selectWebsiteByAn" resultType="net.biancheng.po.Website">
+    SELECT id,NAME,url FROM website
+    WHERE name LIKE CONCAT ('%',#{name},'%')
+    AND url LIKE CONCAT ('%',#{url},'%')
+</select>
+```
+
+
+
+#### #｛i｝（不用）
+
+public List<XXXBean> getXXXBeanList(String xxId, String xxCode)。
+
+```xml
+<select id="getXXXBeanList" resultType="XXBean">   <!-- 不需要写parameterType参数 -->
+	select t.* from tableName where id = #{0} and name = #{1} 
+</select> <!-- 由于是多参数那么就不能使用parameterType， 改用#｛index｝是第几个就用第几个的索引，索引从0开始 -->
+```
+
+
+
+#### Map封装多参数（不用）
+
+public List<XXXBean> getXXXBeanList(HashMap map);  
+
+```xml
+<select id="getXXXBeanList" parameterType="hashmap" resultType="XXBean"> 　　
+	select * from XXX where id=#{xxId} code = #{xxCode} 
+</select> <!-- 其中hashmap是mybatis自己配置好的直接使用就行。map中key的名字是那个就在#{}使用那个 --> 
+```
+
+以上 3 种方式的区别如下。
+
+- 使用 Map 传递参数会导致业务可读性的丧失，继而导致后续扩展和维护的困难，所以在实际应用中我们应该果断废弃该方式。
+- 使用 @Param 注解传递参数会受到参数个数的影响。当 n≤5 时，它是最佳的传参方式，因为它更加直观；当 n>5 时，多个参数将给调用带来困难。
+- 当参数个数大于 5 个时，建议使用 JavaBean 方式。
+
+
+
+
+
+
+
+
+
+## 级联查询
+
+​	级联关系是一个数据库实体的概念，有 3 种级联关系，分别是一对一级联、一对多级联以及多对多级联。
+
+### 一对一
+
+​	如学生信息表与学籍信息表。
+
+**数据库表中相互持有对方主键**
+
+```sql
+CREATE TABLE `student` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sex` tinyint(4) DEFAULT NULL,
+  `cardId` int(20) DEFAULT NULL,
+...)
+
+CREATE TABLE `studentcard` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `studentId` int(20) DEFAULT NULL,
+  `startDate` date DEFAULT NULL,
+  `endDate` date DEFAULT NULL,
+...)
+```
+
+
+
+**学生实体持有学籍实体的引用，而学籍实体持有学生实体的主键**
+
+```java
+public class Student {//学生信息实体
+    private int id;//如身份证
+    private String name;
+    private int sex;
+    private StudentCard studentCard;//学生有学籍信息
+}
+```
+
+```java
+package net.biancheng.po;
+import java.util.Date;
+public class StudentCard {//学籍信息实体
+    private int id;//学号
+    private int studentId;//学籍信息有对应的学生
+    private Date startDate;
+    private Date endDate;
+}
+```
+
+一对一查询：返回值中用association对应实体对象
+
+```xml
+<resultMap type="net.biancheng.po.Student" id="cardAndStu2">
+    <id property="id" column="id" />
+    <result property="name" column="name" />
+    <result property="sex" column="sex" />
+    <!-- 一对一级联查询 -->
+    <association property="studentCard"
+        javaType="net.biancheng.po.StudentCard">
+        <id property="id" column="id" />
+        <result property="studentId" column="studentId" />
+    </association>
+</resultMap>
+<select id="selectStuById2" parameterType="Integer"
+    resultMap="cardAndStu2">
+    SELECT s.*,sc.studentId FROM student s,studentCard sc
+    WHERE
+    s.cardId = sc.id AND s.id=#{id}
+</select>
+```
+
+
+
+
+
+### 一对多
+
+​	如用户表与订单表。
+
+​	**订单表持有用户表的主键**
+
+```sql
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ordernum` int(25) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  ...)
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `pwd` varchar(20) DEFAULT NULL,
+ 	...)
+```
+
+
+
+**用户实体持有订单实体 对象的链表**
+
+```java
+package net.biancheng.po;
+import java.util.List;
+public class User {
+    private int id;
+    private String name;
+    private String pwd;
+    private List<Order> orderList;
+}
+```
+
+```java
+package net.biancheng.po;
+public class Order {
+    private int id;
+    private int ordernum;
+}
+```
+
+
+
+一对多关系：返回值中用collection对应实体链表
+
+```xml
+<!-- 一对多 根据id查询用户及其关联的订单信息 -->
+<resultMap type="net.biancheng.po.User" id="userAndOrder2">
+    <id property="id" column="id" />
+    <result property="name" column="name" />
+    <result property="pwd" column="pwd" />
+    <!-- 一对多级联查询，ofType表示集合中的元素类型 -->
+    <collection property="orderList"
+        ofType="net.biancheng.po.Order">
+        <id property="oId" column="oId" />
+        <result property="ordernum" column="ordernum" />
+    </collection>
+</resultMap>
+<select id="selectUserOrderById2" parameterType="Integer"
+    resultMap="userAndOrder2">
+    SELECT u.*,o.id as oId,o.ordernum FROM `user` u,`order` o
+    WHERE
+    u.id=o.`userId` AND u.id=#{id}
+</select>
+```
+
+
+
+### 多对多
+
+​	如订单表、商品表、商品_订单表。多对多关系时，**关系也会成为一个表。**实际应用中，由于多对多的关系比较复杂，会增加理解和关联的复杂度，所以应用较少。MyBatis 没有实现多对多级联，推荐**通过两个一对多级联替换多对多级联**，以降低关系的复杂度，简化程序。
+
+
+
+**关系单独作为一个表**
+
+```sql
+CREATE TABLE `order` (
+  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `ordernum` int(25) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  ...)
+
+CREATE TABLE `orders_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orderId` int(11) DEFAULT NULL,
+  `productId` int(11) DEFAULT NULL,
+ ...)
+
+CREATE TABLE `product` (
+  `pid` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) DEFAULT NULL,
+  `price` double DEFAULT NULL,
+    ...)
+```
+
+
+
+**订单实体与商品实体相互持有对方对象链表**
+
+```java
+package net.biancheng.po;
+import java.util.List;
+public class Order {
+    private int oid;
+    private int ordernum;
+    private List<Product> products;
+}
+```
+
+```java
+package net.biancheng.po;
+import java.util.List;
+public class Product {
+    private int pid;
+    private String name;
+    private Double price;
+    // 多对多中的一个一对多
+    private List<Order> orders;
+}
+```
+
+多对多关系：返回值中用collection对应实体链表
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.biancheng.mapper.OrderMapper">
+    <resultMap type="net.biancheng.po.Order" id="orderMap">
+        <id property="oid" column="oid" />
+        <result property="ordernum" column="ordernum" />
+
+        <collection property="products"
+            ofType="net.biancheng.po.Product">
+            <id property="pid" column="pid" />
+            <result property="name" column="name" />
+            <result property="price" column="price" />
+        </collection>
+    </resultMap>
+
+    <select id="selectAllOrdersAndProducts" parameterType="Integer"
+        resultMap="orderMap">
+        SELECT o.oid,o.`ordernum`,p.`pid`,p.`name`,p.`price` FROM
+        `order` o
+        INNER JOIN orders_detail od ON o.oid=od.`orderId`
+        INNER JOIN
+        product p
+        ON p.pid = od.`productId`
+    </select>
+</mapper>
+```
+
+
+
+
+
+
+
+## 动态SQL
+
+​	在 JDBC 或其它类似的框架中，开发人员通常需要手动拼接 SQL 语句。根据不同的条件拼接 SQL 语句是一件极其痛苦的工作。
+
+​	MyBatis 也可以在注解中配置 SQL，但是由于注解功能受限，且对于复杂的 SQL 语句来说可读性差，所以使用较少。
+
+| 元素                                                         | 作用                              | 备注                    |
+| ------------------------------------------------------------ | --------------------------------- | ----------------------- |
+| [if](http://c.biancheng.net/mybatis/if.html)                 | 判断语句                          | 单条件分支判断          |
+| [choose（when、otherwise）](http://c.biancheng.net/mybatis/choose-when-otherwise.html) | 相当于 Java 中的 switch case 语句 | 多条件分支判断          |
+| [trim](http://c.biancheng.net/mybatis/trim.html)、[where](http://c.biancheng.net/mybatis/where.html) | 辅助元素                          | 用于处理一些SQL拼装问题 |
+| [foreach](http://c.biancheng.net/mybatis/foreach.html)       | 循环语句                          | 在in语句等列举条件常用  |
+| [bind](http://c.biancheng.net/mybatis/bind.html)             | 辅助元素                          | 拼接参数                |
+
+### if
+
+​	MyBatis if 类似于 Java 中的 if 语句，但是没有else语句对应。if是 MyBatis 中最常用的判断语句。使用 if 标签可以节省许多拼接 SQL 的工作，把精力集中在 XML 的维护上。
+
+```xml
+<if test="判断条件">
+    SQL语句
+</if>
+```
+
+例如 根据网页名称和url查询
+
+```xml
+<select id="selectAllWebsite" resultMap="myResult">
+    select id,name,url from website
+    <if test="name != null">
+        where name like #{name}
+    </if>
+</select>
+```
+
+```sql
+<select id="selectAllWebsite" resultMap="myResult">
+    select id,name,url from website where 1=1
+    <if test="name != null">
+        AND name like #{name}
+    </if>
+    <if test="url!= null">
+        AND url like #{url}
+    </if>
+</select>
+```
+
+
+
+
+
+### where
+
+​	对于if多条件，加入“1=1”这样的条件又非常奇怪，所以 MyBatis 提供了 where 标签。
+
+```xml
+<where>
+    <if test="判断条件">
+        AND/OR ...
+    </if>
+</where>
+```
+
+​	where 会检索语句，它会将 where 后的第一个 SQL 条件语句的 AND 或者 OR 关键词去掉。
+
+```xml
+<select id="selectWebsite" resultType="net.biancheng.po.Website">
+    select id,name,url from website
+    <where>
+        <if test="name != null">
+            AND name like #{name}
+        </if>
+        <if test="url!= null">
+            AND url like #{url}
+        </if>
+    </where>
+</select>
+```
+
+
+
+
+
+### choose-when-otherwise
+
+```sql
+<mapper namespace="net.biancheng.mapper.WebsiteMapper">
+    <select id="selectWebsite"
+        parameterType="net.biancheng.po.Website"
+        resultType="net.biancheng.po.Website">
+        SELECT id,name,url,age,country
+        FROM website WHERE 1=1
+        <choose>
+            <when test="name != null and name !=''">
+                AND name LIKE CONCAT('%',#{name},'%')
+            </when>
+            <when test="url != null and url !=''">
+                AND url LIKE CONCAT('%',#{url},'%')
+            </when>
+            <otherwise>
+                AND age is not null
+            </otherwise>
+        </choose>
+    </select>
+</mapper>
+```
+
+### foreach
+
+​	 Mybatis if、where、trim 等动态语句来处理一些简单的查询操作。对于一些 SQL 语句中含有 in 条件，需要迭代条件集合来生成的情况，可以使用 foreach 来实现 SQL 条件的迭代。
+
+```xml
+<foreach item="item" index="index" collection="list|array|map key" open="(" separator="," close=")">
+    参数值
+</foreach>
+```
+
+
+
+```xml
+<select id="selectWebsite"
+    parameterType="net.biancheng.po.Website"
+    resultType="net.biancheng.po.Website">
+    SELECT id,name,url,age,country
+    FROM website WHERE age in
+    <foreach item="age" index="index" collection="list" open="("
+        separator="," close=")">
+        #{age}
+    </foreach>
+</select>
+```
+
+foreach 标签主要有以下属性，说明如下。
+
+- item：表示集合中每一个元素进行迭代时的别名。
+- index：指定一个名字，表示在迭代过程中每次迭代到的位置。
+- open：表示该语句以什么开始（既然是 in 条件语句，所以必然以`(`开始）。
+- separator：表示在每次进行迭代之间以什么符号作为分隔符（既然是 in 条件语句，所以必然以`,`作为分隔符）。
+- close：表示该语句以什么结束（既然是 in 条件语句，所以必然以`)`开始）。
+
+### bind
+
+​	每个数据库的**拼接函数或连接符号**都不同，例如 MySQL 的 concat 函数、Oracle 的连接符号“||”等。MyBatis 提供了 bind 标签来解决这一问题。
+
+```xml
+<select id="selectWebsite" resultType="net.biancheng.po.Website">
+    SELECT id,name,url,age,country
+    FROM website
+    <trim prefix="where" prefixOverrides="and">
+        <if test="name != null and name !=''">
+            AND name LIKE CONCAT ('%',#{name},'%')
+        </if>
+        <if test="url!= null">
+            AND url LIKE CONCAT ('%',#{url},'%')
+        </if>
+    </trim>
+</select>
+```
+
+```xml
+<select id="selectWebsite" resultType="net.biancheng.po.Website">
+    <bind name="pattern_name" value="'%'+name+'%'" />
+    <bind name="pattern_url" value="'%'+url+'%'" />
+    SELECT id,name,url,age,country
+    FROM website
+    WHERE name like #{pattern_name}
+    AND url like #{pattern_url}
+</select>
+```
+
+bind 元素属性如下。
+
+- value：对应传入实体类的某个字段，可以进行字符串拼接等特殊处理。
+- name：给对应参数取的别名。
+
+### trim
+
+​	trim 一般用于去除 SQL 语句中多余的 AND 关键字、逗号`，`或者给 SQL 语句前拼接 where、set 等后缀，可用于选择性插入、更新、删除或者条件查询等操作。trim 语法格式如下。
+
+```xml
+<trim prefix="前缀" suffix="后缀" prefixOverrides="忽略前缀字符" suffixOverrides="忽略后缀字符">
+    SQL语句
+</trim>
+```
+
+
+
+```xml
+<select id="selectWebsite" resultType="net.biancheng.po.Website">
+    SELECT id,name,url,age,country
+    FROM website
+    <trim prefix="where" prefixOverrides="and">
+        <if test="name != null and name !=''">
+            AND name LIKE CONCAT ('%',#{name},'%')
+        </if>
+        <if test="url!= null">
+            AND url like concat ('%',#{url},'%')
+        </if>
+    </trim>
+</select>
+```
+
+
+
+## 分页查询
+
+增加 limit 关键字，通过设置起始位置（from）和页面容量（pageSize），用于实现分页查询。
+
+```xml
+<select id="selectWebsite" resultType="net.biancheng.po.Website">
+    SELECT id,name,url,age,country
+    FROM website
+    <trim prefix="where" prefixOverrides="and">
+        <if test="site.name != null and site.name !=''">
+            AND name LIKE CONCAT ('%',#{site.name},'%')
+        </if>
+        <if test="site.url!= null and site.url !=''">
+            AND url LIKE CONCAT ('%',#{site.url},'%')
+        </if>
+        ORDER BY id limit #{from},#{pageSize}
+    </trim>
+</select>
+```
+
+
+
+## 缓存
+
+​	MyBatis 提供了一级缓存和二级缓存的支持。默认情况下，MyBatis 只开启一级缓存。
+
+​	**Spring+mybatis里面每一个方法对应一个sqlSession。**
+
+### 一级缓存
+
+​	一级缓存是基于 PerpetualCache（MyBatis自带）的 HashMap 本地缓存，**作用范围为 session 域**内。当 session flush（刷新）或者 close（关闭）之后，该 session 中所有的 cache（缓存）就会被清空。
+
+​	**mybatis与spring整合后，一级缓存就失去作用。**
+
+### 二级缓存
+
+​	**二级缓存是全局缓存**，作用域超出 session 范围之外，可以被所有 SqlSession 共享。
+
+​	
+
+​	一级缓存缓存的是 SQL 语句，**二级缓存缓存的是结果对象**。
 
 
 
