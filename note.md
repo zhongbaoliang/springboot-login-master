@@ -1,4 +1,132 @@
+
+
+# 电子书
+
+https://github.com/itdevbooks/pdf
+
 # Java基础
+
+https://github.com/rocLv/OnJava8
+
+
+
+​	java代码执行主要流程：
+
+​	编译：生成class文件。
+
+​	类加载：加载class文件到虚拟机
+
+​	类执行：JVM为每个新创建的线程都分配一个线程栈。
+
+
+
+## JDK & JRE 
+
+![img](.\src\main\resources\img\java-structure.jpg)
+
+​	JDK：java development kit （**java开发工具**），JDK主要包含三部分
+
+​	第一部分就是Java运行时环境，JVM。
+
+​	第二部分就是Java的基础类库，这个类库的数量还是非常可观的。
+
+​	第三部分就是Java的开发工具，它们都是辅助你更好的使用Java的利器。
+
+​	JRE：java runtime environment （**java运行时环境**），运行在JVM上。
+
+
+
+##  虚拟机 &编译 &执行
+
+​	虚拟机的主要任务是装载class文件并执行其中的字节码。
+
+​	JDK中javac.exe就是编译Java源码并生成字节码的；java.exe时执行字节码的。
+
+![preview](.\src\main\resources\img\java-process.jpg)
+
+
+
+
+
+
+
+## 异常
+
+​	发现错误的理想时机是在编译阶段，也就是在你试图运行程序之前。**异常只能在运行时期抛出；但是应该尽可能早的被检查出来，即尽量在编译时期检查出来。**检查型异常便是编译阶段检查出来。
+
+​	Error  JAVA虚拟机内部错误，运行时由Java虚拟机抛出。
+
+​	检查型异常  编译时期检查出来，运行时抛出。主要是文件找不到问题。
+
+​	运行时异常  运行时才检查出来并抛出。
+
+​	
+
+​	c语言等 编译器编译生成机器码供计算机执行；Java编译生成字节码供Java虚拟机执行。尽可能早的发现错误，即编译时期就发现错误，这类错误称之为检查型异常；它们编译时期就被检查出来，在运行时期才被抛出。
+
+
+
+NoClassDefFoundError和ClassNotfoundException
+
+​		都发生在JVM在classpath下找不到所需的类时。	
+
+​	ClassNotfoundException是在编译时JVM加载不到类或者找不到类导致的； 发生在代码中主动加载类或者反射，编译时期就会对其进行检查。
+
+​	而NoClassDefError是在运行时JVM加载不到类或者找不到类。主要是jar包没有添加到classpath中、jar包版本不对等。
+
+------
+
+​	为什么不把除数为0等 运行时异常处理为受检异常。
+
+​	文件找不到之类的异常不依赖于代码内容，可以直接在编译时期通过系统调用判断文件是否存在。而除数为0之类的异常需要根据变量来判断，而变量的值在编译时期未知。
+
+------
+
+
+
+## 注解
+
+### 四大元注解
+
+@Target       描述注解的适用范围
+
+@Retention    描述注解的生命周期 SOURCE CLASS RUNTIME
+
+@Inherited    说明子类可以继承父类的**类注解**
+
+@Documented   说明该注解将被包含在javadoc
+
+![java-annotation](.\src\main\resources\img\java-annotation.jpg)
+
+​	@Inherited 只是可控制 对类名上注解是否可以被继承。不能控制方法上的注解是否可以被继承。
+
+​	**也就是说重写了方法，要想注解生效，只能自行加上注解。**
+
+
+
+
+
+## 类加载
+
+![img](.\src\main\resources\img\javaee-classLoad.jpg)
+
+
+
+## 访问控制权限
+
+![img](.\src\main\resources\img\java-access.jpg)
+
+
+
+------
+
+​	注意类中的default与接口中default不一样，接口中的default表示是默认实现，而类中的default是访问权限。
+
+为什么接口中的方法都是共有的？
+
+------
+
+
 
 ## 锁
 
@@ -1268,6 +1396,52 @@ public class UserDaoImpl implements UserDao {
 
 ##### 注解形式
 
+​	**Spring中的@Transactional基于AOP的异常增强机制。**
+
+注意事项：
+
+​	**只能应用在Public方法上。**
+
+​	**同一个类中一个方法调用另一个有事务注解的方法，注解失效。**
+
+​	**不推荐在接口中使用。**
+
+------
+
+**为什么只能作用在public上？**
+
+​	**从Java 方法属性访问权限控制和AOP实现原理来解释。**@Transactional基于AOP的异常增强机制，而AOP基于动态代理。生成的代理类与被代理类不在一个包下；因为切入点一般在业务层的包里面，而切面在切面的包里面。比方说service中的一个业务接口，在项目的service包里面，而生成的代理类在spring框架的aspect包里面。代理类需要访问被代理类的方法，若无访问权限，则无法实现代理。
+
+
+
+**为什么同一个类中一个方法调用另一个有事务注解的方法，注解失效？**
+
+​	从动态代理角度解释。因为spring事务是基于动态代理的AOP实现，方法调用是 被代理类中类的内部调用，而不是通过生成的代理类来调用。
+
+
+
+**为什么不推荐在接口中使用？**
+
+​	**继承方法不能继承方法上的注解，@Inherite只是相对于类上的注解而言。**接口中抽象方法前加注解是无效的；如果方法有默认实现的话，子类如果重写了接口中的这个方法必须再次加上注解（mybatisPlus源码）。
+
+
+
+**为什么spring的业务层和mapper层都需要接口**？AOP	
+
+
+
+为什么接口中的方法都是共有的？
+
+AOP实现原理？	动态代理。
+
+AOP术语，目标与切面，增强与切入点，增强分类？
+
+属性方法四种作用域？
+
+​	privite只能在本类中访问，default只能在本包内访问，protected只能在包内和包外的子类，public哪儿都能访问。
+
+------
+
 1） 在Spring容器中注册驱动。
 
 ```xml
@@ -1275,6 +1449,10 @@ public class UserDaoImpl implements UserDao {
 ```
 
 2） 在需要使用事务的业务或者方法上**添加注解@Transactional。该注解只能应用在Public方法上。**
+
+
+
+
 
 @Transactional常用属性说明如下：
 
@@ -1292,9 +1470,17 @@ public class UserDaoImpl implements UserDao {
 
   ​	SERIALIZABLE；可串行化
 
-- readOnly：设置是读写事务还是只读事务；
+- rollbackFor: 因什么而回滚。默认是RuntimeException.class，即运行时异常才回滚。因此，在需要进行文件处理时必须加上 rollBackFor = Exception.class。
 
-- timeout：事务超时事件（单位：s）。
+| 属性名        | 说明                                                         |
+| ------------- | ------------------------------------------------------------ |
+| name          | 当在配置文件中有多个 TransactionManager , 可以用该属性指定选择哪个事务管理器。 |
+| propagation   | 事务的传播行为，默认值为 REQUIRED。                          |
+| isolation     | 事务的隔离度，默认值采用 DEFAULT。                           |
+| timeout       | 事务的超时时间，默认值为-1。如果超过该时间限制但事务还没有完成，则自动回滚事务。 |
+| readOnly      | 指定事务是否为只读事务，默认值为 false；为了忽略那些不需要事务的方法，比如读取数据，可以设置 readOnly 为 true。 |
+| rollbackFor   | 用于指定能够触发事务回滚的异常类型，如果有多个异常类型需要指定，各类型之间可以通过逗号分隔。 |
+| noRollbackFor | 抛出 noRollbackFor 指定的异常类型，不回滚事务。              |
 
 
 
@@ -1473,6 +1659,8 @@ for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 
 ​	和Spring对事务管理的支持一样，Spring对Cache的支持也有基于注解和基于XML配置两种方式。
 
+​	一般作用在业务层。
+
 常用注解形式。要在Springboot中使用缓存需要以下几步:
 
    第一步： 导入spring-boot-starter-cache模块
@@ -1483,7 +1671,7 @@ for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 
 ![img](.\src\main\resources\img\spring-cache.jpg)
 
-​	**@EnableCaching作用在配置类上。**当标记在一个方法上时表示该方法是支持缓存的，当标记在一个类上时则表示该类所有的方法都是支持缓存的。对于一个支持缓存的方法，Spring会在其被调用后将其返回值缓存起来，以保证下次利用同样的参数来执行该方法时可以直接从缓存中获取结果，而不需要再次执行该方法。Spring在缓存方法的返回值时是以键值对进行缓存的，值就是方法的返回结果，至于键的话，Spring又支持两种策略，默认策略和自定义策略。需要注意的是当一个支持缓存的方法在对象内部被调用时是不会触发缓存功能的。@Cacheable可以指定三个属性，value、key和condition。
+​	**@EnableCaching作用在配置类上。**在配置类(@Configuration)上使用@EnableCaching注解时，会触发一个post processor，这会扫描每一个spring bean，查看是否已经存在注解对应的缓存。如果找到了，就会自动创建一个代理拦截方法调用，使用缓存的bean执行处理。
 
 ​	**@Cacheable作用在一个方法或者类上**，当标记在一个方法上时表示该方法是支持缓存的，当标记在一个类上时则表示该类所有的方法都是支持缓存的。对于一个支持缓存的方法，Spring会在其被调用后将其返回值缓存起来，以保证**下次利用同样的参数来执行该方法时可以直接从缓存中获取结果，而不需要再次执行该方法**。需要注意的是**当一个支持缓存的方法在对象内部被调用时是不会触发缓存**功能的。
 
@@ -2439,13 +2627,23 @@ public class UserServiceImpl implements UserService {
 
 ## 异步任务
 
+​	一般作用在业务层。
+
 1. **@EnableAsync**  利用@EnableAsync注解开启异步任务支持。
 
 2. **@Async** 通过@Async注解表明该方法是一个异步方法，如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
 
    
 
+## 缓存
 
+​	**@EnableCaching作用在配置类上。**在配置类(@Configuration)上使用@EnableCaching注解时，会触发一个post processor，这会扫描每一个spring bean，查看是否已经存在注解对应的缓存。如果找到了，就会自动创建一个代理拦截方法调用，使用缓存的bean执行处理。
+
+​	**@Cacheable作用在一个方法或者类上**，保证**下次利用同样的参数来执行该方法时可以直接从缓存中获取结果，而不需要再次执行该方法**。需要注意的是**当一个支持缓存的方法在对象内部被调用时是不会触发缓存**功能的。
+
+​	**@CachePut也是声明一个方法支持缓存功能。**与@Cacheable不同的是使用**@CachePut标注的方法在执行前不会去检查缓存中是否存在之前执行过的结果，而是每次都会执行该方法，并将执行结果以键值对的形式存入指定的缓存中。**
+
+​	**@CacheEvict是用来标注在需要清除缓存元素的方法或类上的**。当标记在一个类上时表示其中所有的方法的执行都会触发缓存的清除操作。
 
 
 
@@ -2629,7 +2827,7 @@ public class Singleton{
 
 ​	代理类是自动动态生成的。
 
-​	动态代理分为两大类：基于接口的动态代理，基于类的动态代理。
+​	动态代理分为两大类：**基于接口的动态代理，基于类的动态代理。**
 
 ​		基于接口：JDK动态代理，被代理类实现一个接口，生成的代理类是这个**接口的实现类**。
 
@@ -2949,7 +3147,7 @@ BCrypt
 ​	**mybatis不区分大小写，但是查询语句里面的参数区分，因为查询语句由mysql引擎执行，而mysql可以设置为区分大小写。**	 
 
  	**utf8_genera_ci** 不区分大小写，ci为case insensitive的缩写，即大小写不敏感。
-
+ 	
  	 **utf8_general_cs** 区分大小写，cs为case sensitive的缩写，即大小写敏感。
 
 ​	MyBatis 前身为 IBatis，是一种**半自动化**的 ORM 实现。MyBatis 内部封装了 JDBC，简化了加载驱动、创建连接、创建 statement 等繁杂的过程，开发者只需要关注 SQL 语句本身。其封装性低于 Hibernate，但性能优秀、小巧、简单易学、应用广泛。
@@ -3519,7 +3717,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 ## 动态SQL
 
-​	在 JDBC 或其它类似的框架中，开发人员通常需要手动拼接 SQL 语句。根据不同的条件拼接 SQL 语句是一件极其痛苦的工作。
+​	在 JDBC 或其它类似的框架中，开发人员通常需要手动拼接 SQL 语句。根据不同的条件拼接 SQL 语句是一件极其痛苦的工作。动态 SQL 大大减少了编写代码的工作量，更体现了 MyBatis 的灵活性、高度可配置性和可维护性，是 MyBatis 的强大特性之一。。
 
 ​	MyBatis 也可以在注解中配置 SQL，但是由于注解功能受限，且对于复杂的 SQL 语句来说可读性差，所以使用较少。
 
@@ -3723,7 +3921,17 @@ bind 元素属性如下。
 
 ## 分页查询
 
-增加 limit 关键字，通过设置起始位置（from）和页面容量（pageSize），用于实现分页查询。
+​	MyBatis 的分页功能是**基于内存的分页**，即先查询出所有记录，再按起始位置和页面容量取出结果。
+
+​	增加 limit 关键字，通过设置起始位置（from）和页面容量（pageSize），用于实现分页查询。
+
+------
+
+​	**基于拦截器实现。（用户点击查询）首次查询取出所有记录，mybatis将结果缓存，并返回一页结果；后续查询时（用户点击下一页），拦截器拦截请求后直接查询缓存。**
+
+------
+
+
 
 ```xml
 <select id="selectWebsite" resultType="net.biancheng.po.Website">
@@ -3770,6 +3978,16 @@ bind 元素属性如下。
 https://mp.baomidou.com/guide/crud-interface.html#service-crud-%E6%8E%A5%E5%8F%A3
 
 ​	MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的基础上**只做增强不做改变**，为简化开发、提高效率而生。
+
+​	**sql执行失败时向上抛出异常。批量操作时都有事务@Transactional。**
+
+------
+
+​	为什么是抛出异常呢，而不是返回true或者false呢？
+
+​	因为异常可以携带信息，比如多少行发生错误。
+
+------
 
 
 
@@ -3949,13 +4167,228 @@ query().eq("column", value).one();
 lambdaQuery().eq(Entity::getId, value).list();
 ```
 
+链式更改
+
+```java
+// 链式更改 普通
+UpdateChainWrapper<T> update();
+// 链式更改 lambda 式。注意：不支持 Kotlin 
+LambdaUpdateChainWrapper<T> lambdaUpdate();
+
+// 示例：
+update().eq("column", value).remove();
+lambdaUpdate().eq(Entity::getId, value).update(entity);
+```
 
 
-Mapper
+
+## Mapper
+
+### Insert
+
+```java
+// 插入一条记录
+int insert(T entity);
+```
 
 
+
+### Delete
+
+```java
+// 根据 entity 条件，删除记录
+int delete(@Param(Constants.WRAPPER) Wrapper<T> wrapper);
+// 删除（根据ID 批量删除）
+int deleteBatchIds(@Param(Constants.COLLECTION) Collection<? extends Serializable> idList);
+// 根据 ID 删除
+int deleteById(Serializable id);
+// 根据 columnMap 条件，删除记录
+int deleteByMap(@Param(Constants.COLUMN_MAP) Map<String, Object> columnMap);
+```
+
+
+
+### Update
+
+```java
+// 根据 whereWrapper 条件，更新记录
+int update(@Param(Constants.ENTITY) T updateEntity, @Param(Constants.WRAPPER) Wrapper<T> whereWrapper);
+// 根据 ID 修改
+int updateById(@Param(Constants.ENTITY) T entity);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 条件构造器
+
+### AbstractWrapper
+
+​	QueryWrapper(LambdaQueryWrapper) 和UpdateWrapper(LambdaUpdateWrapper) 的父类用于生成 sql 的 where 条件, entity 属性也用于生成 sql 的 where 条件。
+​	注意: entity 生成的 where 条件与 使用各个 api 生成的 where 条件**没有任何关联行为**。
+
+### QueryWrapper与LambdaQueryWrapper
+
+```java
+QueryWrapper<Entity> queryWrapper = new QueryWrapper<>();
+QueryWrapper<Entity> queryWrapper1 = 
+```
+
+
+
+### UpdateWrapper与LambdaUpdateWrapper
+
+
+
+
+
+
+
+### 常用方法
 
 ![在这里插入图片描述](.\src\main\resources\img\mybatisplus-wrapper.jpg)
+
+
+
+## batch
+
+处理源码
+
+```java
+public static <E> boolean executeBatch(Class<?> entityClass, Log log, Collection<E> list, int batchSize, BiConsumer<SqlSession, E> consumer) {
+    Assert.isFalse(batchSize < 1, "batchSize must not be less than one", new Object[0]);
+    return !CollectionUtils.isEmpty(list) && executeBatch(entityClass, log, (sqlSession) -> {
+        int size = list.size();
+        int i = 1;
+		
+        for(Iterator var6 = list.iterator(); var6.hasNext(); ++i) {
+            E element = var6.next();
+            consumer.accept(sqlSession, element);
+            if (i % batchSize == 0 || i == size) {
+                sqlSession.flushStatements();
+            }
+        }
+
+    });
+}
+```
+
+
+
+## 分页查询
+
+​	常用的插件：IPage，PageHelper
+
+IPage分页查询是通过拦截器来实现的，每回
+
+```java
+//Spring boot方式
+@Configuration
+@MapperScan("com.luna.demo.*.mapper*")
+public class MybatisPlusConfig {
+    // 最新版
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.H2));
+        return interceptor;
+    }
+}
+```
+
+
+
+```java
+public interface SysUserService extends IService<SysUser> {
+    JSONObject selectSysUserPage(String name, Integer page, Integer size);
+
+    JSONObject selectSysUserMapsPage(String name, Integer page, Integer size);
+}
+```
+
+
+
+```java
+@Service
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
+        implements SysUserService {
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+    // 分页查询 selectPage()
+    @Override
+    public JSONObject selectSysUserPage(String name, Integer page, Integer size) {
+        JSONObject object = new JSONObject();
+        LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = Wrappers.lambdaQuery();
+        sysUserLambdaQueryWrapper.like(SysUser::getName, name);//设置查询条件
+        Page<SysUser> userPage = new Page<>(page, size);//页面id,页面大小
+        Page<SysUser> pages = sysUserMapper.selectPage(userPage, sysUserLambdaQueryWrapper);//获取页面
+        object.put("当前页码", pages.getCurrent());
+        object.put("当前页码", pages.getOrders());
+        object.put("当前页的记录数据", pages.getRecords());
+        object.put("当前页的记录条数", pages.getSize());
+        object.put("总记录条数", pages.getTotal());
+        object.put("总页数", pages.getPages());
+        return object;
+    }
+
+    // 分页查询 selectMapsPage()
+    @Override
+    public JSONObject selectSysUserMapsPage(String name, Integer page, Integer size) {
+        JSONObject object = new JSONObject();
+        LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = Wrappers.lambdaQuery();
+        sysUserLambdaQueryWrapper.like(SysUser::getName, name);
+        Page<Map<String, Object>> mapPage = new Page<>(page, size, false);
+        Page<Map<String, Object>> mapPage1 = sysUserMapper.selectMapsPage(mapPage, sysUserLambdaQueryWrapper);
+        object.put("当前页码", mapPage1.getCurrent());
+        object.put("当前页码", mapPage1.getOrders());
+        object.put("当前页的记录数据", mapPage1.getRecords());
+        object.put("当前页的记录条数", mapPage1.getSize());
+        object.put("总记录条数", mapPage1.getTotal());
+        object.put("总页数", mapPage1.getPages());
+        return object;
+    }
+}
+```
+
+
+
+```java
+@RestController
+@Slf4j
+@RequestMapping("/CURD1")
+public class SysUserController {
+    @Autowired
+    private SysUserService sysUserService;
+
+    //分页
+    @RequestMapping("/page")
+    public JSONObject pageDemo(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "2") int size, String name) {
+        return sysUserService.selectSysUserPage(name,page,size);
+    }
+
+    //分页
+    @RequestMapping("/mappage")
+    public JSONObject pageMapDemo(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "2") int size, String name) {
+        return sysUserService.selectSysUserMapsPage(name, page, size);
+    }
+}
+```
+
+
+
+
+
+
 
 
 
@@ -4713,23 +5146,73 @@ MyISAM
 
 
 
+## 分页与游标
+
+​	用户点击查询，假设后台数据库查询结果有一万条数据，不可能将一万条数据一次全部发送给前端，通过分页处理（如下一页页面每回显示20条），或者通过游标处理（如滑轮，mysql cursor只能用于储存过程）。
+
+​	分页查询一次性查询数据库得到所有结果，根据Limit的from和size返回结果。
+
+
+
+游标：在数据库中缓存查询结果。
+
+```sql
+create procedure proccessorders()
+begin
+    declare id int;
+    declare name varchar(100) character set utf8;
+    declare done int default 0;
+    -- 声明游标
+    declare mc cursor for select stuId,stuName from student where stuAge >19;
+    declare continue handler for not found set done = 1;
+    -- 打开游标
+    open mc;
+    -- 获取结果
+    fetch mc into id,name;
+    -- 这里是为了显示获取结果
+    select id,name;
+    -- 关闭游标
+    close mc;
+end //
+```
+
+------
+
+​	游标说白了就是数据库自行设计的一个数据缓存和数据指针，游标在一次sql语句执行完就关闭了。可基于cursor实现分页查询。
+
+​	
+
+
+
+
+
 
 
 ## 视图
 
-
-
 ​	MySQL 视图（View）是一种**虚拟存在的表**，同真实表一样，视图也由列和行构成，但视图并不实际存在于数据库中。行和列的数据来自于定义视图的查询中所使用的表，并且还是在**使用视图时动态生成的**。
 
-​		**数据库中只存放了视图的定义，并没有存放视图中的数据。**视图经过定义以后，结构形式和表一样，可以进行查询、修改、更新和删除等操作。一旦真实表中的数据发生改变，显示在视图中的数据也会发生改变。
+​		**数据库中只存放了视图的定义，并没有存放视图中的数据。**视图经过定义以后，结构形式和表一样，可以进行查询、修改、更新和删除等操作。**一旦真实表中的数据发生改变，显示在视图中的数据也会发生改变。**视图一般用来查询而不用来更新。
 
 ​	视图可以从原有的表上选取对用户有用的信息，那些对用户没用，或者用户没有权限了解的信息，都可以直接屏蔽掉，作用类似于筛选。这样做既使应用**简单化**，也保证了系统的**安全**。
-
-​	
 
 ```sql
 CREATE VIEW <视图名> AS <SELECT语句>
 ```
+
+​	CHECK TABLE   检查表是否被改变
+
+​	**WITH CHECK OPTION   检查插入的数据是否符合 WHERE 设置的条件**
+
+​	WITH CASCADED CHECK OPTION  mysql检查所有依赖视图的规则。
+
+​	WITH LOCAL CHECK OPTION   mysql只会检查当前视图的规则，并且不会检查底层视图的规则。
+
+​	视图定义中允许使用 ORDER BY 语句。
+
+​	视图定义中不能引用 TEMPORARY 表（临时表），不能创建 TEMPORARY 视图。
+
+​	 如果视图中数据是来自于一个表时，修改视图中的数据，表数据会更新。而且修改表中数据时，对应视图也会更新。但是如果视图数据来源于两个表时，修改视图数据时会报错，无法修改。 但是**视图一般用来查询而不用来更新。**
 
 
 
@@ -5674,6 +6157,104 @@ delete key：删除key
 
 
 
+## 项目结构
+
+![image-20210804142333434](.\src\main\resources\img\vue-pro-structure.jpg)
+
+
+
+### 目录解析
+
+| 目录/文件    | 说明                                                         |
+| :----------- | :----------------------------------------------------------- |
+| build        | 项目构建(webpack)相关代码                                    |
+| config       | 配置目录，包括端口号等。我们初学可以使用默认的。             |
+| node_modules | npm 加载的项目依赖模块                                       |
+| src          | 这里是我们要开发的目录，基本上要做的事情都在这个目录里。里面包含了几个目录及文件：assets: 放置一些图片，如logo等。components: 目录里面放了一个组件文件，可以不用。App.vue: 项目入口文件，我们也可以直接将组件写这里，而不使用 components 目录。main.js: 项目的核心文件。 |
+| static       | 静态资源目录，如图片、字体等。                               |
+| test         | 初始测试目录，可删除                                         |
+| .xxxx文件    | 这些是一些配置文件，包括语法配置，git配置等。                |
+| index.html   | 首页入口文件，你可以添加一些 meta 信息或统计代码啥的。       |
+| package.json | 项目配置文件。                                               |
+| README.md    | 项目的说明文档，markdown 格式                                |
+
+### 文件结构
+
+```vue
+<template>
+  <div class="container">
+   </div>
+</template>
+
+<script type="text/ecmascript-6">
+export default {
+    data(){
+        return{
+        // 数据
+        };
+    },
+    components:{
+      // 组件注册
+    },
+    beforeCreate(){
+      // 在实例初始化之后，数据观测(data observer) 和 event/watcher 事件配置之前被调用。
+    },
+    create(){
+      // 实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，属性和方法的运算， watch/event 事件回调。然而，挂载阶段还没开始，$el 属性目前不可见。
+    },
+    beforeMount(){
+      // 在挂载开始之前被调用：相关的 render 函数首次被调用。
+    },
+    mounted(){
+      // el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。
+    },
+    beforeUpdate(){
+      // 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。
+    },
+    updated(){
+      // 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+      // 当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。然而在大多数情况下，你应该避免在此期间更改状态，因为这可能会导致更新无限循环
+    },
+    beforeDestroy(){
+      // 实例销毁之前调用。在这一步，实例仍然完全可用。 
+    },
+    destroyed(){
+      // Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。 该钩子在服务器端渲染期间不被调用。
+    },
+    computed:{
+      // 计算属性
+    },
+    watch:{
+      // 数据监听
+    },
+    methods:{
+      // 方法定义
+    }
+}
+</script>
+<style>
+  // css 样式
+</style>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## vue七大常用属性
 
 ### el: element
@@ -5818,7 +6399,77 @@ export default {
 
 ​	客户端支持防御XSRF。
 
-​	
+
+
+## 前端路由
+
+1. 设置资源的meta属性，需要登录才能访问则设置requireAuth 为true
+
+```js
+const routers = [
+{
+   path: '/',
+   component: App,
+　　 children: [
+　　　 { 
+　　　　path: '/login', 
+　　　 component: Login,
+   meta: {
+    title: '登录'
+
+   }
+　　 },
+　　　{ 
+　　　　path: '/home', 
+　　　 component: Home,
+   meta: {
+    title: '首页',
+    requireAuth: true//设置为true表示访问前需要登录
+   }
+　　 }
+　　]
+}
+]
+export default routers
+```
+
+2. 
+
+```js
+router.beforeEach((to, from, next) => {
+ /* 页面title */
+ if (to.meta.title) {
+  document.title = to.meta.title
+ }
+ /* 判断该路由是否需要登录权限 */
+ if (to.matched.some(record => record.meta.requireAuth)) {
+  //是否登录
+  axios.post('/home/user/isLogin')
+    .then(function (response) {
+      if (response.data.code == 0) {
+        //未登录
+        if (response.data.data.online == 0) {
+          next({
+            path: '/login',
+          })
+        } else {
+          //已登录
+          next()
+        }
+      }
+    })
+    .catch(function (error) {
+      // Toast(error.data.msg);
+    });
+
+ }
+ next();
+})
+```
+
+​	多角色系统中，通过用户角色来确定页面访问权限。
+
+
 
 
 
@@ -5856,13 +6507,85 @@ swagger 文档
 
 
 
+
+
+
+
+![未命名文件 (5)](.\src\main\resources\img\login.jpg)
+
+
+
 ## 字段校验
 
 ​	DTO
 
+
+
 ## 动态验证码
 
 ​	kaptcha bean
+
+​	后端生成kaptcha，将其与kaptchaKey（可以是用户访问时间+kaptcha  加密生产）存入redis。发送给前端。前端接受并显示，用户输入验证码。
+
+​	后端接受用户输入，通过kaptchaKey查redis，得到原始的kaptcha，将其与用户输入的kaptcha对比。
+
+
+
+​	注意redis中的key应该可以再次生成，因未知用户信息，因此可以采用用户访问时间和kaptcha来生成。但有可能出现冲突，在用户量巨大时，多个用户同一时刻访问网页，网页生成的kaptcha相同时就可能导致冲突。可通过加密方式降低冲突；加盐的话盐不方便存储；BCrytpt加盐的话因不知哪个key，无法做比较。
+
+![未命名文件 (1)](.\src\main\resources\img\login-kaptcha.jpg)
+
+
+
+
+
+
+
+## 密码传输
+
+​	前端——crypto-js
+
+​	RSA
+
+​	后端-加密算法 BCrypt原理。
+
+
+
+
+
+![注册登录安全问题](.\src\main\resources\img\regist-login-safty.jpg)
+
+
+
+
+
+
+
+​	安全配置类继承spring security WebSecurityConfigurerAdapter
+
+​		重写三个compare方法（对应认证、授权、资源控制）
+
+​		注入BCrypt密码机、注入 数据认证（在compare中使用)
+
+​	service实现UserDetailsService接口，实现loadUserByName方法(给数据认证的bean使用)
+
+AOP原理，时机
+
+
+
+## 保持登录状态
+
+​	token格式，前缀 + （**用户名+过期时间+加密后的密码**）+后缀
+
+​	redis中键值对格式，**key: 前缀+token；value: tokenNew**
+
+​	token中包含用户id，**token在一次会话中保持不变**。
+
+​	设置redis中键值对的过期时间为token过期时间的两倍；当tokenNew过期时，重置过期时间，并更新redis键值对及其过期时间。
+
+![未命名文件 (4)](.\src\main\resources\img\login-remember.jpg)
+
+
 
 
 
@@ -5885,57 +6608,13 @@ swagger 文档
 
 
 
-## 登录密码验证
-
-​	前端——crypto-js
-
-​	后端-加密算法 BCrypt原理。
-
-
-
-​	
-
-![注册登录安全问题](.\src\main\resources\img\regist-login-safty.jpg)
-
-
-
-
-
-![记住密码](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\regist-login-remember.jpg)
-
-
-
-
-
-​	安全配置类继承spring security WebSecurityConfigurerAdapter
-
-​		重写三个compare方法（对应认证、授权、资源控制）
-
-​		注入BCrypt密码机、注入 数据认证（在compare中使用)
-
-​	service实现UserDetailsService接口，实现loadUserByName方法(给数据认证的bean使用)
-
-AOP原理，时机
-
-
-
-
-
-
-
 ## 访问权限 
 
 ​	同上
 
 
 
-## 保存登录信息，设置有效期
-
-### session
-
-### token
-
-### redis
+### 
 
 ## 事务
 
@@ -6019,7 +6698,226 @@ lombok
 
 
 
+## google
+
+https://developers.google.com/android/management/quickstart
+
+​	谷歌账号在谷歌云平台上创建一个项目，并添加用户，生成一个token文件，在项目中唯一绑定。
+
+​	MDM项目通过项目和用户信息，创建企业、策略，添加设备。设备重启便自动执行策略。
+
+![MDM (4)](.\src\main\resources\img\MDM -3.jpg)
+
+
+
+​	设备怎么接收到策略呢。策略更新后便自动下载？
+
+​	策略存放在哪儿呢，google云平台还是联想服务器？
+
+​	策略MDM保存，再次发布时发送给google，设备存在google
+
+
+
+```sql
+用户表（userId,username,createTime updateTime)
+
+企业表(enterpriseToken,userId,enterprisename,createTime,updateTime)
+
+设备组表(deviceGroupId,deviceGroupname,enterpriseToken,createTime,updateTime)
+
+策略表(policyId,policyName,deviceId,version,......)
+
+设备表(sn,policyId)
+```
+
+
+
+![MDM](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\MDM.jpg)
 
 
 
 
+
+![MDM (1)](.\src\main\resources\img\MDM -1.jpg)
+
+
+
+![123](.\src\main\resources\img\MDM-2.jpg)
+
+
+
+
+
+```json
+{
+  "devices": [
+    {
+      "name": "enterprises/LC025y6btn/devices/3d10e573efe0db78",
+      "managementMode": "DEVICE_OWNER",
+      "state": "PROVISIONING",
+      "enrollmentTime": "2021-07-08T02:40:37.714Z",
+      "lastPolicySyncTime": "2021-07-08T03:09:13.907Z",
+      "softwareInfo": {
+        "androidVersion": "10",
+        "androidDevicePolicyVersionCode": 1535090,
+        "androidDevicePolicyVersionName": "15.35.09.v41",
+        "androidBuildNumber": "TB-X606F_S200712_210625_BMAIN",
+        "deviceKernelVersion": "4.9.190+",
+        "bootloaderVersion": "unknown",
+        "androidBuildTime": "2021-06-25T10:40:14Z",
+        "securityPatchLevel": "2021-07-05",
+        "primaryLanguageCode": "en-US",
+        "deviceBuildSignature": "564ad1edeb43af8005176c0011a6f964db8d83be49715ab8a74bd5c2130c3cdb",
+        "systemUpdateInfo": {
+          "updateStatus": "UP_TO_DATE"
+        }
+      },
+      "hardwareInfo": {
+        "brand": "Lenovo",
+        "hardware": "mt8768",
+        "manufacturer": "LENOVO",
+        "serialNumber": "0123456789ABCDEF",
+        "model": "Lenovo TB-X606F"
+      },
+      "memoryInfo": {
+        "totalRam": "3999711232",
+        "totalInternalStorage": "3957481472"
+      },
+      "userName": "enterprises/LC025y6btn/users/103528350160634159608",
+      "enrollmentTokenName": "enterprises/LC025y6btn/enrollmentTokens/wM6gdbdB1y7aApZuj6-UAeSfFxP_FlFZNYHeNqsXO0w",
+      "securityPosture": {},
+      "ownership": "COMPANY_OWNED"
+    },
+    {
+      "name": "enterprises/LC025y6btn/devices/3df59860d53f7cdb",
+      "managementMode": "DEVICE_OWNER",
+      "state": "ACTIVE",
+      "appliedState": "ACTIVE",
+      "policyCompliant": true,
+      "enrollmentTime": "2021-07-08T03:19:57.265Z",
+      "lastStatusReportTime": "2021-07-12T08:33:15.122Z",
+      "lastPolicySyncTime": "2021-07-13T01:58:11.911Z",
+      "appliedPolicyVersion": "1",
+      "apiLevel": 29,
+      "hardwareInfo": {
+        "brand": "Lenovo",
+        "hardware": "mt8768",
+        "manufacturer": "LENOVO",
+        "serialNumber": "0123456789ABCDEF",
+        "model": "Lenovo TB-X606F"
+      },
+      "policyName": "enterprises/LC025y6btn/policies/mypolicy",
+      "appliedPolicyName": "enterprises/LC025y6btn/policies/mypolicy",
+      "memoryInfo": {
+        "totalRam": "3999711232",
+        "totalInternalStorage": "3957481472"
+      },
+      "userName": "enterprises/LC025y6btn/users/107456044311606991599",
+      "enrollmentTokenName": "enterprises/LC025y6btn/enrollmentTokens/eDc2tz1VF1nXOeIV7sRP8qzsd7Agk0HHP6Tcxv03Gk8",
+      "previousDeviceNames": [
+        "enterprises/LC025y6btn/devices/3d10e573efe0db78"
+      ],
+      "securityPosture": {
+        "devicePosture": "POTENTIALLY_COMPROMISED",
+        "postureDetails": [
+          {
+            "securityRisk": "UNKNOWN_OS"
+          }
+        ]
+      },
+      "ownership": "COMPANY_OWNED"
+    }
+  ]
+}
+```
+
+
+
+
+
+```java
+//创建注册地址
+//主要是返回enterprisetoken，便于后续创建企业
+signupUrl = androidManagementClient//为什么需要这一步
+                        .signupUrls()
+                        .create()
+                        .setProjectId(PROJECT_ID)
+                        .setCallbackUrl("https://localhost:9999")
+                        .execute();
+
+//创建企业
+return androidManagementClient
+                .enterprises()
+                .create(new Enterprise())
+                .setProjectId(PROJECT_ID)
+                .setSignupUrlName(signupUrl.getName())
+                .setEnterpriseToken(enterpriseToken)
+                .execute()
+                .getName();
+
+//设置策略
+String name = enterpriseName + "/policies/" + policyId;
+androidManagementClient
+                .enterprises()
+                .policies()
+                .patch(name, policy)
+                .execute();
+
+//根据enterpriseName获取所有设备
+ListDevicesResponse response =
+                androidManagementClient
+                        .enterprises()
+                        .devices()
+                        .list(enterpriseName)
+                        .execute();
+        return response.getDevices() == null
+                ? new ArrayList<>() : response.getDevices();
+
+//重置一个设备
+androidManagementClient
+                .enterprises()
+                .devices()
+                .issueCommand(device.getName(), command)
+                .execute();
+```
+
+
+
+
+
+
+
+
+
+
+
+## 表格插入
+
+​	添加所有正常数据吗，对于异常数据，给予错误信息反馈。
+
+![未命名文件 (6)](.\src\main\resources\img\MDM.importExcel.jpg)
+
+​	
+
+
+
+# 问题及解决
+
+​	为什么spring的@Transactional只能作用在Public方法？
+
+
+
+​	0-1背包是NPC问题。
+
+
+
+
+
+# 实习总结
+
+1. 学习技术
+2. 任务优先级
+3. 自我定位，是同事关系而不是师生关系
+4. 自行解决问题，少打扰他人
+5. 学会沟通，被问进度时如实回答；正在做，做完了，做的一半中途在做别的，在做别的还没开始做。
+6. 公司任何东西不能发到云端。
