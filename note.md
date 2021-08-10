@@ -2203,6 +2203,8 @@ Access-Control-Allow-Credentials="true";//允许使用cookies
 
 #### Spring 的@CrossOrigin注解
 
+作用在Controller方法或者类上。
+
 ```java
 @CrossOrigin(origins="http://www.a.com:8888",allowCredentials = "true")
 ```
@@ -4245,7 +4247,7 @@ int updateById(@Param(Constants.ENTITY) T entity);
 
 ### AbstractWrapper
 
-​	QueryWrapper(LambdaQueryWrapper) 和UpdateWrapper(LambdaUpdateWrapper) 的父类用于生成 sql 的 where 条件, entity 属性也用于生成 sql 的 where 条件。
+​	是QueryWrapper(LambdaQueryWrapper) 和UpdateWrapper(LambdaUpdateWrapper) 的父类用于生成 sql 的 where 条件, entity 属性也用于生成 sql 的 where 条件。
 ​	注意: entity 生成的 where 条件与 使用各个 api 生成的 where 条件**没有任何关联行为**。
 
 ### QueryWrapper与LambdaQueryWrapper
@@ -6973,15 +6975,19 @@ https://developers.google.com/android/management/quickstart
 
 ​	MDM项目通过项目和用户信息，创建企业、策略，添加设备。设备重启便自动执行策略。
 
-![MDM (4)](.\src\main\resources\img\MDM -3.jpg)
+![MDM (8)](.\src\main\resources\img\MDM -3.jpg)
 
 
 
-​	设备怎么接收到策略呢。策略更新后便自动下载？
+问题
 
-​	策略存放在哪儿呢，google云平台还是联想服务器？
+\1. 设备量很大，该存放在哪，redis?mysql？
 
-​	策略MDM保存，再次发布时发送给google，设备存在google
+\2. 怎么快速查询出新设备
+
+\3. 事务处理用spring？是否过于繁重？
+
+设备处理以google云平台为准，定时（比如每天）从google云平台获取，
 
 
 
@@ -6999,23 +7005,160 @@ https://developers.google.com/android/management/quickstart
 
 
 
-![MDM](C:\Users\zhongbl1\IdeaProjects\springboot-login-master\src\main\resources\img\MDM.jpg)
+![123 (1)](.\src\main\resources\img\MDM-1.jpg)
 
 
 
 
 
-![MDM (1)](.\src\main\resources\img\MDM -1.jpg)
+### API
 
+```java
+//创建注册地址
+//主要是返回enterprisetoken，便于后续创建企业
+signupUrl = androidManagementClient//为什么需要这一步
+                        .signupUrls()
+                        .create()
+                        .setProjectId(PROJECT_ID)
+                        .setCallbackUrl("https://localhost:9999")
+                        .execute();
 
+//创建企业
+return androidManagementClient
+                .enterprises()
+                .create(new Enterprise())
+                .setProjectId(PROJECT_ID)
+                .setSignupUrlName(signupUrl.getName())
+                .setEnterpriseToken(enterpriseToken)
+                .execute()
+                .getName();
 
-![123](.\src\main\resources\img\MDM-2.jpg)
+//发布策略
+String name = enterpriseName + "/policies/" + policyId;
+androidManagementClient
+                .enterprises()
+                .policies()
+                .patch(name, policy)
+                .execute();
+
+//获取Qr Code，也可以直接获取二维码
+androidManagementClient
+                .enterprises()
+                .enrollmentTokens()
+                .create(enterpriseName, token)
+                .execute()
+                .getQrCode();
+
+//根据enterpriseName获取所有设备
+ListDevicesResponse response =
+                androidManagementClient
+                        .enterprises()
+                        .devices()
+                        .list(enterpriseName)
+                        .execute();
+        return response.getDevices() == null
+                ? new ArrayList<>() : response.getDevices();
+
+//重置一个设备
+androidManagementClient
+                .enterprises()
+                .devices()
+                .issueCommand(device.getName(), command)
+                .execute();
+```
+
+### 生成二维码
+
+```java
+//通过QRCode生成二维码
+/**
+ *  Maven依赖
+ *         <dependency>
+ *             <groupId>com.google.zxing</groupId>
+ *             <artifactId>core</artifactId>
+ *             <version>3.1.0</version>
+ *         </dependency>
+ *         <dependency>
+ *             <groupId>com.google.zxing</groupId>
+ *             <artifactId>javase</artifactId>
+ *             <version>3.1.0</version>
+ *         </dependency>
+ *
+ *  主要方法
+ *   QRCodeWriter qrCodeWriter = new QRCodeWriter();
+ *   BitMatrix bitMatrix = qrCodeWriter.encode(QRCode, BarcodeFormat.QR_CODE, 350, 350);
+ */
+package com.example.androidtest01.controller;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+import com.google.zxing.BarcodeFormat;//调用Google的zxing根据Qr Code生成二维码图片
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+public class QRCodeUtil {
+    private static void generateQRCodeImage(String text, int width, int height) throws WriterException, IOException {
+        File file=new File("./QRCode/");
+        if(!file.exists()){//如果文件夹不存在
+            //file.mkdir();创建单个文件夹
+            file.mkdirs();//mkdirs创建多级文件夹
+        }
+        UUID   uuid = UUID.randomUUID();
+        String guid=uuid.toString();
+        String filePath="./QRCode/"+guid+".png";
+        System.out.println("************"+filePath);
+        String QRCode = "www.baidu.com";
+        try {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(QRCode, BarcodeFormat.QR_CODE, 350, 350);
+            //这个java.nio.file.FileSystems必须在1.7以上才可以
+            Path path = FileSystems.getDefault().getPath(filePath);
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+        } catch (WriterException e) {
+            System.out.println("未能正常生成二维码，WriterException :: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("未能正常生成二维码, IOException :: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            generateQRCodeImage("This is my first QR Code", 350, 350);
+        } catch (WriterException e) {
+            System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Could not generate QR Code, IOException :: " + e.getMessage());
+        }
+    }
+}
+```
 
 
 
 
 
 ```json
+//QRCode的json
+{
+  "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME":"com.google.android.apps.work.clouddpc/.receivers.CloudDeviceAdminReceiver",
+  "android.app.extra.PROVISIONING_DEVICE_ADMIN_SIGNATURE_CHECKSUM":"I5YvS0O5hXY46mb01BlRjq4oJJGs2kuUcHvVkAPEXlg",
+  "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_DOWNLOAD_LOCATION":"https://play.google.com/managed/downloadManagingApp?identifier=setup",
+  "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE":{"com.google.android.apps.work.clouddpc.EXTRA_ENROLLMENT_TOKEN":"DIWSNCPXDXGHROHZBAFS"}
+}
+```
+
+
+
+```json
+//设备信息json
 {
   "devices": [
     {
@@ -7102,60 +7245,6 @@ https://developers.google.com/android/management/quickstart
 
 
 
-```java
-//创建注册地址
-//主要是返回enterprisetoken，便于后续创建企业
-signupUrl = androidManagementClient//为什么需要这一步
-                        .signupUrls()
-                        .create()
-                        .setProjectId(PROJECT_ID)
-                        .setCallbackUrl("https://localhost:9999")
-                        .execute();
-
-//创建企业
-return androidManagementClient
-                .enterprises()
-                .create(new Enterprise())
-                .setProjectId(PROJECT_ID)
-                .setSignupUrlName(signupUrl.getName())
-                .setEnterpriseToken(enterpriseToken)
-                .execute()
-                .getName();
-
-//设置策略
-String name = enterpriseName + "/policies/" + policyId;
-androidManagementClient
-                .enterprises()
-                .policies()
-                .patch(name, policy)
-                .execute();
-
-//根据enterpriseName获取所有设备
-ListDevicesResponse response =
-                androidManagementClient
-                        .enterprises()
-                        .devices()
-                        .list(enterpriseName)
-                        .execute();
-        return response.getDevices() == null
-                ? new ArrayList<>() : response.getDevices();
-
-//重置一个设备
-androidManagementClient
-                .enterprises()
-                .devices()
-                .issueCommand(device.getName(), command)
-                .execute();
-```
-
-
-
-
-
-
-
-
-
 
 
 ## 表格插入
@@ -7188,3 +7277,4 @@ androidManagementClient
 4. 自行解决问题，少打扰他人
 5. 学会沟通，被问进度时如实回答；正在做，做完了，做的一半中途在做别的，在做别的还没开始做。
 6. 公司任何东西不能发到云端。
+7. 与leader意见不一致时，仔细思考自己与他的设计的区别。倘若还是觉得有问题，再向他请教这么设计的原因，请教自己所想的设计方案缺点。
