@@ -5987,11 +5987,17 @@ mysqldump -u username -p dbname [tbname ...]> filename.sql
 
 ​	首先要 **否认** 一点 http 协议相较于 自定义tcp 报文协议，增加的开销在于连接的建立与断开。
 
-　　第一、**http协议是支持连接池复用的**，也就是建立一定数量的连接不断开，并不会频繁的创建和销毁连接
+　　第一、**http协议是支持连接池复用的**，也就是建立一定数量的连接不断开，并不会频繁的创建和销毁连接。
 
-　　第二、http也可以使用 protobuf 这种二进制编码协议对内容进行编码
+　　第二、http也可以使用 protobuf 这种二进制编码协议对内容进行编码。
 
 　　因此二者即 http 和 rpc 最大的区别还是在**传输协议**上。rpc报头更短，数据传输效率更高。
+
+
+
+**Http2主要思想：服务端推送**
+
+​	当一个客户端请求资源X，而服务器知道它很可能也需要资源Z的情况下，服务器可以在客户端发送请求前，主动将资源Z推送给客户端。这个功能帮助客户端将Z放进缓存以备将来之需。也遵守同源策略，且客户端可以拒绝推送过来的资源。
 
 
 
@@ -6469,7 +6475,7 @@ delete key：删除key
 
 #### 点对点模式
 
-​	在点对点消息系统中，消息持久化到一个队列中。此时，将有一个或多个消费者消费队列中的数据。但是一条消息只能被消费一次。当一个消费者消费了队列中的某条数据之后，该条数据则从消息队列中删除。该模式即使有多个消费者同时消费数据，也能保证数据处理的顺序。
+​	在点对点消息系统中，消息持久化到一个队列中。此时，将有一个或多个消费者消费队列中的数据。但是**一条消息只能被消费一次**。当一个消费者消费了队列中的某条数据之后，该条数据则从消息队列中删除。该模式即使有多个消费者同时消费数据，也能保证数据处理的顺序。
 
 ![img](.\src\main\resources\img\Kafka-P2P.jpg)
 
@@ -6482,6 +6488,8 @@ delete key：删除key
 ![](.\src\main\resources\img\Kafka-P_S.jpg)
 
 ​	发布者发送消息到Topic，所有订阅了该Topic的订阅者才会看到消息（多对多）。
+
+
 
 
 
@@ -7202,11 +7210,26 @@ https://developers.google.com/android/management/quickstart
 
 
 
+## project
+
+![image-20210811104800251](.\src\main\resources\img\MDM-pro-structure.jpg)
+
+
+
+AmTools为单例模式，存储了一个google安卓管理API客户端。
+
 
 
 ### API
 
 ```java
+//创建google安卓管理API客户端
+new AndroidManagement.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    credential)
+                    .setApplicationName(APP_NAME)
+                    .build();
 //创建注册地址
 //主要是返回enterprisetoken，便于后续创建企业
 signupUrl = androidManagementClient//为什么需要这一步
