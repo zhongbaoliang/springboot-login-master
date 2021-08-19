@@ -7228,6 +7228,8 @@ https://developers.google.com/android/management/quickstart
 
 问题3. 命名规范，调研设计好再做；例如Enterprise类
 
+问题4. 
+
 
 
 
